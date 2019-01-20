@@ -1,0 +1,142 @@
+[
+  {
+    "item_id": "d7865422-a539-4929-8ed1-fbb4eaf703c9",
+    "type_id": "7e98a0d6-1144-4131-960c-b3eeec2d29e3",
+    "extra": {
+      "units": 0
+    },
+    "created_at": "2018-11-10T13:38:24.186Z",
+    "updated_at": "2018-11-10T13:38:24.186Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "5dec6506-c85f-466e-8a3d-bee488017e80",
+    "type_id": "01743ab9-e24f-49db-b592-e82984f9fb79",
+    "extra": {
+      "units": 5
+    },
+    "created_at": "2018-11-10T07:20:14.260Z",
+    "updated_at": "2018-11-10T07:20:14.260Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "a1b416e0-8058-42fa-9aa2-e76522a7e0a0",
+    "type_id": "14292fd7-5c4c-4852-982f-94ce5d01c5c9",
+    "extra": {
+      "units": 7
+    },
+    "created_at": "2018-11-13T05:04:27.408Z",
+    "updated_at": "2018-11-13T05:04:27.408Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "077e6ec6-9c85-4a7d-a43e-87508664edf8",
+    "type_id": "3c92ea91-e861-4d00-9ae4-e8f7ac7f9a63",
+    "extra": {
+      "units": 1
+    },
+    "created_at": "2018-11-14T00:31:29.696Z",
+    "updated_at": "2018-11-14T00:31:29.696Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "a11ad7be-4560-4214-a923-06b70bc3c762",
+    "type_id": "5582152b-3ae8-4cfe-9908-ea7068d00406",
+    "extra": {
+      "units": 5
+    },
+    "created_at": "2018-11-12T19:58:39.291Z",
+    "updated_at": "2018-11-12T19:58:39.291Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "284b1069-c183-4a27-8d36-b058bb670d7f",
+    "type_id": "01743ab9-e24f-49db-b592-e82984f9fb79",
+    "extra": {
+      "units": 3
+    },
+    "created_at": "2018-11-12T08:11:49.380Z",
+    "updated_at": "2018-11-12T08:11:49.380Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "a1247e3c-243e-416c-8782-5955e7b55306",
+    "type_id": "dae01c93-36e0-469f-9c8c-bed099105412",
+    "extra": {
+      "units": 3
+    },
+    "created_at": "2018-11-11T18:12:37.672Z",
+    "updated_at": "2018-11-11T18:12:37.672Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "2d5925e7-32ec-4e19-a052-0a99e2126e6a",
+    "type_id": "01743ab9-e24f-49db-b592-e82984f9fb79",
+    "extra": {
+      "units": 5
+    },
+    "created_at": "2018-11-10T00:17:08.734Z",
+    "updated_at": "2018-11-10T00:17:08.734Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "f410e3e4-1115-4f19-8d2f-d26215c51235",
+    "type_id": "2a70f0fe-963b-4fea-8685-873ce6446d2c",
+    "extra": {
+      "units": 1
+    },
+    "created_at": "2018-11-11T16:22:47.556Z",
+    "updated_at": "2018-11-11T16:22:47.556Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "6bca0e64-eda4-479e-8e54-95e1fd4689e3",
+    "type_id": "3c92ea91-e861-4d00-9ae4-e8f7ac7f9a63",
+    "extra": {
+      "units": 4
+    },
+    "created_at": "2018-11-14T09:35:59.188Z",
+    "updated_at": "2018-11-14T09:35:59.188Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "963e896f-eeb5-4416-98ea-5c072bc49be5",
+    "type_id": "14292fd7-5c4c-4852-982f-94ce5d01c5c9",
+    "extra": {
+      "units": 5
+    },
+    "created_at": "2018-11-12T00:07:41.532Z",
+    "updated_at": "2018-11-12T00:07:41.532Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "6f567ce4-a744-470d-b21a-7b6f02c81f71",
+    "type_id": "c7671214-6c9e-46d9-b28c-e3bfc140ed92",
+    "extra": {
+      "units": 8
+    },
+    "created_at": "2018-11-12T01:56:04.507Z",
+    "updated_at": "2018-11-12T01:56:04.507Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "faff005f-2622-442c-9b79-1ee82d64c77f",
+    "type_id": "b2e5c32b-fb53-49b3-bd43-f27d1bb2708e",
+    "extra": {
+      "units": 3
+    },
+    "created_at": "2018-11-11T18:52:12.881Z",
+    "updated_at": "2018-11-11T18:52:12.881Z",
+    "deleted_at": null
+  },
+  {
+    "item_id": "7994a49f-75ce-4f60-87ed-19c134368d58",
+    "type_id": "b2e5c32b-fb53-49b3-bd43-f27d1bb2708e",
+    "extra": {
+      "units": 1
+    },
+    "created_at": "2018-11-11T03:17:12.148Z",
+    "updated_at": "2018-11-11T03:17:12.148Z",
+    "deleted_at": null
+  }
+]

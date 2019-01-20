@@ -1,0 +1,26 @@
+{
+  "execMap": {
+    "js": "babel-node"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": ".js,.jsx,.json",
+  "ignore": [
+    "test",
+    "dist",
+    "docs",
+    "logs"
+  ],
+  "events": {
+    "start": "sh nodemon.sh"
+  },
+  "script": "src/server.js",
+  "restartable": "rs",
+  "verbose": false,
+  "watch": ["src"],
+  "stdin": false,
+  "stdout": true,
+  "quiet": true,
+  "colours": true
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "23d691a2-d27b-4b5a-be72-f407601a48b4",
+    "code": "DEP0000001",
+    "name": "Art",
+    "created_at": "2018-11-12T23:08:36.747Z",
+    "updated_at": "2018-11-12T23:08:36.747Z",
+    "deleted_at": null
+  },
+  {
+    "id": "14066800-1fd2-4895-a275-8195ed83b5c8",
+    "code": "DEP0000002",
+    "name": "Printing",
+    "created_at": "2018-11-10T04:31:24.030Z",
+    "updated_at": "2018-11-10T04:31:24.030Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4723a320-cd2e-40ed-9e20-9d1fd30a5ce7",
+    "code": "DEP0000003",
+    "name": "Weld",
+    "created_at": "2018-11-13T19:54:50.518Z",
+    "updated_at": "2018-11-13T19:54:50.518Z",
+    "deleted_at": null
+  },
+  {
+    "id": "b23c7ee9-c9e0-49dc-a454-abbca24d1445",
+    "code": "DEP0000004",
+    "name": "Wood",
+    "created_at": "2018-11-11T21:16:04.984Z",
+    "updated_at": "2018-11-11T21:16:04.984Z",
+    "deleted_at": null
+  },
+  {
+    "id": "c9fc5a39-957f-4021-9cbe-40c117512498",
+    "code": "DEP0000005",
+    "name": "Painting",
+    "created_at": "2018-11-13T14:29:11.433Z",
+    "updated_at": "2018-11-13T14:29:11.433Z",
+    "deleted_at": null
+  },
+  {
+    "id": "f1c2abbf-d660-49b1-804e-cf6f55174ac8",
+    "code": "DEP0000006",
+    "name": "Sales",
+    "created_at": "2018-11-10T21:41:39.598Z",
+    "updated_at": "2018-11-10T21:41:39.598Z",
+    "deleted_at": null
+  }
+]

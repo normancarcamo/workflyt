@@ -1,0 +1,242 @@
+[
+  {
+    "id": "8fd3e8f0-d2da-4971-92d5-57e5f27360d6",
+    "code": "PRM0000001",
+    "name": "eveniet",
+    "created_at": "2018-11-10T16:32:09.096Z",
+    "updated_at": "2018-11-10T16:32:09.096Z",
+    "deleted_at": null
+  },
+  {
+    "id": "77991f13-3655-471c-bd33-df7b7a9def6b",
+    "code": "PRM0000002",
+    "name": "corrupti",
+    "created_at": "2018-11-12T01:47:05.073Z",
+    "updated_at": "2018-11-12T01:47:05.073Z",
+    "deleted_at": null
+  },
+  {
+    "id": "50e7e62f-ef9e-4ac5-b3bb-7eb2c870ef16",
+    "code": "PRM0000003",
+    "name": "ipsa",
+    "created_at": "2018-11-12T08:48:04.966Z",
+    "updated_at": "2018-11-12T08:48:04.966Z",
+    "deleted_at": null
+  },
+  {
+    "id": "0a537f6b-c004-41c6-92fc-03d52756289d",
+    "code": "PRM0000004",
+    "name": "sit",
+    "created_at": "2018-11-11T12:30:24.576Z",
+    "updated_at": "2018-11-11T12:30:24.576Z",
+    "deleted_at": null
+  },
+  {
+    "id": "15fff238-5b1c-4409-ab85-0bdd521ba272",
+    "code": "PRM0000005",
+    "name": "ullam",
+    "created_at": "2018-11-12T00:19:04.425Z",
+    "updated_at": "2018-11-12T00:19:04.425Z",
+    "deleted_at": null
+  },
+  {
+    "id": "ac60e785-2774-4824-8883-7d4db0252d14",
+    "code": "PRM0000006",
+    "name": "qui",
+    "created_at": "2018-11-10T08:14:14.357Z",
+    "updated_at": "2018-11-10T08:14:14.357Z",
+    "deleted_at": null
+  },
+  {
+    "id": "1a37d0ec-b4b9-4b0e-82e7-64bdf6306cf0",
+    "code": "PRM0000007",
+    "name": "harum",
+    "created_at": "2018-11-12T21:34:51.112Z",
+    "updated_at": "2018-11-12T21:34:51.112Z",
+    "deleted_at": null
+  },
+  {
+    "id": "e84ffc31-6f6f-45b1-96c1-ef11a4826ba3",
+    "code": "PRM0000008",
+    "name": "quia",
+    "created_at": "2018-11-10T22:52:16.321Z",
+    "updated_at": "2018-11-10T22:52:16.321Z",
+    "deleted_at": null
+  },
+  {
+    "id": "e214c3ae-2e05-4f8a-9ac6-d7b4b33b5b77",
+    "code": "PRM0000009",
+    "name": "saepe",
+    "created_at": "2018-11-13T17:41:56.307Z",
+    "updated_at": "2018-11-13T17:41:56.307Z",
+    "deleted_at": null
+  },
+  {
+    "id": "d1e2db98-54c3-4df4-acdb-405e8f17aea7",
+    "code": "PRM0000010",
+    "name": "voluptas",
+    "created_at": "2018-11-11T14:18:02.979Z",
+    "updated_at": "2018-11-11T14:18:02.979Z",
+    "deleted_at": null
+  },
+  {
+    "id": "1658e73d-872c-4b71-b905-a3fbed5a5102",
+    "code": "PRM0000011",
+    "name": "dolor",
+    "created_at": "2018-11-11T06:42:20.992Z",
+    "updated_at": "2018-11-11T06:42:20.992Z",
+    "deleted_at": null
+  },
+  {
+    "id": "2a2334fe-42cf-4b76-903c-232c69a067d6",
+    "code": "PRM0000012",
+    "name": "ut",
+    "created_at": "2018-11-12T04:41:44.956Z",
+    "updated_at": "2018-11-12T04:41:44.956Z",
+    "deleted_at": null
+  },
+  {
+    "id": "7c2e02ad-dab1-4c49-a6dc-4a93bd98d125",
+    "code": "PRM0000013",
+    "name": "aliquam",
+    "created_at": "2018-11-12T02:27:43.935Z",
+    "updated_at": "2018-11-12T02:27:43.935Z",
+    "deleted_at": null
+  },
+  {
+    "id": "82f4fb78-b46b-473d-8359-cabd595c4ae6",
+    "code": "PRM0000014",
+    "name": "cupiditate",
+    "created_at": "2018-11-11T14:33:02.384Z",
+    "updated_at": "2018-11-11T14:33:02.384Z",
+    "deleted_at": null
+  },
+  {
+    "id": "80472551-6d88-488d-93be-19607c86790d",
+    "code": "PRM0000015",
+    "name": "quae",
+    "created_at": "2018-11-11T20:42:43.920Z",
+    "updated_at": "2018-11-11T20:42:43.920Z",
+    "deleted_at": null
+  },
+  {
+    "id": "3ff3f43a-76ee-441c-8b10-140158d4198d",
+    "code": "PRM0000016",
+    "name": "dicta",
+    "created_at": "2018-11-13T13:10:42.659Z",
+    "updated_at": "2018-11-13T13:10:42.659Z",
+    "deleted_at": null
+  },
+  {
+    "id": "904eaa42-075d-41cd-baa5-5362a9027804",
+    "code": "PRM0000017",
+    "name": "deserunt",
+    "created_at": "2018-11-11T16:12:33.598Z",
+    "updated_at": "2018-11-11T16:12:33.598Z",
+    "deleted_at": null
+  },
+  {
+    "id": "3155de18-7259-4532-a1fa-8e5bc769ee4c",
+    "code": "PRM0000018",
+    "name": "explicabo",
+    "created_at": "2018-11-10T13:28:31.029Z",
+    "updated_at": "2018-11-10T13:28:31.029Z",
+    "deleted_at": null
+  },
+  {
+    "id": "2ddb1daf-1c6c-4c27-97a8-ec69c4dbd5f7",
+    "code": "PRM0000019",
+    "name": "in",
+    "created_at": "2018-11-13T18:23:26.400Z",
+    "updated_at": "2018-11-13T18:23:26.400Z",
+    "deleted_at": null
+  },
+  {
+    "id": "aeb067c9-0d53-412f-9564-f1873b2e5abe",
+    "code": "PRM0000020",
+    "name": "sed",
+    "created_at": "2018-11-10T18:59:06.168Z",
+    "updated_at": "2018-11-10T18:59:06.168Z",
+    "deleted_at": null
+  },
+  {
+    "id": "6c32370f-a3fb-4695-9e1e-2fbdcbe12c34",
+    "code": "PRM0000021",
+    "name": "reprehenderit",
+    "created_at": "2018-11-11T11:54:41.190Z",
+    "updated_at": "2018-11-11T11:54:41.190Z",
+    "deleted_at": null
+  },
+  {
+    "id": "0188c93b-35e9-4fbb-8dc6-4c977e14dfad",
+    "code": "PRM0000022",
+    "name": "amet",
+    "created_at": "2018-11-13T17:42:31.579Z",
+    "updated_at": "2018-11-13T17:42:31.579Z",
+    "deleted_at": null
+  },
+  {
+    "id": "b7e8f2a0-9fbc-403b-8333-908a6ba2f5a3",
+    "code": "PRM0000023",
+    "name": "aut",
+    "created_at": "2018-11-12T19:38:53.753Z",
+    "updated_at": "2018-11-12T19:38:53.753Z",
+    "deleted_at": null
+  },
+  {
+    "id": "eeb73aeb-6745-4531-8322-eaf94afc6818",
+    "code": "PRM0000024",
+    "name": "dolores",
+    "created_at": "2018-11-10T07:32:14.921Z",
+    "updated_at": "2018-11-10T07:32:14.921Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4e485db0-b289-4132-9b8f-5ba688937619",
+    "code": "PRM0000025",
+    "name": "maiores",
+    "created_at": "2018-11-12T01:39:57.893Z",
+    "updated_at": "2018-11-12T01:39:57.893Z",
+    "deleted_at": null
+  },
+  {
+    "id": "5208c65b-31f2-4b4c-802e-c8de460d325d",
+    "code": "PRM0000026",
+    "name": "consequuntur",
+    "created_at": "2018-11-10T14:14:59.309Z",
+    "updated_at": "2018-11-10T14:14:59.309Z",
+    "deleted_at": null
+  },
+  {
+    "id": "c3990dec-afe9-470f-80ec-fbe9d0dfc9ee",
+    "code": "PRM0000027",
+    "name": "excepturi",
+    "created_at": "2018-11-12T05:02:58.526Z",
+    "updated_at": "2018-11-12T05:02:58.526Z",
+    "deleted_at": null
+  },
+  {
+    "id": "44dbd2dd-6da8-4334-a7d1-4569e0a9fec8",
+    "code": "PRM0000028",
+    "name": "ex",
+    "created_at": "2018-11-14T03:04:40.326Z",
+    "updated_at": "2018-11-14T03:04:40.326Z",
+    "deleted_at": null
+  },
+  {
+    "id": "fb00eaae-3cb2-4b37-8d56-4fcbf02ccf42",
+    "code": "PRM0000029",
+    "name": "ipsam",
+    "created_at": "2018-11-10T20:15:42.889Z",
+    "updated_at": "2018-11-10T20:15:42.889Z",
+    "deleted_at": null
+  },
+  {
+    "id": "dd9c6d97-8e68-4222-9652-c673c11b2e0b",
+    "code": "PRM0000030",
+    "name": "dolorem",
+    "created_at": "2018-11-11T11:15:36.702Z",
+    "updated_at": "2018-11-11T11:15:36.702Z",
+    "deleted_at": null
+  }
+]

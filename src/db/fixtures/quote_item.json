@@ -1,0 +1,302 @@
+[
+  {
+    "quote_id": "9fb8bcad-62df-4b28-9eb5-0a9cdbe3ea7a",
+    "item_id": "7994a49f-75ce-4f60-87ed-19c134368d58",
+    "extra": {
+      "units": 9
+    },
+    "created_at": "2018-11-11T02:20:09.512Z",
+    "updated_at": "2018-11-11T02:20:09.512Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "6216d680-1029-4a2d-ab6e-d8402b2c2d93",
+    "item_id": "7e98a0d6-1144-4131-960c-b3eeec2d29e3",
+    "extra": {
+      "units": 2
+    },
+    "created_at": "2018-11-10T13:52:18.817Z",
+    "updated_at": "2018-11-10T13:52:18.817Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "fbc66945-fccc-46a5-9b33-4e8a74bce5e2",
+    "item_id": "d7865422-a539-4929-8ed1-fbb4eaf703c9",
+    "extra": {
+      "units": 4
+    },
+    "created_at": "2018-11-11T05:36:52.779Z",
+    "updated_at": "2018-11-11T05:36:52.779Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "f60d181d-a582-4a01-92a2-102ef76d2225",
+    "item_id": "5582152b-3ae8-4cfe-9908-ea7068d00406",
+    "extra": {
+      "units": 4
+    },
+    "created_at": "2018-11-13T06:07:31.771Z",
+    "updated_at": "2018-11-13T06:07:31.771Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "c365dd91-6de5-4d19-ae59-16b4e05bc87d",
+    "item_id": "f410e3e4-1115-4f19-8d2f-d26215c51235",
+    "extra": {
+      "units": 9
+    },
+    "created_at": "2018-11-10T09:43:31.020Z",
+    "updated_at": "2018-11-10T09:43:31.020Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "0f24ab17-e03f-4cbb-ba72-53c146e1c526",
+    "item_id": "f410e3e4-1115-4f19-8d2f-d26215c51235",
+    "extra": {
+      "units": 1
+    },
+    "created_at": "2018-11-14T17:11:35.057Z",
+    "updated_at": "2018-11-14T17:11:35.057Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "d4a3fc68-8593-4ff2-b117-94d702f6d377",
+    "item_id": "bc16ee06-2595-4d5e-aff5-9d1dfdae785b",
+    "extra": {
+      "units": 4
+    },
+    "created_at": "2018-11-14T16:42:36.812Z",
+    "updated_at": "2018-11-14T16:42:36.812Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "cd7a1423-89ba-4f36-b66e-d3f7fbaefcfc",
+    "item_id": "c7671214-6c9e-46d9-b28c-e3bfc140ed92",
+    "extra": {
+      "units": 7
+    },
+    "created_at": "2018-11-10T01:06:32.180Z",
+    "updated_at": "2018-11-10T01:06:32.180Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "84f3222f-788d-490c-a239-79eb76bc473f",
+    "item_id": "14292fd7-5c4c-4852-982f-94ce5d01c5c9",
+    "extra": {
+      "units": 4
+    },
+    "created_at": "2018-11-12T04:02:03.930Z",
+    "updated_at": "2018-11-12T04:02:03.930Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "dc6bc577-4c9e-40b5-8942-0e0aa56dbb80",
+    "item_id": "b2e5c32b-fb53-49b3-bd43-f27d1bb2708e",
+    "extra": {
+      "units": 5
+    },
+    "created_at": "2018-11-12T15:48:50.369Z",
+    "updated_at": "2018-11-12T15:48:50.369Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "038e4097-e364-4961-80c5-bde2ba9ebeb1",
+    "item_id": "c7671214-6c9e-46d9-b28c-e3bfc140ed92",
+    "extra": {
+      "units": 1
+    },
+    "created_at": "2018-11-13T06:35:24.020Z",
+    "updated_at": "2018-11-13T06:35:24.020Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "b8b33dd9-7a4c-4bac-93e7-bf4f844a681d",
+    "item_id": "d7865422-a539-4929-8ed1-fbb4eaf703c9",
+    "extra": {
+      "units": 4
+    },
+    "created_at": "2018-11-11T14:16:55.618Z",
+    "updated_at": "2018-11-11T14:16:55.618Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "62a19fbf-3d67-4dcb-b311-c092e9d0118d",
+    "item_id": "2a70f0fe-963b-4fea-8685-873ce6446d2c",
+    "extra": {
+      "units": 10
+    },
+    "created_at": "2018-11-10T03:06:09.293Z",
+    "updated_at": "2018-11-10T03:06:09.293Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "483f5711-afd2-4f97-8359-597ff35f3e7a",
+    "item_id": "47f4a234-f886-4230-9e82-c961f4206691",
+    "extra": {
+      "units": 4
+    },
+    "created_at": "2018-11-12T08:51:46.310Z",
+    "updated_at": "2018-11-12T08:51:46.310Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "4bad9492-8c63-4881-b2dc-623ea2a4876f",
+    "item_id": "faff005f-2622-442c-9b79-1ee82d64c77f",
+    "extra": {
+      "units": 6
+    },
+    "created_at": "2018-11-14T12:30:15.139Z",
+    "updated_at": "2018-11-14T12:30:15.139Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "a4344339-41b1-4bea-a3e7-285b4b28ac06",
+    "item_id": "077e6ec6-9c85-4a7d-a43e-87508664edf8",
+    "extra": {
+      "units": 9
+    },
+    "created_at": "2018-11-11T03:44:45.144Z",
+    "updated_at": "2018-11-11T03:44:45.144Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "eb6c8846-227f-4c13-91ca-c763a7e34b77",
+    "item_id": "01743ab9-e24f-49db-b592-e82984f9fb79",
+    "extra": {
+      "units": 1
+    },
+    "created_at": "2018-11-12T10:14:08.973Z",
+    "updated_at": "2018-11-12T10:14:08.973Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "7590f825-f0de-4f08-84c8-9951b3a949cf",
+    "item_id": "bc16ee06-2595-4d5e-aff5-9d1dfdae785b",
+    "extra": {
+      "units": 10
+    },
+    "created_at": "2018-11-13T20:50:54.493Z",
+    "updated_at": "2018-11-13T20:50:54.493Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "04f07a65-46bd-40dc-b137-18401d3a9222",
+    "item_id": "5582152b-3ae8-4cfe-9908-ea7068d00406",
+    "extra": {
+      "units": 3
+    },
+    "created_at": "2018-11-13T16:51:40.554Z",
+    "updated_at": "2018-11-13T16:51:40.554Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "6e9fdcbb-9f7e-4cb9-8ed9-c07257f178ef",
+    "item_id": "faff005f-2622-442c-9b79-1ee82d64c77f",
+    "extra": {
+      "units": 9
+    },
+    "created_at": "2018-11-10T05:39:36.151Z",
+    "updated_at": "2018-11-10T05:39:36.151Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "867c03f1-5d74-4262-afbd-79e500adeffd",
+    "item_id": "7e98a0d6-1144-4131-960c-b3eeec2d29e3",
+    "extra": {
+      "units": 5
+    },
+    "created_at": "2018-11-14T16:42:08.383Z",
+    "updated_at": "2018-11-14T16:42:08.383Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "26d7537f-72cb-43c0-9661-191773a7bf32",
+    "item_id": "01743ab9-e24f-49db-b592-e82984f9fb79",
+    "extra": {
+      "units": 7
+    },
+    "created_at": "2018-11-10T22:15:41.794Z",
+    "updated_at": "2018-11-10T22:15:41.794Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "feaa1500-6896-4241-bfe6-acf49e7ae6b1",
+    "item_id": "a1b416e0-8058-42fa-9aa2-e76522a7e0a0",
+    "extra": {
+      "units": 7
+    },
+    "created_at": "2018-11-12T21:45:42.057Z",
+    "updated_at": "2018-11-12T21:45:42.057Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "2da15ea5-036c-449a-9296-9a205e8ffda3",
+    "item_id": "3c92ea91-e861-4d00-9ae4-e8f7ac7f9a63",
+    "extra": {
+      "units": 8
+    },
+    "created_at": "2018-11-14T10:55:45.556Z",
+    "updated_at": "2018-11-14T10:55:45.556Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "32c4da71-dc37-4568-88c6-cc6b0587f11a",
+    "item_id": "2ff2a011-03e5-4d02-aff6-da2e1562bbc4",
+    "extra": {
+      "units": 2
+    },
+    "created_at": "2018-11-13T10:50:10.707Z",
+    "updated_at": "2018-11-13T10:50:10.707Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "99c8ba6f-55c7-4b99-a4e4-505ae2af55e2",
+    "item_id": "a11ad7be-4560-4214-a923-06b70bc3c762",
+    "extra": {
+      "units": 2
+    },
+    "created_at": "2018-11-10T08:17:58.536Z",
+    "updated_at": "2018-11-10T08:17:58.536Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "9fa0bce3-a7f7-4e95-b615-b6d763134a59",
+    "item_id": "a1b416e0-8058-42fa-9aa2-e76522a7e0a0",
+    "extra": {
+      "units": 5
+    },
+    "created_at": "2018-11-11T06:03:32.200Z",
+    "updated_at": "2018-11-11T06:03:32.200Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "fada7871-7b96-4630-bd74-67a02b779e8a",
+    "item_id": "2a70f0fe-963b-4fea-8685-873ce6446d2c",
+    "extra": {
+      "units": 8
+    },
+    "created_at": "2018-11-14T19:33:25.390Z",
+    "updated_at": "2018-11-14T19:33:25.390Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "0fd9e13c-24ef-4c6f-a2be-8be07558cf1c",
+    "item_id": "47f4a234-f886-4230-9e82-c961f4206691",
+    "extra": {
+      "units": 3
+    },
+    "created_at": "2018-11-13T11:49:05.466Z",
+    "updated_at": "2018-11-13T11:49:05.466Z",
+    "deleted_at": null
+  },
+  {
+    "quote_id": "2843e2e0-f512-4a75-bea7-b55f3ca6b7e3",
+    "item_id": "faff005f-2622-442c-9b79-1ee82d64c77f",
+    "extra": {
+      "units": 6
+    },
+    "created_at": "2018-11-11T03:53:53.091Z",
+    "updated_at": "2018-11-11T03:53:53.091Z",
+    "deleted_at": null
+  }
+]

@@ -1,0 +1,62 @@
+"use strict";
+
+module.exports = function(DataTypes) {
+  return {
+    name: "Category",
+    attributes: {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        allowNull: false,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4
+      },
+      parent_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: {
+            tableName: "category",
+            schema: "nz"
+          },
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      code: {
+        type: DataTypes.STRING(10),
+        allowNull: false,
+        unique: true,
+        defaultValue: "unset"
+      },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true
+      },
+      extra: {
+        type: DataTypes.JSONB,
+        allowNull: true,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      deleted_at: {
+        type: DataTypes.DATE,
+        allowNull: true
+      }
+    },
+    options: {
+      schema: "nz",
+      tableName: "category"
+    }
+  }
+}

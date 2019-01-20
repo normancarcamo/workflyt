@@ -1,0 +1,242 @@
+[
+  {
+    "id": "f653165d-bb21-437a-8605-7dc06837975e",
+    "code": "SPL0000001",
+    "name": "Goodwin - Strosin",
+    "created_at": "2018-11-13T14:46:07.390Z",
+    "updated_at": "2018-11-13T14:46:07.390Z",
+    "deleted_at": null
+  },
+  {
+    "id": "099d2d0a-3eff-41ff-af16-8cdddedefe50",
+    "code": "SPL0000002",
+    "name": "Swift Group",
+    "created_at": "2018-11-10T19:14:29.776Z",
+    "updated_at": "2018-11-10T19:14:29.776Z",
+    "deleted_at": null
+  },
+  {
+    "id": "871dd5e9-4cdf-440f-8d51-fb438f15cc69",
+    "code": "SPL0000003",
+    "name": "Boyle Inc",
+    "created_at": "2018-11-13T17:26:41.555Z",
+    "updated_at": "2018-11-13T17:26:41.555Z",
+    "deleted_at": null
+  },
+  {
+    "id": "60f40df5-9e25-44da-85c9-b060382dd3eb",
+    "code": "SPL0000004",
+    "name": "Huel - Eichmann",
+    "created_at": "2018-11-13T15:49:45.035Z",
+    "updated_at": "2018-11-13T15:49:45.035Z",
+    "deleted_at": null
+  },
+  {
+    "id": "547757b2-c6d6-4e2e-ac56-6cc6864fb3b1",
+    "code": "SPL0000005",
+    "name": "Bechtelar - O'Reilly",
+    "created_at": "2018-11-14T02:53:27.295Z",
+    "updated_at": "2018-11-14T02:53:27.295Z",
+    "deleted_at": null
+  },
+  {
+    "id": "c36e9c6d-bd7f-4d03-b11a-32970e05cc4e",
+    "code": "SPL0000006",
+    "name": "Johnston Inc",
+    "created_at": "2018-11-10T11:34:41.125Z",
+    "updated_at": "2018-11-10T11:34:41.125Z",
+    "deleted_at": null
+  },
+  {
+    "id": "69e96744-702b-41f4-bd52-4abbfe65dec0",
+    "code": "SPL0000007",
+    "name": "Bartell - Kihn",
+    "created_at": "2018-11-10T16:02:52.931Z",
+    "updated_at": "2018-11-10T16:02:52.931Z",
+    "deleted_at": null
+  },
+  {
+    "id": "efe72b34-5518-46d3-99e4-c256ee8a2fd5",
+    "code": "SPL0000008",
+    "name": "Bednar and Sons",
+    "created_at": "2018-11-12T20:45:38.409Z",
+    "updated_at": "2018-11-12T20:45:38.409Z",
+    "deleted_at": null
+  },
+  {
+    "id": "41f7d988-3f10-4fc8-a6a9-1c62ab1839a4",
+    "code": "SPL0000009",
+    "name": "Ryan, Glover and Daugherty",
+    "created_at": "2018-11-14T17:33:31.209Z",
+    "updated_at": "2018-11-14T17:33:31.209Z",
+    "deleted_at": null
+  },
+  {
+    "id": "df7634f4-4de6-4a08-80ef-a912c3867172",
+    "code": "SPL0000010",
+    "name": "Trantow, Dooley and Rohan",
+    "created_at": "2018-11-10T03:17:57.052Z",
+    "updated_at": "2018-11-10T03:17:57.052Z",
+    "deleted_at": null
+  },
+  {
+    "id": "5d2cff55-46fe-4a05-822c-b9b214128417",
+    "code": "SPL0000011",
+    "name": "Corkery - Feil",
+    "created_at": "2018-11-11T06:22:13.263Z",
+    "updated_at": "2018-11-11T06:22:13.263Z",
+    "deleted_at": null
+  },
+  {
+    "id": "f582ffa6-78b4-4c02-9e8f-3e375b8a87bb",
+    "code": "SPL0000012",
+    "name": "Heller, Hamill and Schulist",
+    "created_at": "2018-11-13T06:16:10.793Z",
+    "updated_at": "2018-11-13T06:16:10.793Z",
+    "deleted_at": null
+  },
+  {
+    "id": "57b3bffe-1ec3-416a-a51d-fb4877fdf021",
+    "code": "SPL0000013",
+    "name": "Rowe, Ledner and Bosco",
+    "created_at": "2018-11-14T02:18:10.634Z",
+    "updated_at": "2018-11-14T02:18:10.634Z",
+    "deleted_at": null
+  },
+  {
+    "id": "b10f2d69-6d74-442e-b1c8-6c79c1b4dd98",
+    "code": "SPL0000014",
+    "name": "Orn, Volkman and Kozey",
+    "created_at": "2018-11-13T10:53:22.709Z",
+    "updated_at": "2018-11-13T10:53:22.709Z",
+    "deleted_at": null
+  },
+  {
+    "id": "a569059c-457a-4f1f-bba8-84c55c116dc5",
+    "code": "SPL0000015",
+    "name": "Mertz - King",
+    "created_at": "2018-11-13T20:39:35.335Z",
+    "updated_at": "2018-11-13T20:39:35.335Z",
+    "deleted_at": null
+  },
+  {
+    "id": "e1d73383-ebb8-4239-8bfa-0694d51ccd3f",
+    "code": "SPL0000016",
+    "name": "McDermott, Jerde and Nitzsche",
+    "created_at": "2018-11-11T22:39:11.657Z",
+    "updated_at": "2018-11-11T22:39:11.657Z",
+    "deleted_at": null
+  },
+  {
+    "id": "e962e50a-8565-43c0-8cb0-e8559795f80b",
+    "code": "SPL0000017",
+    "name": "Armstrong - Steuber",
+    "created_at": "2018-11-13T02:01:29.247Z",
+    "updated_at": "2018-11-13T02:01:29.247Z",
+    "deleted_at": null
+  },
+  {
+    "id": "81a076c6-29de-458a-a3bc-ccd65aa0c570",
+    "code": "SPL0000018",
+    "name": "Macejkovic - Cassin",
+    "created_at": "2018-11-11T04:07:00.046Z",
+    "updated_at": "2018-11-11T04:07:00.046Z",
+    "deleted_at": null
+  },
+  {
+    "id": "54c846a5-6118-4d9f-9512-6772a63537ce",
+    "code": "SPL0000019",
+    "name": "Hartmann - Mohr",
+    "created_at": "2018-11-12T20:53:05.598Z",
+    "updated_at": "2018-11-12T20:53:05.598Z",
+    "deleted_at": null
+  },
+  {
+    "id": "0c005468-c6d5-498f-9a19-65ed64b01796",
+    "code": "SPL0000020",
+    "name": "Bergstrom, Dicki and Kunze",
+    "created_at": "2018-11-10T14:40:11.409Z",
+    "updated_at": "2018-11-10T14:40:11.409Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4c437a46-7f1d-4e59-800e-61d84639d419",
+    "code": "SPL0000021",
+    "name": "Schinner LLC",
+    "created_at": "2018-11-14T21:27:45.919Z",
+    "updated_at": "2018-11-14T21:27:45.919Z",
+    "deleted_at": null
+  },
+  {
+    "id": "96061c73-f17f-435f-b88d-0599d9311401",
+    "code": "SPL0000022",
+    "name": "Gorczany - Dach",
+    "created_at": "2018-11-14T01:47:05.348Z",
+    "updated_at": "2018-11-14T01:47:05.348Z",
+    "deleted_at": null
+  },
+  {
+    "id": "79a4eaa9-7e23-4534-b397-dd4bc94e311a",
+    "code": "SPL0000023",
+    "name": "Wyman - Powlowski",
+    "created_at": "2018-11-12T01:24:53.081Z",
+    "updated_at": "2018-11-12T01:24:53.081Z",
+    "deleted_at": null
+  },
+  {
+    "id": "3c64d8df-7f91-4932-8c1e-1de77b01b887",
+    "code": "SPL0000024",
+    "name": "Nicolas, Kautzer and Mueller",
+    "created_at": "2018-11-10T08:49:19.028Z",
+    "updated_at": "2018-11-10T08:49:19.028Z",
+    "deleted_at": null
+  },
+  {
+    "id": "9a67f393-60e4-40c8-8cd3-5cf306b83a72",
+    "code": "SPL0000025",
+    "name": "Stracke, Morar and Altenwerth",
+    "created_at": "2018-11-12T09:43:11.901Z",
+    "updated_at": "2018-11-12T09:43:11.901Z",
+    "deleted_at": null
+  },
+  {
+    "id": "fcf60cf9-d44b-4ea6-9597-51a9abe9400b",
+    "code": "SPL0000026",
+    "name": "Cruickshank, Collier and Little",
+    "created_at": "2018-11-10T11:44:18.124Z",
+    "updated_at": "2018-11-10T11:44:18.124Z",
+    "deleted_at": null
+  },
+  {
+    "id": "cba0ed33-bb68-424b-bf42-465fab7f173a",
+    "code": "SPL0000027",
+    "name": "Powlowski, Kunze and Zulauf",
+    "created_at": "2018-11-13T02:59:31.235Z",
+    "updated_at": "2018-11-13T02:59:31.235Z",
+    "deleted_at": null
+  },
+  {
+    "id": "72729481-82d8-4076-bf6a-41434d21eb71",
+    "code": "SPL0000028",
+    "name": "Monahan - Streich",
+    "created_at": "2018-11-10T12:53:40.289Z",
+    "updated_at": "2018-11-10T12:53:40.289Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4ffc50a8-2f99-40b7-9ed7-82a246b9318e",
+    "code": "SPL0000029",
+    "name": "Sipes - Hane",
+    "created_at": "2018-11-11T06:49:07.979Z",
+    "updated_at": "2018-11-11T06:49:07.979Z",
+    "deleted_at": null
+  },
+  {
+    "id": "437c3781-e2ae-4c9c-b518-7d0aae66cc13",
+    "code": "SPL0000030",
+    "name": "Wunsch Inc",
+    "created_at": "2018-11-12T14:58:43.329Z",
+    "updated_at": "2018-11-12T14:58:43.329Z",
+    "deleted_at": null
+  }
+]

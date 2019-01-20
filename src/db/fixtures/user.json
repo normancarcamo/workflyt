@@ -1,0 +1,302 @@
+[
+  {
+    "id": "6d9802fb-cd69-4491-89b3-185af84784bc",
+    "employee_id": "832acbef-cae7-49f5-9024-c4553cf93724",
+    "code": "USR0000001",
+    "username": "evelyn.doyle",
+    "password": "ZfPmAdjpUuTHZ9h",
+    "created_at": "2018-11-11T13:52:43.613Z",
+    "updated_at": "2018-11-11T13:52:43.613Z",
+    "deleted_at": null
+  },
+  {
+    "id": "c494c408-ef4f-4aed-9f8a-5f6b3d0e902c",
+    "employee_id": "d481d4dd-aebc-46aa-9bcf-069c2d44ac51",
+    "code": "USR0000002",
+    "username": "alvah_rodriguez",
+    "password": "jNUPutvKNN9Sfyd",
+    "created_at": "2018-11-14T14:46:02.894Z",
+    "updated_at": "2018-11-14T14:46:02.894Z",
+    "deleted_at": null
+  },
+  {
+    "id": "a418a6e3-1d3a-4908-9343-c69ae648b214",
+    "employee_id": "95103c7c-52ce-42fa-9d3e-e4fc99e60b4d",
+    "code": "USR0000003",
+    "username": "ruby.zemlak",
+    "password": "5lzVAOxgIGAtxPY",
+    "created_at": "2018-11-14T22:29:18.744Z",
+    "updated_at": "2018-11-14T22:29:18.744Z",
+    "deleted_at": null
+  },
+  {
+    "id": "836c9320-76d4-4352-95a0-20fb2f6c5c2a",
+    "employee_id": "f4deb93c-8674-4481-8053-78a234686644",
+    "code": "USR0000004",
+    "username": "freddy.hoppe",
+    "password": "1y_ESITlPFhCSv5",
+    "created_at": "2018-11-11T17:54:00.198Z",
+    "updated_at": "2018-11-11T17:54:00.198Z",
+    "deleted_at": null
+  },
+  {
+    "id": "553a533f-24e3-49ce-8720-36b21bd1bbfc",
+    "employee_id": "eb88b8f1-4237-44c8-9492-b411bec43f1d",
+    "code": "USR0000005",
+    "username": "katlynn.marks",
+    "password": "VE0myxriW5qj6OP",
+    "created_at": "2018-11-11T00:52:19.096Z",
+    "updated_at": "2018-11-11T00:52:19.096Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4c5d9678-e650-4638-9f02-7a2e489641ba",
+    "employee_id": "95c1ab08-7c86-4563-9950-a4f33e8b728a",
+    "code": "USR0000006",
+    "username": "javier97",
+    "password": "ALw9bnhl_6EwSli",
+    "created_at": "2018-11-11T19:26:29.696Z",
+    "updated_at": "2018-11-11T19:26:29.696Z",
+    "deleted_at": null
+  },
+  {
+    "id": "fd97ff61-e198-48f5-83dd-8e67cf9d0ec7",
+    "employee_id": "eb88b8f1-4237-44c8-9492-b411bec43f1d",
+    "code": "USR0000007",
+    "username": "brandon_jones",
+    "password": "O9P1N6WJs8wrAFL",
+    "created_at": "2018-11-10T23:12:57.575Z",
+    "updated_at": "2018-11-10T23:12:57.575Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4d470eac-6bec-4b5e-8fef-cf6657ae0f8d",
+    "employee_id": "f0495afc-94d1-434d-9c0d-f1fcb4a2850d",
+    "code": "USR0000008",
+    "username": "rashad75",
+    "password": "8tFerEpaPqSceLV",
+    "created_at": "2018-11-10T20:35:06.719Z",
+    "updated_at": "2018-11-10T20:35:06.719Z",
+    "deleted_at": null
+  },
+  {
+    "id": "1b9459af-65bd-4b92-ae9f-900f30b45b75",
+    "employee_id": "30cc8dea-dafa-44b3-8737-4bec3ba7618e",
+    "code": "USR0000009",
+    "username": "ila21",
+    "password": "lPfBeBPcmMvMnej",
+    "created_at": "2018-11-11T10:34:41.354Z",
+    "updated_at": "2018-11-11T10:34:41.354Z",
+    "deleted_at": null
+  },
+  {
+    "id": "83ff3800-f942-4632-a8ba-e09a938a2a40",
+    "employee_id": "4cc9a768-7527-42de-bf26-520399b3430d",
+    "code": "USR0000010",
+    "username": "lincoln92",
+    "password": "xVRWQ1JoOKiTgLX",
+    "created_at": "2018-11-12T22:20:02.022Z",
+    "updated_at": "2018-11-12T22:20:02.022Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4bd3294a-7331-4a2d-8974-793b329a0136",
+    "employee_id": "30cc8dea-dafa-44b3-8737-4bec3ba7618e",
+    "code": "USR0000011",
+    "username": "liliana_rempel",
+    "password": "xnOf5T5qci9dVUx",
+    "created_at": "2018-11-13T04:53:47.931Z",
+    "updated_at": "2018-11-13T04:53:47.931Z",
+    "deleted_at": null
+  },
+  {
+    "id": "ed3c9cdf-0e3d-434e-ac37-607fb00e8a0a",
+    "employee_id": "3b8dd1f2-69a8-4801-af93-5bc37dfd206c",
+    "code": "USR0000012",
+    "username": "jazmyne_fritsch",
+    "password": "BSEb8UHOQhDAa2l",
+    "created_at": "2018-11-10T00:02:05.870Z",
+    "updated_at": "2018-11-10T00:02:05.870Z",
+    "deleted_at": null
+  },
+  {
+    "id": "e0b58c5a-51da-4264-a0b6-22b6a7e72576",
+    "employee_id": "3b8dd1f2-69a8-4801-af93-5bc37dfd206c",
+    "code": "USR0000013",
+    "username": "kody_bernhard46",
+    "password": "awDiEDjYvFMdCsw",
+    "created_at": "2018-11-10T21:19:45.241Z",
+    "updated_at": "2018-11-10T21:19:45.241Z",
+    "deleted_at": null
+  },
+  {
+    "id": "72598830-388b-414d-bb6c-d76ce29d6385",
+    "employee_id": "2fe4bde4-520e-402e-a53e-7de32415fd5c",
+    "code": "USR0000014",
+    "username": "savion.kiehn55",
+    "password": "JJ_dYY1n6zmGrCb",
+    "created_at": "2018-11-10T21:30:09.640Z",
+    "updated_at": "2018-11-10T21:30:09.640Z",
+    "deleted_at": null
+  },
+  {
+    "id": "bc40b312-298d-42ee-9f42-c36b7555fd17",
+    "employee_id": "9f2c7a79-13cc-41ba-b72d-3962fb69e6f7",
+    "code": "USR0000015",
+    "username": "olaf.osinski72",
+    "password": "cAOxFkqVxB6wrqC",
+    "created_at": "2018-11-14T23:03:09.595Z",
+    "updated_at": "2018-11-14T23:03:09.595Z",
+    "deleted_at": null
+  },
+  {
+    "id": "17163d23-f774-4c6f-b0c3-ccc35580ba86",
+    "employee_id": "01e13c32-864e-4387-a9a0-6292c325b4eb",
+    "code": "USR0000016",
+    "username": "chloe_pfeffer40",
+    "password": "TVLc19HriGUF2mj",
+    "created_at": "2018-11-11T00:00:44.496Z",
+    "updated_at": "2018-11-11T00:00:44.496Z",
+    "deleted_at": null
+  },
+  {
+    "id": "01548970-de13-4654-8175-59d94554841d",
+    "employee_id": "30cc8dea-dafa-44b3-8737-4bec3ba7618e",
+    "code": "USR0000017",
+    "username": "laury82",
+    "password": "p1tYSypNMj8wTO4",
+    "created_at": "2018-11-13T01:51:05.378Z",
+    "updated_at": "2018-11-13T01:51:05.378Z",
+    "deleted_at": null
+  },
+  {
+    "id": "fb851a01-34ff-43da-a71e-f8104e8e1fc2",
+    "employee_id": "fa45d954-1098-455e-b4a3-024607dd07ce",
+    "code": "USR0000018",
+    "username": "jamel.jerde75",
+    "password": "shupt6GkFWjPckB",
+    "created_at": "2018-11-14T02:07:07.178Z",
+    "updated_at": "2018-11-14T02:07:07.178Z",
+    "deleted_at": null
+  },
+  {
+    "id": "7e2495a3-cbc4-4715-a7a6-796466b29429",
+    "employee_id": "95103c7c-52ce-42fa-9d3e-e4fc99e60b4d",
+    "code": "USR0000019",
+    "username": "keon65",
+    "password": "L0gapYpXaHNAmH9",
+    "created_at": "2018-11-14T10:04:21.152Z",
+    "updated_at": "2018-11-14T10:04:21.152Z",
+    "deleted_at": null
+  },
+  {
+    "id": "02c48253-e4e7-4931-91e9-91cf7c8b0a17",
+    "employee_id": "5b6dd8ec-12e6-4983-9f3d-b35394652e63",
+    "code": "USR0000020",
+    "username": "jaclyn.koepp39",
+    "password": "FOgwEcN2CgxnAHh",
+    "created_at": "2018-11-13T01:59:31.501Z",
+    "updated_at": "2018-11-13T01:59:31.501Z",
+    "deleted_at": null
+  },
+  {
+    "id": "98ac334b-28c9-41eb-8719-f39610f567cf",
+    "employee_id": "d9749266-4ab2-418b-a85f-a13d5cab5efb",
+    "code": "USR0000021",
+    "username": "damaris.towne",
+    "password": "yU_w8yuQKJmVKaN",
+    "created_at": "2018-11-13T08:04:04.978Z",
+    "updated_at": "2018-11-13T08:04:04.978Z",
+    "deleted_at": null
+  },
+  {
+    "id": "a05c20ba-5215-4f08-9fc5-284f9d8c3666",
+    "employee_id": "4cc9a768-7527-42de-bf26-520399b3430d",
+    "code": "USR0000022",
+    "username": "luna_wintheiser",
+    "password": "lrglZXiN6l0HY6M",
+    "created_at": "2018-11-10T20:20:23.589Z",
+    "updated_at": "2018-11-10T20:20:23.589Z",
+    "deleted_at": null
+  },
+  {
+    "id": "8c34fcea-7a67-48a5-ac8c-71e0a98f9ac2",
+    "employee_id": "2ac546f6-48a1-46a7-8b05-ffaa18a75e6a",
+    "code": "USR0000023",
+    "username": "kaylin80",
+    "password": "cRA11ha9kdnuv5N",
+    "created_at": "2018-11-12T13:38:38.043Z",
+    "updated_at": "2018-11-12T13:38:38.043Z",
+    "deleted_at": null
+  },
+  {
+    "id": "88a0f264-8a36-40f6-a23c-25619292c559",
+    "employee_id": "5a0a02af-01a7-44fb-bc85-0ba17bf464f1",
+    "code": "USR0000024",
+    "username": "lottie_lynch",
+    "password": "9auVXRYI6cC4M2D",
+    "created_at": "2018-11-11T23:11:35.903Z",
+    "updated_at": "2018-11-11T23:11:35.903Z",
+    "deleted_at": null
+  },
+  {
+    "id": "f6cd1155-f7a5-4f64-8c39-d337da96e68c",
+    "employee_id": "47f52f9d-af39-45a8-984d-7f168578d31f",
+    "code": "USR0000025",
+    "username": "tristian.daugherty90",
+    "password": "ATPZ5eyapEqpAg1",
+    "created_at": "2018-11-12T02:35:50.388Z",
+    "updated_at": "2018-11-12T02:35:50.388Z",
+    "deleted_at": null
+  },
+  {
+    "id": "4256b63f-8a7a-45e3-8863-5449f24212d0",
+    "employee_id": "47f52f9d-af39-45a8-984d-7f168578d31f",
+    "code": "USR0000026",
+    "username": "vince_von",
+    "password": "5v0PgwuNANiM1QP",
+    "created_at": "2018-11-14T09:28:54.212Z",
+    "updated_at": "2018-11-14T09:28:54.212Z",
+    "deleted_at": null
+  },
+  {
+    "id": "fcfe84f6-ddee-40dc-913c-3da926ee0cfc",
+    "employee_id": "f4deb93c-8674-4481-8053-78a234686644",
+    "code": "USR0000027",
+    "username": "deron.swift",
+    "password": "TeOBMtLX56_j77n",
+    "created_at": "2018-11-10T18:29:03.739Z",
+    "updated_at": "2018-11-10T18:29:03.739Z",
+    "deleted_at": null
+  },
+  {
+    "id": "364ef3c6-d5f2-4925-b327-e9504432702a",
+    "employee_id": "bed802df-ee88-4ef2-a83d-2dcbee2fc1ba",
+    "code": "USR0000028",
+    "username": "dejuan71",
+    "password": "7dwoVjLQ7IG4irq",
+    "created_at": "2018-11-10T14:54:14.724Z",
+    "updated_at": "2018-11-10T14:54:14.724Z",
+    "deleted_at": null
+  },
+  {
+    "id": "f6cdd693-cd07-4c0b-bac5-f637163be7f7",
+    "employee_id": "f75d91db-56d7-4aea-a0f1-ce97c610f62f",
+    "code": "USR0000029",
+    "username": "deron.stiedemann58",
+    "password": "3zF5cFxkqdHpNaE",
+    "created_at": "2018-11-13T12:27:49.085Z",
+    "updated_at": "2018-11-13T12:27:49.085Z",
+    "deleted_at": null
+  },
+  {
+    "id": "9d21075f-3b24-4eb9-a205-4ce73dd896b2",
+    "employee_id": "c32961f6-bbb4-468c-8b22-84a4f8bd2c05",
+    "code": "USR0000030",
+    "username": "delaney52",
+    "password": "52JXDzgShZbj5Oj",
+    "created_at": "2018-11-13T07:25:40.271Z",
+    "updated_at": "2018-11-13T07:25:40.271Z",
+    "deleted_at": null
+  }
+]
