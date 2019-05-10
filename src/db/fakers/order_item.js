@@ -19,7 +19,10 @@ module.exports = function(orders, item) {
       },
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     });
   }
 

@@ -13,16 +13,17 @@ module.exports = function(DataTypes) {
       },
       item_id: {
         type: DataTypes.UUID,
-        allowNull: true,
+        allowNull: false,
+        unique: false,
         references: {
           model: {
-            schema: "nz",
+            schema: "public",
             tableName: "item"
           },
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL"
+        onDelete: "CASCADE"
       },
       entries: {
         type: DataTypes.INTEGER,
@@ -56,10 +57,31 @@ module.exports = function(DataTypes) {
       deleted_at: {
         type: DataTypes.DATE,
         allowNull: true
+      },
+      created_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      updated_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      deleted_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       }
     },
     options: {
-      schema: "nz",
+      schema: "public",
       tableName: "stock"
     }
   }

@@ -6,18 +6,18 @@ const API_BASE = `/api/v1/suppliers`;
 describe("Supplier Service:", () => {
   beforeAll(setup.before_all);
   beforeEach(setup.before_each);
-
-  // --------------------------------------------------------------------------
+  afterEach(setup.after_each);
+  afterAll(setup.after_all);
 
   describe("get suppliers", () => {
     describe('should return data when:', () => {
       for (let { id, description, input } of scenario.get_suppliers.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_suppliers.mock({ input, fail: false });
+          await scenario.get_suppliers.mock({ input, fail: false, stage: description });
 
           // Given:
-          let querystring = input();
+          let querystring = await input();
 
           // When:
           let res = await request("get", API_BASE).query(querystring);
@@ -33,10 +33,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.get_suppliers.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_suppliers.mock({ input, fail: true });
+          await scenario.get_suppliers.mock({ input, fail: true, stage: description });
 
           // Given:
-          let querystring = input();
+          let querystring = await input();
 
           // When:
           let res = await request("get", API_BASE).query(querystring);
@@ -55,13 +55,12 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.create_suppliers.pass) {
         it(description, async () => {
           // Given:
-          scenario.create_suppliers.mock({ input, fail: false });
+          await scenario.create_suppliers.mock({ input, fail: false, stage: description });
 
           // When:
-          let res = await request("post", API_BASE).send(input());
+          let res = await request("post", API_BASE).send(await input());
 
           // Then:
-          console.log('==============>', res.body.error);
           expect(res.statusCode).toEqual(201);
           expect(res.body.data).toBeDefined();
           expect(res.body.error).toBeOneOf([ undefined, null ]);
@@ -72,10 +71,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.create_suppliers.fail) {
         it(description, async () => {
           // Given:
-          scenario.create_suppliers.mock({ input, fail: true });
+          await scenario.create_suppliers.mock({ input, fail: true, stage: description });
 
           // When:
-          let res = await request("post", API_BASE).send(input());
+          let res = await request("post", API_BASE).send(await input());
 
           // Then:
           expect(res.statusCode).toBeWithin(400, 522);
@@ -86,17 +85,15 @@ describe("Supplier Service:", () => {
     });
   });
 
-  // --------------------------------------------------------------------------
-
   describe("get supplier:", () => {
     describe('should return data when:', () => {
       for (let { id, description, input } of scenario.get_supplier.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_supplier.mock({ input, fail: false });
+          await scenario.get_supplier.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id } = input();
+          let { supplier_id } = await input();
 
           // When:
           let res = await request("get", `${API_BASE}/${supplier_id}`);
@@ -112,10 +109,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.get_supplier.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_supplier.mock({ input, fail: true });
+          await scenario.get_supplier.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id } = input();
+          let { supplier_id } = await input();
 
           // When:
           let res = await request("get", `${API_BASE}/${supplier_id}`);
@@ -134,10 +131,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.update_supplier.pass) {
         it(description, async () => {
           // Setup:
-          scenario.update_supplier.mock({ input, fail: false });
+          await scenario.update_supplier.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id, values } = input();
+          let { supplier_id, values } = await input();
           let endpoint = `${API_BASE}/${supplier_id}`;
 
           // When:
@@ -154,10 +151,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.update_supplier.fail) {
         it(description, async () => {
           // Setup:
-          scenario.update_supplier.mock({ input, fail: true });
+          await scenario.update_supplier.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id, values } = input();
+          let { supplier_id, values } = await input();
           let endpoint = `${API_BASE}/${supplier_id}`;
 
           // When:
@@ -177,10 +174,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.delete_supplier.pass) {
         it(description, async () => {
           // Setup:
-          scenario.delete_supplier.mock({ input, fail: false });
+          await scenario.delete_supplier.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id, query } = input();
+          let { supplier_id, query } = await input();
           let endpoint = `${API_BASE}/${supplier_id}`;
 
           // When:
@@ -197,10 +194,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.delete_supplier.fail) {
         it(description, async () => {
           // Setup:
-          scenario.delete_supplier.mock({ input, fail: true });
+          await scenario.delete_supplier.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id, query } = input();
+          let { supplier_id, query } = await input();
           let endpoint = `${API_BASE}/${supplier_id}`;
 
           // When:
@@ -215,17 +212,15 @@ describe("Supplier Service:", () => {
     });
   });
 
-  // --------------------------------------------------------------------------
-
   describe("get items:", () => {
     describe('should return data when:', () => {
       for (let { id, description, input } of scenario.get_items.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_items.mock({ input, fail: false });
+          await scenario.get_items.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id, query } = input();
+          let { supplier_id, query } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items`;
 
           // When:
@@ -242,10 +237,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.get_items.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_items.mock({ input, fail: true });
+          await scenario.get_items.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id, query } = input();
+          let { supplier_id, query } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items`;
 
           // When:
@@ -260,15 +255,15 @@ describe("Supplier Service:", () => {
     });
   });
 
-  describe("add items:", () => {
+  describe("set items:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.add_items.pass) {
+      for (let { id, description, input } of scenario.set_items.pass) {
         it(description, async () => {
           // Setup:
-          scenario.add_items.mock({ input, fail: false });
+          await scenario.set_items.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id, items } = input();
+          let { supplier_id, items } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items`;
 
           // When:
@@ -282,13 +277,13 @@ describe("Supplier Service:", () => {
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.add_items.fail) {
+      for (let { id, description, input } of scenario.set_items.fail) {
         it(description, async () => {
           // Setup:
-          scenario.add_items.mock({ input, fail: true });
+          await scenario.set_items.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id, items } = input();
+          let { supplier_id, items } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items`;
 
           // When:
@@ -303,17 +298,15 @@ describe("Supplier Service:", () => {
     });
   });
 
-  // --------------------------------------------------------------------------
-
   describe("get item:", () => {
     describe('should return data when:', () => {
       for (let { id, description, input } of scenario.get_item.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_item.mock({ input, fail: false });
+          await scenario.get_item.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id, item_id } = input();
+          let { supplier_id, item_id } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items/${item_id}`;
 
           // When:
@@ -330,10 +323,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.get_item.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_item.mock({ input, fail: true });
+          await scenario.get_item.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id, item_id } = input();
+          let { supplier_id, item_id } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items/${item_id}`;
 
           // When:
@@ -353,10 +346,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.update_item.pass) {
         it(description, async () => {
           // Setup:
-          scenario.update_item.mock({ input, fail: false });
+          await scenario.update_item.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id, item_id, values } = input();
+          let { supplier_id, item_id, values } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items/${item_id}`;
 
           // When:
@@ -373,10 +366,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.update_item.fail) {
         it(description, async () => {
           // Setup:
-          scenario.update_item.mock({ input, fail: true });
+          await scenario.update_item.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id, item_id, values } = input();
+          let { supplier_id, item_id, values } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items/${item_id}`;
 
           // When:
@@ -396,10 +389,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.remove_item.pass) {
         it(description, async () => {
           // Setup:
-          scenario.remove_item.mock({ input, fail: false });
+          await scenario.remove_item.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { supplier_id, item_id } = input();
+          let { supplier_id, item_id } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items/${item_id}`;
 
           // When:
@@ -416,10 +409,10 @@ describe("Supplier Service:", () => {
       for (let { id, description, input } of scenario.remove_item.fail) {
         it(description, async () => {
           // Setup:
-          scenario.remove_item.mock({ input, fail: true });
+          await scenario.remove_item.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { supplier_id, item_id } = input();
+          let { supplier_id, item_id } = await input();
           let endpoint = `${API_BASE}/${supplier_id}/items/${item_id}`;
 
           // When:
@@ -433,9 +426,4 @@ describe("Supplier Service:", () => {
       }
     });
   });
-
-  // --------------------------------------------------------------------------
-
-  afterEach(setup.after_each);
-  afterAll(setup.after_all);
 });

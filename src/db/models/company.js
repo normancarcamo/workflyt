@@ -2,9 +2,7 @@
 
 import Schema from "../schemas/company";
 
-import Methods from "../methods/company";
-
-import Hooks from "../hooks/company";
+import Methods from "../methods/shared";
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -13,8 +11,6 @@ module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define(name, attributes, options);
 
   Methods.call(Model, sequelize);
-
-  Hooks(Model, sequelize);
 
   return Model;
 };

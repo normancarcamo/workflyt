@@ -7,126 +7,53 @@ const is_mocked = JSON.parse(process.env.MOCK);
 const setup = setup_factory(db, is_mocked), scenario = {};
 const { Item } = db.sequelize.models;
 
+// ----------------------------------------------------------------------------
+
 scenario.get_items = {
   pass: [
     {
       id: uuid(),
-      description: 'querystring is: empty',
-      input: () => ({ search: {} })
+      description: 'query sent is: {}',
+      input: async () => ({})
     },
     {
       id: uuid(),
-      description: 'querystring is: undefined',
-      input: () => ({ search: undefined })
+      description: 'query sent is: { search: {} }',
+      input: async () => ({ search: {} })
     },
     {
       id: uuid(),
-      description: 'querystring is: ?search[name]=war',
-      input: () => ({ search: { name: 'war' } })
+      description: 'query sent is: undefined',
+      input: async () => ({ search: undefined })
     },
     {
       id: uuid(),
-      description: 'querystring is: ?search[name]=Hardware',
-      input: () => ({ search: { name: 'Hardware' } })
+      description: "query sent is: { search: { name: 'ccccc' } }",
+      input: async () => ({ search: { name: 'ccccc' } })
     },
     {
       id: uuid(),
-      description: 'querystring is: ?search[code]=SPL',
-      input: () => ({ search: { code: 'SPL' } })
+      description: "query sent is: { search: { name: { like: '%vvvvv%' } } }",
+      input: async () => ({ search: { name: { like: '%vvvvv%' } } })
     },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[name][like]=%ware%',
-      input: () => ({ search: { name: { like: '%ware%'} } })
-    },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[code][like]=%SPL%',
-      input: () => ({ search: { code: { like: '%SPL%'} } })
-    },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[name][eq]=Hardware',
-      input: () => ({ search: { name: { eq: 'Hardware'} } })
-    },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[code][eq]=SPL',
-      input: () => ({ search: { code: { eq: 'SPL'} } })
-    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'querystring is: ?search=null',
-      input: () => ({ search: null })
+      description: 'Query validation fail',
+      input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'querystring is sent but something is wrong in the server',
-      input: () => ({ search: { name: { eq: 'Hardware'} } })
+      description: 'Item search throw error',
+      input: async () => ({ search: { name: { eq: 'model' } } })
     },
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findAll').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      } else {
-        jest.spyOn(Item, 'findAll').mockImplementation(options => {
-          // search:
-          const { search } = input();
-
-          if (is.object(search) && is.empty(search)) {
-            return Promise.resolve(setup.instance.items);
-          }
-
-          if (is.undefined(search)) {
-            return Promise.resolve(setup.instance.items);
-          }
-
-          if (search.name === 'war') {
-            return Promise.resolve([]);
-          }
-
-          if (search.name === 'Hardware') {
-            return Promise.resolve([setup.instance.items[0]]);
-          }
-
-          if (search.code === 'SPL') {
-            return Promise.resolve([]);
-          }
-
-          if (is.object(search.name)) {
-            if (search.name.like === '%war%') {
-              return Promise.resolve([setup.instance.items[0]]);
-            }
-            if (search.name.eq === 'Hardware') {
-              return Promise.resolve([setup.instance.items[0]]);
-            }
-          }
-
-          if (is.object(search.code)) {
-            if (search.code.like === '%SPL%') {
-              return Promise.resolve(setup.instance.items);
-            }
-            if (search.code.eq === 'SPL') {
-              return Promise.resolve([]);
-            }
-          }
-
-          // TODO: add querystring for "fields".
-
-          return Promise.resolve([]);
-        });
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (fail) {
+      jest.spyOn(Item, 'findAll').mockRejectedValue(new Error('Mocked'));
     } else {
-      if (fail) {
-        jest.spyOn(Item, 'findAll').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      }
+      jest.spyOn(Item, 'findAll').mockResolvedValue([]);
     }
   }
 };
@@ -135,115 +62,99 @@ scenario.create_items = {
   pass: [
     {
       id: uuid(),
-      description: 'values are sent as array',
-      input: () => ({
-        values: [ { name: "sps" } ]
-      })
+      description: 'Values are sent as array',
+      input: async () => ({ values: [{ name: 'aaaaa' }] })
     },
     {
       id: uuid(),
-      description: 'values are sent as object',
-      input: () => ({
-        values: { name: "tgu" }
-      })
+      description: 'Values are sent as object',
+      input: async () => ({ values: { name: 'bbbbb' } })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'values are sent as an array but server reject',
-      input: () => ({
-        values: [ { name: "sps" } ]
-      })
+      description: 'Values are sent as array but validation fail',
+      input: async () => ({ values: [{ name: '' }] })
     },
     {
       id: uuid(),
-      description: 'values are sent as object but server reject',
-      input: () => ({
-        values: { name: "tgu" }
-      })
+      description: 'Values are sent as object but validation fail',
+      input: async () => ({ values: { name: '' } })
+    },
+    {
+      id: uuid(),
+      description: 'Values are sent but action fail',
+      input: async () => ({ values: { name: 'demo' } })
     }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Item, 'createMany').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      } else {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          commit: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Item, 'createMany').mockImplementation((values, options) => {
-          if (Array.isArray(values)) {
-            let result = values.reduce((initial, values, index) => {
-              initial.push(Item.build({
-                code: 'SPL0083748',
-                ...values
-              }, options));
-              return initial;
-            }, []);
-            return Promise.resolve(result);
-          } else {
-            return Promise.resolve(Item.build({
-              code: 'SPL0083748',
-              ...values
-            }));
-          }
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Item, 'createMany').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (fail && stage === 'Values are sent but action fail') {
+      return jest.spyOn(Item, 'createMany')
+        .mockImplementation(new Error('Item.create error mocked'));
     }
-  },
+    if (!fail && is_mocked) {
+      return jest.spyOn(Item, 'createMany')
+        .mockImplementation((values, options) => {
+        if (Array.isArray(values)) {
+          return values.reduce((initial, values) => {
+            initial.push(Item.build(values, options));
+            return initial;
+          }, []);
+        } else {
+          return Item.build(values, options);
+        }
+      });
+    }
+  }
 };
 
 scenario.get_item = {
   pass: [
     {
       id: uuid(),
-      description: 'item is found',
-      input: () => ({ item_id: setup.instance.items[0].id })
+      description: 'Item is found',
+      input: async () => ({ item_id: setup.instance.items[0].id })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'item is not found',
-      input: () => ({ item_id: setup.instance.items[0].id })
-    }
+      description: 'Item param id is invalid',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item throw error when trying to be found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id
+      })
+    },
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue(null);
-      } else {
-        jest.spyOn(Item, 'findByPk').mockImplementation(id => {
-          return Promise.resolve({
-            id,
-            code: 'SPL0084789',
-            name: 'SAT',
-            extra: null,
-            created_at: '2019-01-06T08:34:31.609Z',
-            updated_at: '2019-01-06T08:34:31.625Z',
-            deleted_at: null
-          })
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue(null);
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Item is not found') {
+      return jest
+        .spyOn(Item, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (stage === 'Item throw error when trying to be found') {
+      return jest
+        .spyOn(Item, 'findByPk')
+        .mockRejectedValue(new Error('Item.findByPk error mocked'));
+    }
+    if (!fail && is_mocked) {
+      return jest
+        .spyOn(Item, 'findByPk')
+        .mockResolvedValue(setup.instance.items[0]);
     }
   }
 };
@@ -252,53 +163,72 @@ scenario.update_item = {
   pass: [
     {
       id: uuid(),
-      description: 'item was updated',
-      input: () => ({
+      description: 'Item is updated',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        values: { name: 'any name' }
+        values: { name: 'Item A' }
       })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'item was not updated',
-      input: () => ({
+      description: 'Item param id is invalid',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        values: { name: 'Item A' }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        values: { name: 'Item A' }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        values: { name: 'any name' }
+        values: { name: 'Item A' }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be updated',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        values: { name: 'Item A' }
       })
     }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          update: payload => Promise.reject(new Error('Mock Error'))
-        });
-      } else {
-        jest.spyOn(Item, 'findByPk').mockImplementation(id => {
-          return Promise.resolve({
-            update: payload => {
-              return Promise.resolve({
-                id,
-                code: 'SPL0083834',
-                name: 'SAT',
-                extra: null,
-                created_at: '2019-01-06T06:33:36.582Z',
-                updated_at: '2019-01-06T06:33:36.709Z',
-                deleted_at: null,
-                ...payload
-              })
-            }
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Item is not found' && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue(null);
+    }
+    if (stage === 'Item was trying to be found') {
+      return jest
+        .spyOn(Item, 'findByPk')
+        .mockRejectedValue(new Error('Item.findByPk error mocked'));
+    }
+    if (stage === 'Item was trying to be updated') {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        update: async payload => {
+          throw new Error('Item.findByPk error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        update: async (values, options) => {
+          return Item.build({
+            ...setup.instance.items[0].dataValues,
+            updated_at: new Date().toISOString()
           })
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          update: payload => Promise.reject(new Error('Mock Error'))
-        });
-      }
+        }
+      });
     }
   }
 };
@@ -307,318 +237,352 @@ scenario.delete_item = {
   pass: [
     {
       id: uuid(),
-      description: 'item was deleted',
-      input: () => ({
+      description: 'Item is deleted using force option as false',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        query: {
-          force: is_mocked ? false : true
-        }
+        query: { force: false }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is deleted using force option as true',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        query: { force: true }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is deleted without options',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        query: {}
       })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'item could not be deleted',
-      input: () => ({
-        item_id: setup.instance.items[0].id,
-        query: {
-          force: is_mocked ? false : true
-        }
+      description: 'Item param id is invalid',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        query: {}
       })
-    }
-  ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          destroy: payload => Promise.reject(new Error('Mock Error'))
-        });
-      } else {
-        jest.spyOn(Item, 'findByPk').mockImplementation(id => {
-          return Promise.resolve({
-            destroy: payload => {
-              if (payload.force) {
-                return Promise.resolve([]);
-              } else {
-                return Promise.resolve(Item.build({
-                  id,
-                  code: 'SPL0083834',
-                  name: 'SAT',
-                  extra: null,
-                  created_at: '2019-01-06T06:33:36.582Z',
-                  updated_at: '2019-01-06T06:33:36.709Z',
-                  deleted_at: new Date().toISOString()
-                }))
-              }
-            }
-          });
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          destroy: payload => Promise.reject(new Error('Mock Error'))
-        });
-      }
-    }
-  }
-};
-
-scenario.get_types = {
-  pass: [
+    },
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: 'Item is not found',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
         query: {}
       })
     },
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: 'Item was trying to be deleted',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        query: { search: { name: 'dknd' } }
+        query: {}
+      })
+    },
+  ],
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Item is not found' && is_mocked) {
+      return jest
+        .spyOn(Item, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (stage === 'Item was trying to be found') {
+      return jest
+        .spyOn(Item, 'findByPk')
+        .mockRejectedValue(new Error('Item.findByPk error mocked'));
+    }
+    if (stage === 'Item was trying to be deleted') {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        destroy: (options) => Promise.reject(new Error('destroy error mocked'))
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        destroy: async (options) => {
+          if (options.force) {
+            return [];
+          } else {
+            const now = new Date().toISOString();
+            setup.instance.items[0].deleted_at = now;
+            setup.instance.items[0].updated_at = now;
+            return setup.instance.items[0];
+          }
+        }
+      });
+    }
+  }
+};
+
+// ----------------------------------------------------------------------------
+
+scenario.get_stocks = {
+  pass: [
+    {
+      id: uuid(),
+      description: 'Stocks are found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        query: {}
       })
     },
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: 'Stocks has been found using entries=34',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        query: { search: { name: { like: '%disk%' } } }
+        query: {
+          search: {
+            entries: 34
+          }
+        }
       })
-    }
-  ],
-  fail: [
-    {
-      id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
-        item_id: setup.instance.items[0].id,
-        query: null
-      }),
     },
     {
       id: uuid(),
-      description: 'querystring is sent but something is wrong in the server',
-      input: () => ({
+      description: 'Stocks has been found using exits[gte]=50',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        query: { name: { eq: 'Hardware'} }
+        query: {
+          search: {
+            exits: {
+              gte: 50
+            }
+          }
+        }
       })
-    }
+    },
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: jest.fn().mockRejectedValue(new Error('Mock Error'))
+  fail: [
+    {
+      id: uuid(),
+      description: 'Item id is invalid',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Stocks were trying to be found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        query: {}
+      })
+    },
+  ],
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Item is not found') {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue(null);
+    }
+    if (stage === 'Item was trying to be found') {
+      return jest.spyOn(Item, 'findByPk')
+        .mockImplementation(async (id, options) => {
+          throw new Error('Item.findByPk error mocked');
         });
-      } else {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: jest.fn().mockResolvedValue([])
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: jest.fn().mockRejectedValue(new Error('Mock Error'))
-        });
-      }
+    }
+    if (stage === 'Stocks were trying to be found') {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        getStocks: async payload => {
+          throw new Error('Item.findByPk error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        getStocks: async payload => ({ success : 'mocked' })
+      });
     }
   }
 };
 
-scenario.add_types = {
+scenario.set_stocks = {
   pass: [
     {
       id: uuid(),
-      description: "types are added sucessfully to a item",
-      input: () => ({
+      description: "Stocks are added",
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        types: setup.instance.items.map(item => item.id)
+        stocks: setup.instance.stocks.map(stock => stock.id)
       })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: "types are not added to a item",
-      input: () => ({
-        item_id: setup.instance.items[0].id,
-        types: setup.instance.items.map(item => item.id)
+      description: 'Item param id validation fail',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        stocks: setup.instance.stocks.map(stock => stock.id)
       })
-    }
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        stocks: setup.instance.stocks.map(stock => stock.id)
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: "Stocks cannot be set",
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        stocks: setup.instance.stocks.map(stock => stock.id)
+      })
+    },
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Item is not found' && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue(null);
+    }
+    if (stage === 'Item was trying to be found') {
+      return jest.spyOn(Item, 'findByPk')
+        .mockImplementation(async (id, options) => {
+          throw new Error('Item.findByPk error mocked');
         });
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          addTypes: jest.fn().mockRejectedValue(new Error('Mock Error'))
-        });
-      } else {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          commit: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          addTypes: jest.fn(payload => Promise.resolve(payload))
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          addTypes: jest.fn().mockRejectedValue(new Error('Mock Error'))
-        });
-      }
+    }
+    if (stage === 'Stocks cannot be set') {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        addStocks: payload => Promise.reject(new Error('Mock Error'))
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        addStocks: async payload => ({ success : 'mocked' })
+      });
     }
   }
 };
 
-scenario.get_type = {
+scenario.get_stock = {
   pass: [
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: "Stock is found",
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        type_id: setup.instance.items[0].id
+        stock_id: setup.instance.stocks[0].id
       })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
+      description: 'Item id param is invalid',
+      input: async () => ({
+        item_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
+        stock_id: setup.instance.stocks[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Stock id param is invalid',
+      input: async () => ({
         item_id: setup.instance.items[0].id,
-        type_id: setup.instance.items[0].id
-      }),
-    }
+        stock_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        stock_id: setup.instance.stocks[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Stock is not found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        stock_id: setup.instance.stocks[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        stock_id: setup.instance.stocks[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Stock was trying to be found',
+      input: async () => ({
+        item_id: setup.instance.items[0].id,
+        stock_id: setup.instance.stocks[0].id
+      })
+    },
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: jest.fn().mockResolvedValue(null)
-        });
-      } else {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: jest.fn((type, id) => Promise.resolve({ id }))
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: jest.fn().mockResolvedValue(null)
-        });
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Item is not found' && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue(null);
+    }
+    if (stage === 'Stock is not found' && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        getStocks: payload => Promise.resolve(null)
+      });
+    }
+    if (stage === 'Item was trying to be found') {
+      return jest.spyOn(Item, 'findByPk')
+        .mockRejectedValue(new Error('Item.findByPk error mocked'));
+    }
+    if (stage === 'Stock was trying to be found') {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        getStocks: async payload => {
+          throw new Error('Item.findByPk error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Item, 'findByPk').mockResolvedValue({
+        getStocks: async payload => setup.instance.stocks[0]
+      });
     }
   }
 };
 
-scenario.update_type = {
-  pass: [
-    {
-      id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
-        item_id: setup.instance.items[0].id,
-        type_id: setup.instance.items[0].id,
-        values: { extra: { units: 20 } }
-      })
-    }
-  ],
-  fail: [
-    {
-      id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
-        item_id: setup.instance.items[0].id,
-        type_id: setup.instance.items[0].id,
-        values: { extra: { units: 20 } }
-      }),
-    }
-  ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: (type, id) => Promise.resolve({ id }),
-          addType: (type, id) => Promise.reject(new Error('Mock error'))
-        });
-      } else {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: (type, id) => Promise.resolve({ id }),
-          addType: () => Promise.resolve({
-            id: '419056d0-cf01-432a-9770-15bf4a201100'
-          })
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: (type, id) => Promise.resolve({ id }),
-          addType: (type, id) => Promise.reject(new Error('Mock error'))
-        });
-      }
-    }
-  }
-};
-
-scenario.remove_type = {
-  pass: [
-    {
-      id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
-        item_id: setup.instance.items[0].id,
-        type_id: setup.instance.items[0].id
-      })
-    }
-  ],
-  fail: [
-    {
-      id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
-        item_id: setup.instance.items[0].id,
-        type_id: setup.instance.items[0].id
-      }),
-    }
-  ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: (type, id) => Promise.resolve({ id }),
-          removeType: (type, id) => Promise.reject(new Error('Mock error'))
-        });
-      } else {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: (type, id) => Promise.resolve({ id }),
-          removeType: () => Promise.resolve({
-            id: '419056d0-cf01-432a-9770-15bf4a201100'
-          })
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Item, 'findByPk').mockResolvedValue({
-          findTypes: (type, id) => Promise.resolve({ id }),
-          removeType: (type, id) => Promise.reject(new Error('Mock error'))
-        });
-      }
-    }
-  }
-};
+// ----------------------------------------------------------------------------
 
 module.exports.scenario = scenario;
 

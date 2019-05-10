@@ -10,7 +10,7 @@ module.exports = function(DataTypes) {
         primaryKey: true,
         references: {
           model: {
-            schema: "nz",
+            schema: "public",
             tableName: "supplier"
           },
           key: "id"
@@ -24,7 +24,7 @@ module.exports = function(DataTypes) {
         primaryKey: true,
         references: {
           model: {
-            schema: "nz",
+            schema: "public",
             tableName: "item"
           },
           key: "id"
@@ -49,10 +49,31 @@ module.exports = function(DataTypes) {
       deleted_at: {
         type: DataTypes.DATE,
         allowNull: true
+      },
+      created_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      updated_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      deleted_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       }
     },
     options: {
-      schema: "nz",
+      schema: "public",
       tableName: "supplier_item"
     }
   }

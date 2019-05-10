@@ -1,42 +1,57 @@
 [
   {
-    "id": "5b48dc5f-740b-4727-99df-e66b6a90e685",
-    "code": "WRH0000001",
-    "name": "Kids",
-    "created_at": "2018-11-11T00:00:29.779Z",
-    "updated_at": "2018-11-11T00:00:29.779Z",
-    "deleted_at": null
-  },
-  {
-    "id": "6e9e50f5-12e9-41bd-86cb-d7c7bdedf743",
-    "code": "WRH0000002",
+    "id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
+    "code": "WRH/000001",
     "name": "Jewelery",
-    "created_at": "2018-11-14T14:33:30.982Z",
-    "updated_at": "2018-11-14T14:33:30.982Z",
-    "deleted_at": null
+    "created_at": "2018-11-10T03:28:01.478Z",
+    "updated_at": "2018-11-10T03:28:01.478Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "90c2705b-10c5-4223-9ab1-43d64502de8a",
-    "code": "WRH0000003",
+    "id": "66cc21b3-4b75-4d2d-b3e6-f3e1001e420c",
+    "code": "WRH/000002",
     "name": "Automotive",
-    "created_at": "2018-11-11T22:14:33.178Z",
-    "updated_at": "2018-11-11T22:14:33.178Z",
-    "deleted_at": null
+    "created_at": "2018-11-12T15:44:52.713Z",
+    "updated_at": "2018-11-12T15:44:52.713Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "d65632cd-e55f-48ad-a3dd-9873762011ab",
-    "code": "WRH0000004",
-    "name": "Beauty",
-    "created_at": "2018-11-12T12:27:03.557Z",
-    "updated_at": "2018-11-12T12:27:03.557Z",
-    "deleted_at": null
+    "id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
+    "code": "WRH/000003",
+    "name": "Sports",
+    "created_at": "2018-11-10T13:53:08.193Z",
+    "updated_at": "2018-11-10T13:53:08.193Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "6684ca12-3afc-4434-8915-04abfde3777c",
-    "code": "WRH0000005",
-    "name": "Baby",
-    "created_at": "2018-11-12T00:35:08.075Z",
-    "updated_at": "2018-11-12T00:35:08.075Z",
-    "deleted_at": null
+    "id": "9fbbc268-6539-4048-9f10-437989b63bb7",
+    "code": "WRH/000004",
+    "name": "Electronics",
+    "created_at": "2018-11-10T01:41:12.860Z",
+    "updated_at": "2018-11-10T01:41:12.860Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "e9ed5891-c500-4c2c-a917-3e4a5580d444",
+    "code": "WRH/000005",
+    "name": "Toys",
+    "created_at": "2018-11-13T15:38:34.302Z",
+    "updated_at": "2018-11-13T15:38:34.302Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   }
 ]

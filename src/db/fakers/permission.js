@@ -15,7 +15,7 @@ function setUnique(fn, arr) {
   }
 }
 
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 100; i++) {
   let uuid = faker.random.uuid();
 
   let created_at = faker.date.between(
@@ -27,11 +27,14 @@ for (let i = 0; i < 30; i++) {
 
   data.push({
     "id": faker.random.uuid(),
-    "code": `PRM${("0000000" + (i+1)).substr(-7,7)}`,
+    "code": `PRM/${("000000" + (i+1)).substr(-6,6)}`,
     "name": names[i],
     "created_at": created_at,
     "updated_at": created_at,
-    "deleted_at": null
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   });
 }
 

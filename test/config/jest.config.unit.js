@@ -7,7 +7,8 @@ process.env.UNIT_TEST = true;
 module.exports = {
   ...config,
   "coveragePathIgnorePatterns": [
-    "<rootDir>/src/routes",
+    "<rootDir>/src/services",
+    "<rootDir>/src/utils",
     "<rootDir>/test"
   ],
   "testMatch": [

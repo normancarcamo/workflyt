@@ -24,8 +24,8 @@
     "test:integration:both": "npm run test:integration:mock -- --coverage; npm run db:migration:test; npm run test:integration -- --coverage;",
     "test:report": "open test/reports/index.html",
     "test:report:coverage": "open test/reports/coverage/lcov-report/index.html",
-    "db:migration:test": "sh src/db/scripts/migrate_test.sh",
-    "db:migration:dev": "sh src/db/scripts/migrate_dev.sh"
+    "db:migration:test": "sh src/db/scripts/shell/migrate_test.sh",
+    "db:migration:dev": "sh src/db/scripts/shell/migrate_dev.sh"
   },
   "dependencies": {
     "@babel/preset-env": "^7.1.5",
@@ -46,6 +46,7 @@
     "jest-extended": "^0.11.0",
     "jest-html-reporter": "^2.4.2",
     "joi": "^14.3.0",
+    "nock": "^10.0.6",
     "pg": "^7.6.0",
     "pg-hstore": "^2.3.2",
     "pino-pretty": "^2.5.0",
@@ -62,9 +63,9 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.6",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.7.1",
     "faker": "^4.1.0",
-    "jest": "^23.6.0",
+    "jest": "^24.7.1",
     "jsdoc": "^3.5.5",
     "nodemon": "^1.18.7",
     "regenerator-runtime": "^0.12.1",

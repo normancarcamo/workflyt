@@ -6,16 +6,18 @@ const API_BASE = `/api/v1/companies`;
 describe("Company Service", () => {
   beforeAll(setup.before_all);
   beforeEach(setup.before_each);
+  afterEach(setup.after_each);
+  afterAll(setup.after_all);
 
   describe("get companies", () => {
     describe('should return data when:', () => {
       for (let { id, description, input } of scenario.get_companies.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_companies.mock({ input, fail: false });
+          await scenario.get_companies.mock({ input, fail: false, stage: description });
 
           // Given:
-          let querystring = input();
+          let querystring = await input();
 
           // When:
           let res = await request("get", API_BASE).query(querystring);
@@ -31,10 +33,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.get_companies.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_companies.mock({ input, fail: true });
+          await scenario.get_companies.mock({ input, fail: true, stage: description });
 
           // Given:
-          let querystring = input();
+          let querystring = await input();
 
           // When:
           let res = await request("get", API_BASE).query(querystring);
@@ -53,10 +55,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.create_companies.pass) {
         it(description, async () => {
           // Given:
-          scenario.create_companies.mock({ input, fail: false });
+          await scenario.create_companies.mock({ input, fail: false, stage: description });
 
           // When:
-          let res = await request("post", API_BASE).send(input());
+          let res = await request("post", API_BASE).send(await input());
 
           // Then:
           expect(res.statusCode).toEqual(201);
@@ -69,10 +71,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.create_companies.fail) {
         it(description, async () => {
           // Given:
-          scenario.create_companies.mock({ input, fail: true });
+          await scenario.create_companies.mock({ input, fail: true, stage: description });
 
           // When:
-          let res = await request("post", API_BASE).send(input());
+          let res = await request("post", API_BASE).send(await input());
 
           // Then:
           expect(res.statusCode).toBeWithin(400, 522);
@@ -88,10 +90,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.get_company.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_company.mock({ input, fail: false });
+          await scenario.get_company.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { company_id } = input();
+          let { company_id } = await input();
 
           // When:
           let res = await request("get", `${API_BASE}/${company_id}`);
@@ -107,10 +109,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.get_company.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_company.mock({ input, fail: true });
+          await scenario.get_company.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { company_id } = input();
+          let { company_id } = await input();
 
           // When:
           let res = await request("get", `${API_BASE}/${company_id}`);
@@ -129,10 +131,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.update_company.pass) {
         it(description, async () => {
           // Setup:
-          scenario.update_company.mock({ input, fail: false });
+          await scenario.update_company.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { company_id, values } = input();
+          let { company_id, values } = await input();
           let endpoint = `${API_BASE}/${company_id}`;
 
           // When:
@@ -149,10 +151,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.update_company.fail) {
         it(description, async () => {
           // Setup:
-          scenario.update_company.mock({ input, fail: true });
+          await scenario.update_company.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { company_id, values } = input();
+          let { company_id, values } = await input();
           let endpoint = `${API_BASE}/${company_id}`;
 
           // When:
@@ -172,10 +174,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.delete_company.pass) {
         it(description, async () => {
           // Setup:
-          scenario.delete_company.mock({ input, fail: false });
+          await scenario.delete_company.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { company_id, query } = input();
+          let { company_id, query } = await input();
           let endpoint = `${API_BASE}/${company_id}`;
 
           // When:
@@ -192,10 +194,10 @@ describe("Company Service", () => {
       for (let { id, description, input } of scenario.delete_company.fail) {
         it(description, async () => {
           // Setup:
-          scenario.delete_company.mock({ input, fail: true });
+          await scenario.delete_company.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { company_id, query } = input();
+          let { company_id, query } = await input();
           let endpoint = `${API_BASE}/${company_id}`;
 
           // When:
@@ -209,7 +211,4 @@ describe("Company Service", () => {
       }
     });
   });
-
-  afterEach(setup.after_each);
-  afterAll(setup.after_all);
 });

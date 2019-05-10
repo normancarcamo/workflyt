@@ -34,12 +34,15 @@ for (let i = 0; i < 10; i++) {
       null,
       ...uuids.filter(uuid => uuid !== id)
     ]),
-    "code": `CAT${("0000000" + (i+1)).substr(-7,7)}`,
+    "code": `CAT/${("000000" + (i+1)).substr(-6,6)}`,
     "name": names[i],
-    "extra": { "units": faker.random.number({ min: 0, max: 10 }) },
+    "extra": {},
     "created_at": created_at,
     "updated_at": created_at,
-    "deleted_at": null
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   });
 }
 

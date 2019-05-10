@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# SYNTAX:
+# m h  dom mon dow   command
+
+# AT 00:00 ON DAY-OF-MONTH 1 IN JANUARY EVERY YEAR.
+0 0 1 1 * sh /var/lib/postgresql/cronjobs/reset_sequences/reset_sequences.sh > /dev/null

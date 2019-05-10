@@ -1,50 +1,90 @@
 [
   {
-    "id": "23d691a2-d27b-4b5a-be72-f407601a48b4",
-    "code": "DEP0000001",
+    "id": "f91b0e11-9b34-452d-a39c-ce3b6fffdf1b",
+    "code": "DEP/000001",
     "name": "Art",
-    "created_at": "2018-11-12T23:08:36.747Z",
-    "updated_at": "2018-11-12T23:08:36.747Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T12:22:33.749Z",
+    "updated_at": "2018-11-13T12:22:33.749Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "14066800-1fd2-4895-a275-8195ed83b5c8",
-    "code": "DEP0000002",
+    "id": "31b121db-ec84-42c9-94c6-18827ed26210",
+    "code": "DEP/000002",
     "name": "Printing",
-    "created_at": "2018-11-10T04:31:24.030Z",
-    "updated_at": "2018-11-10T04:31:24.030Z",
-    "deleted_at": null
+    "created_at": "2018-11-11T00:47:35.307Z",
+    "updated_at": "2018-11-11T00:47:35.307Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "4723a320-cd2e-40ed-9e20-9d1fd30a5ce7",
-    "code": "DEP0000003",
+    "id": "ca521ef5-4809-48c1-bdb0-48083beb4589",
+    "code": "DEP/000003",
     "name": "Weld",
-    "created_at": "2018-11-13T19:54:50.518Z",
-    "updated_at": "2018-11-13T19:54:50.518Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T09:32:34.803Z",
+    "updated_at": "2018-11-13T09:32:34.803Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "b23c7ee9-c9e0-49dc-a454-abbca24d1445",
-    "code": "DEP0000004",
+    "id": "e2ae0bb0-f472-4fb5-a2dd-ecb87b420175",
+    "code": "DEP/000004",
     "name": "Wood",
-    "created_at": "2018-11-11T21:16:04.984Z",
-    "updated_at": "2018-11-11T21:16:04.984Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T14:44:58.357Z",
+    "updated_at": "2018-11-13T14:44:58.357Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "c9fc5a39-957f-4021-9cbe-40c117512498",
-    "code": "DEP0000005",
+    "id": "6105d821-7ea5-45ad-985b-69ec06e5784b",
+    "code": "DEP/000005",
     "name": "Painting",
-    "created_at": "2018-11-13T14:29:11.433Z",
-    "updated_at": "2018-11-13T14:29:11.433Z",
-    "deleted_at": null
+    "created_at": "2018-11-12T16:01:41.149Z",
+    "updated_at": "2018-11-12T16:01:41.149Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "f1c2abbf-d660-49b1-804e-cf6f55174ac8",
-    "code": "DEP0000006",
+    "id": "39ec56f6-c6b1-4087-98a2-7e02141d6ef6",
+    "code": "DEP/000006",
     "name": "Sales",
-    "created_at": "2018-11-10T21:41:39.598Z",
-    "updated_at": "2018-11-10T21:41:39.598Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T15:06:41.652Z",
+    "updated_at": "2018-11-13T15:06:41.652Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "a45e1384-95d3-4791-ae8b-b5ab87b648dc",
+    "code": "DEP/000007",
+    "name": "Management",
+    "created_at": "2018-11-11T04:43:59.072Z",
+    "updated_at": "2018-11-11T04:43:59.072Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "4a26a1e5-0a9f-4853-8914-144b918bd506",
+    "code": "DEP/000008",
+    "name": "Cleaning",
+    "created_at": "2018-11-14T02:14:53.551Z",
+    "updated_at": "2018-11-14T02:14:53.551Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   }
 ]

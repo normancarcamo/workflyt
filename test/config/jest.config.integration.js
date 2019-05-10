@@ -1,6 +1,7 @@
 'use strict';
 
 require('dotenv').config({ path: '.env.test' });
+
 const config = require('./jest.config');
 
 process.env.INTEGRATION_TEST = true;
@@ -19,7 +20,7 @@ module.exports = {
     "<rootDir>/test"
   ],
   "collectCoverageFrom": [
-    "src/routes/**/*.js",
+    "src/services/*.js",
   ],
   "testMatch": [
     "<rootDir>/test/integration/**/*.(spec|test).js?(x)"

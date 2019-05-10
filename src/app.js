@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import compression from "compression";
 import { middlewares } from '@playscode/fns';
-import routes from "./routes";
+import router from "src/router";
 import express from "express";
 
 const app = express();
@@ -19,7 +19,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(compression());
 app.use(middlewares.logger);
-app.use("/api/v1", routes);
+app.use("/api/v1", router);
 app.use(middlewares.notFound);
 app.use(middlewares.errors);
 

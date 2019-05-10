@@ -13,22 +13,23 @@ module.exports = function(DataTypes) {
       },
       quote_id: {
         type: DataTypes.UUID,
-        allowNull: true,
+        allowNull: false,
+        unique: false,
         references: {
           model: {
             tableName: "quote",
-            schema: "nz"
+            schema: "public"
           },
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL"
+        onDelete: "CASCADE"
       },
       code: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
-        defaultValue: "unset"
+        defaultValue: 'unset'
       },
       type: {
         type: DataTypes.ENUM([ "work", "installation" ]),
@@ -36,7 +37,7 @@ module.exports = function(DataTypes) {
         defaultValue: "work"
       },
       status: {
-        type: DataTypes.ENUM([ "awaiting", "working", "canceled", "done" ]),
+        type: DataTypes.ENUM([ "awaiting", "working", "cancelled", "done" ]),
         allowNull: false,
         defaultValue: "awaiting"
       },
@@ -57,11 +58,32 @@ module.exports = function(DataTypes) {
       deleted_at: {
         type: DataTypes.DATE,
         allowNull: true
+      },
+      created_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      updated_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      deleted_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       }
     },
     options: {
-      schema: "nz",
-      tableName: "order"
+      schema: "public",
+      tableName: "orders"
     }
   }
 }

@@ -1,7 +1,7 @@
 import http from 'http';
 import Logger from '@playscode/fns/lib/logger'
 import { exec } from "child_process";
-import db from "./db/models";
+import db from "src/db/models";
 
 const log = new Logger("server");
 

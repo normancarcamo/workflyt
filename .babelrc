@@ -7,17 +7,12 @@
       "module-resolver", {
         "cwd": "babelrc",
         "extensions": [ ".js", ".jsx", ".json" ],
-        "alias": {
-          "src": "./src",
-          "db": "./src/db",
-          "routes": "./src/routes",
-          "test": "./test"
-        },
         "root": [
           "./",
           "./src",
           "./src/db",
-          "./src/routes",
+          "./src/services",
+          "./src/utils",
           "./test"
         ]
       }

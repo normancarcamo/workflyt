@@ -1,122 +1,132 @@
 [
   {
-    "id": "b8127bfb-81f8-4d70-a0da-0b4c9c5a099d",
+    "id": "4b89b6f3-da73-4716-98e4-f270090192ae",
     "parent_id": null,
-    "code": "CAT0000001",
-    "name": "Frozen",
-    "extra": {
-      "units": 8
-    },
-    "created_at": "2019-01-07T03:08:53.405Z",
-    "updated_at": "2019-01-07T03:08:53.405Z",
-    "deleted_at": null
-  },
-  {
-    "id": "d12c8999-cbe3-4085-ac43-3b401497688b",
-    "parent_id": "b8127bfb-81f8-4d70-a0da-0b4c9c5a099d",
-    "code": "CAT0000002",
-    "name": "Metal",
-    "extra": {
-      "units": 6
-    },
-    "created_at": "2018-12-10T11:32:31.033Z",
-    "updated_at": "2018-12-10T11:32:31.033Z",
-    "deleted_at": null
-  },
-  {
-    "id": "8e8fc23f-25ec-4eb9-9800-00266227357d",
-    "parent_id": null,
-    "code": "CAT0000003",
-    "name": "Granite",
-    "extra": {
-      "units": 2
-    },
-    "created_at": "2018-11-17T08:49:57.250Z",
-    "updated_at": "2018-11-17T08:49:57.250Z",
-    "deleted_at": null
-  },
-  {
-    "id": "91dbc21e-8bc3-4a00-891d-69fb0aec30a2",
-    "parent_id": null,
-    "code": "CAT0000004",
-    "name": "Rubber",
-    "extra": {
-      "units": 1
-    },
-    "created_at": "2018-12-08T02:34:29.694Z",
-    "updated_at": "2018-12-08T02:34:29.694Z",
-    "deleted_at": null
-  },
-  {
-    "id": "84d9133e-20e3-4da7-8390-0f1e06e13910",
-    "parent_id": null,
-    "code": "CAT0000005",
-    "name": "Plastic",
-    "extra": {
-      "units": 8
-    },
-    "created_at": "2018-11-18T00:26:39.268Z",
-    "updated_at": "2018-11-18T00:26:39.268Z",
-    "deleted_at": null
-  },
-  {
-    "id": "29d4d9e9-aaab-4c32-b1cf-82c741d3e092",
-    "parent_id": "91dbc21e-8bc3-4a00-891d-69fb0aec30a2",
-    "code": "CAT0000006",
-    "name": "Cotton",
-    "extra": {
-      "units": 3
-    },
-    "created_at": "2018-12-07T19:22:27.027Z",
-    "updated_at": "2018-12-07T19:22:27.027Z",
-    "deleted_at": null
-  },
-  {
-    "id": "e7057603-2641-4275-9bab-e12723857324",
-    "parent_id": "29d4d9e9-aaab-4c32-b1cf-82c741d3e092",
-    "code": "CAT0000007",
-    "name": "Steel",
-    "extra": {
-      "units": 1
-    },
-    "created_at": "2019-01-11T08:06:56.386Z",
-    "updated_at": "2019-01-11T08:06:56.386Z",
-    "deleted_at": null
-  },
-  {
-    "id": "d8b668d0-cbb9-40d8-85d0-5790ed80540c",
-    "parent_id": null,
-    "code": "CAT0000008",
+    "code": "CAT/000001",
     "name": "Concrete",
-    "extra": {
-      "units": 4
-    },
-    "created_at": "2018-12-03T17:31:38.527Z",
-    "updated_at": "2018-12-03T17:31:38.527Z",
-    "deleted_at": null
+    "extra": {},
+    "created_at": "2018-12-14T15:49:40.415Z",
+    "updated_at": "2018-12-14T15:49:40.415Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "26605808-549f-4559-bb0f-4375f5e269a7",
-    "parent_id": "84d9133e-20e3-4da7-8390-0f1e06e13910",
-    "code": "CAT0000009",
-    "name": "Wooden",
-    "extra": {
-      "units": 8
-    },
-    "created_at": "2018-11-15T02:54:48.272Z",
-    "updated_at": "2018-11-15T02:54:48.272Z",
-    "deleted_at": null
+    "id": "f5979e1c-b1c5-4dfd-84b5-299915060a01",
+    "parent_id": null,
+    "code": "CAT/000002",
+    "name": "Frozen",
+    "extra": {},
+    "created_at": "2019-02-02T22:47:01.659Z",
+    "updated_at": "2019-02-02T22:47:01.659Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "d762a4e4-bbb4-4e1c-aacc-b1a2bed8bb83",
-    "parent_id": "84d9133e-20e3-4da7-8390-0f1e06e13910",
-    "code": "CAT0000010",
+    "id": "be254389-b5b8-49a0-8c48-72f33c56ccd2",
+    "parent_id": "4b89b6f3-da73-4716-98e4-f270090192ae",
+    "code": "CAT/000003",
+    "name": "Steel",
+    "extra": {},
+    "created_at": "2019-03-14T18:57:27.423Z",
+    "updated_at": "2019-03-14T18:57:27.423Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "76b9ad61-16ce-4ce9-a38c-ad678b7a5165",
+    "parent_id": "be254389-b5b8-49a0-8c48-72f33c56ccd2",
+    "code": "CAT/000004",
+    "name": "Metal",
+    "extra": {},
+    "created_at": "2019-02-26T19:24:16.464Z",
+    "updated_at": "2019-02-26T19:24:16.464Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "bdbdf41b-aa5e-4cfe-8339-a20ea58840df",
+    "parent_id": null,
+    "code": "CAT/000005",
     "name": "Fresh",
-    "extra": {
-      "units": 2
-    },
-    "created_at": "2018-11-10T12:33:47.426Z",
-    "updated_at": "2018-11-10T12:33:47.426Z",
-    "deleted_at": null
+    "extra": {},
+    "created_at": "2018-11-10T12:58:10.031Z",
+    "updated_at": "2018-11-10T12:58:10.031Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "5ee3ad01-d8c6-4d09-bede-61b4784c6797",
+    "parent_id": null,
+    "code": "CAT/000006",
+    "name": "Soft",
+    "extra": {},
+    "created_at": "2019-01-28T06:04:11.223Z",
+    "updated_at": "2019-01-28T06:04:11.223Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "8a50fe67-056c-4be3-b986-0fa2941ac967",
+    "parent_id": "f5979e1c-b1c5-4dfd-84b5-299915060a01",
+    "code": "CAT/000007",
+    "name": "Cotton",
+    "extra": {},
+    "created_at": "2019-03-09T22:31:43.939Z",
+    "updated_at": "2019-03-09T22:31:43.939Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "697c6d39-4767-41a9-85bf-744417c7c3f1",
+    "parent_id": null,
+    "code": "CAT/000008",
+    "name": "Rubber",
+    "extra": {},
+    "created_at": "2019-01-26T19:31:30.323Z",
+    "updated_at": "2019-01-26T19:31:30.323Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "f69c95a6-5f10-439b-8dcc-1282cceca19b",
+    "parent_id": "4b89b6f3-da73-4716-98e4-f270090192ae",
+    "code": "CAT/000009",
+    "name": "Wooden",
+    "extra": {},
+    "created_at": "2019-03-27T06:22:33.849Z",
+    "updated_at": "2019-03-27T06:22:33.849Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "a1cb02f5-8854-458e-80c1-d271425b5fcd",
+    "parent_id": null,
+    "code": "CAT/000010",
+    "name": "Plastic",
+    "extra": {},
+    "created_at": "2019-04-09T18:10:12.094Z",
+    "updated_at": "2019-04-09T18:10:12.094Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   }
 ]

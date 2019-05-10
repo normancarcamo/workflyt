@@ -1,6 +1,6 @@
 import db from 'src/db/models';
 
-describe("db/models/index.js", () => {
+describe("src/db/models/index.js", () => {
   it("expect db to be defined as an object", () => {
     expect(db).toBeDefined().toBeObject();
   });

@@ -6,16 +6,18 @@ const API_BASE = `/api/v1/items`;
 describe("Item Service", () => {
   beforeAll(setup.before_all);
   beforeEach(setup.before_each);
+  afterEach(setup.after_each);
+  afterAll(setup.after_all);
 
   describe("get items", () => {
     describe('should return data when:', () => {
       for (let { id, description, input } of scenario.get_items.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_items.mock({ input, fail: false });
+          await scenario.get_items.mock({ input, fail: false, stage: description });
 
           // Given:
-          let querystring = input();
+          let querystring = await input();
 
           // When:
           let res = await request("get", API_BASE).query(querystring);
@@ -31,10 +33,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.get_items.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_items.mock({ input, fail: true });
+          await scenario.get_items.mock({ input, fail: true, stage: description });
 
           // Given:
-          let querystring = input();
+          let querystring = await input();
 
           // When:
           let res = await request("get", API_BASE).query(querystring);
@@ -53,10 +55,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.create_items.pass) {
         it(description, async () => {
           // Given:
-          scenario.create_items.mock({ input, fail: false });
+          await scenario.create_items.mock({ input, fail: false, stage: description });
 
           // When:
-          let res = await request("post", API_BASE).send(input());
+          let res = await request("post", API_BASE).send(await input());
 
           // Then:
           expect(res.statusCode).toEqual(201);
@@ -69,10 +71,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.create_items.fail) {
         it(description, async () => {
           // Given:
-          scenario.create_items.mock({ input, fail: true });
+          await scenario.create_items.mock({ input, fail: true, stage: description });
 
           // When:
-          let res = await request("post", API_BASE).send(input());
+          let res = await request("post", API_BASE).send(await input());
 
           // Then:
           expect(res.statusCode).toBeWithin(400, 522);
@@ -88,10 +90,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.get_item.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_item.mock({ input, fail: false });
+          await scenario.get_item.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { item_id } = input();
+          let { item_id } = await input();
 
           // When:
           let res = await request("get", `${API_BASE}/${item_id}`);
@@ -107,10 +109,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.get_item.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_item.mock({ input, fail: true });
+          await scenario.get_item.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { item_id } = input();
+          let { item_id } = await input();
 
           // When:
           let res = await request("get", `${API_BASE}/${item_id}`);
@@ -129,10 +131,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.update_item.pass) {
         it(description, async () => {
           // Setup:
-          scenario.update_item.mock({ input, fail: false });
+          await scenario.update_item.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { item_id, values } = input();
+          let { item_id, values } = await input();
           let endpoint = `${API_BASE}/${item_id}`;
 
           // When:
@@ -149,10 +151,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.update_item.fail) {
         it(description, async () => {
           // Setup:
-          scenario.update_item.mock({ input, fail: true });
+          await scenario.update_item.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { item_id, values } = input();
+          let { item_id, values } = await input();
           let endpoint = `${API_BASE}/${item_id}`;
 
           // When:
@@ -172,10 +174,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.delete_item.pass) {
         it(description, async () => {
           // Setup:
-          scenario.delete_item.mock({ input, fail: false });
+          await scenario.delete_item.mock({ input, fail: false, stage: description });
 
           // Given:
-          let { item_id, query } = input();
+          let { item_id, query } = await input();
           let endpoint = `${API_BASE}/${item_id}`;
 
           // When:
@@ -192,10 +194,10 @@ describe("Item Service", () => {
       for (let { id, description, input } of scenario.delete_item.fail) {
         it(description, async () => {
           // Setup:
-          scenario.delete_item.mock({ input, fail: true });
+          await scenario.delete_item.mock({ input, fail: true, stage: description });
 
           // Given:
-          let { item_id, query } = input();
+          let { item_id, query } = await input();
           let endpoint = `${API_BASE}/${item_id}`;
 
           // When:
@@ -210,16 +212,20 @@ describe("Item Service", () => {
     });
   });
 
-  describe("get types:", () => {
+  describe("get stocks:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_types.pass) {
+      for (let { id, description, input } of scenario.get_stocks.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_types.mock({ input, fail: false });
+          await scenario.get_stocks.mock({
+            input,
+            fail: false,
+            stage: description
+          });
 
           // Given:
-          let { item_id, query} = input();
-          let endpoint = `${API_BASE}/${item_id}/types`;
+          let { item_id, query } = await input();
+          let endpoint = `${API_BASE}/${item_id}/stocks`;
 
           // When:
           let res = await request("get", endpoint).query(query);
@@ -232,14 +238,18 @@ describe("Item Service", () => {
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_types.fail) {
+      for (let { id, description, input } of scenario.get_stocks.fail) {
         it(description, async () => {
           // Setup:
-          scenario.get_types.mock({ input, fail: true });
+          await scenario.get_stocks.mock({
+            input,
+            fail: true,
+            stage: description
+          });
 
           // Given:
-          let { item_id, query} = input();
-          let endpoint = `${API_BASE}/${item_id}/types`;
+          let { item_id, query } = await input();
+          let endpoint = `${API_BASE}/${item_id}/stocks`;
 
           // When:
           let res = await request("get", endpoint).query(query);
@@ -253,19 +263,23 @@ describe("Item Service", () => {
     });
   });
 
-  describe("add types:", () => {
+  describe("set stocks:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.add_types.pass) {
+      for (let { id, description, input } of scenario.set_stocks.pass) {
         it(description, async () => {
           // Setup:
-          scenario.add_types.mock({ input, fail: false });
+          await scenario.set_stocks.mock({
+            input,
+            fail: false,
+            stage: description
+          });
 
           // Given:
-          let { item_id, types } = input();
-          let endpoint = `${API_BASE}/${item_id}/types`;
+          let { item_id, stocks } = await input();
+          let endpoint = `${API_BASE}/${item_id}/stocks`;
 
           // When:
-          let res = await request("post", endpoint).send({ values: types });
+          let res = await request("post", endpoint).send({ values: stocks });
 
           // Then:
           expect(res.statusCode).toEqual(200);
@@ -275,17 +289,21 @@ describe("Item Service", () => {
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.add_types.fail) {
+      for (let { id, description, input } of scenario.set_stocks.fail) {
         it(description, async () => {
           // Setup:
-          scenario.add_types.mock({ input, fail: true });
+          await scenario.set_stocks.mock({
+            input,
+            fail: true,
+            stage: description
+          });
 
           // Given:
-          let { item_id, types } = input();
-          let endpoint = `${API_BASE}/${item_id}/types`;
+          let { item_id, stocks } = await input();
+          let endpoint = `${API_BASE}/${item_id}/stocks`;
 
           // When:
-          let res = await request("post", endpoint).send({ values: types });
+          let res = await request("post", endpoint).send({ values: stocks });
 
           // Then:
           expect(res.statusCode).toBeWithin(400, 522);
@@ -296,62 +314,23 @@ describe("Item Service", () => {
     });
   });
 
-  describe("get type:", () => {
-    describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_type.pass) {
+  describe("get stock:", () => {
+    describe('should return success when:', () => {
+      for (let { id, description, input } of scenario.get_stock.pass) {
         it(description, async () => {
           // Setup:
-          scenario.get_type.mock({ input, fail: false });
+          await scenario.get_stock.mock({
+            input,
+            fail: false,
+            stage: description
+          });
 
           // Given:
-          let { item_id, type_id } = input();
-          let endpoint = `${API_BASE}/${item_id}/types/${type_id}`;
+          let { item_id, stock_id } = await input();
+          let endpoint = `${API_BASE}/${item_id}/stocks/${stock_id}`;
 
           // When:
           let res = await request("get", endpoint);
-
-          // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
-        });
-      }
-    });
-    describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_type.fail) {
-        it(description, async () => {
-          // Setup:
-          scenario.get_type.mock({ input, fail: true });
-
-          // Given:
-          let { item_id, type_id } = input();
-          let endpoint = `${API_BASE}/${item_id}/types/${type_id}`;
-
-          // When:
-          let res = await request("get", endpoint);
-
-          // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
-        });
-      }
-    });
-  });
-
-  describe("update type:", () => {
-    describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.update_type.pass) {
-        it(description, async () => {
-          // Setup:
-          scenario.update_type.mock({ input, fail: false });
-
-          // Given:
-          let { item_id, type_id, values } = input();
-          let endpoint = `${API_BASE}/${item_id}/types/${type_id}`;
-
-          // When:
-          let res = await request("put", endpoint).send({ values });
 
           // Then:
           expect(res.statusCode).toEqual(200);
@@ -361,17 +340,21 @@ describe("Item Service", () => {
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.update_type.fail) {
+      for (let { id, description, input } of scenario.get_stock.fail) {
         it(description, async () => {
           // Setup:
-          scenario.update_type.mock({ input, fail: true });
+          await scenario.get_stock.mock({
+            input,
+            fail: true,
+            stage: description
+          });
 
           // Given:
-          let { item_id, type_id, values } = input();
-          let endpoint = `${API_BASE}/${item_id}/types/${type_id}`;
+          let { item_id, stock_id } = await input();
+          let endpoint = `${API_BASE}/${item_id}/stocks/${stock_id}`;
 
           // When:
-          let res = await request("put", endpoint).send({ values });
+          let res = await request("get", endpoint);
 
           // Then:
           expect(res.statusCode).toBeWithin(400, 522);
@@ -381,50 +364,4 @@ describe("Item Service", () => {
       }
     });
   });
-
-  describe("remove type:", () => {
-    describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.remove_type.pass) {
-        it(description, async () => {
-          // Setup:
-          scenario.remove_type.mock({ input, fail: false });
-
-          // Given:
-          let { item_id, type_id } = input();
-          let endpoint = `${API_BASE}/${item_id}/types/${type_id}`;
-
-          // When:
-          let res = await request("delete", endpoint);
-
-          // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
-        });
-      }
-    });
-    describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.remove_type.fail) {
-        it(description, async () => {
-          // Setup:
-          scenario.remove_type.mock({ input, fail: true });
-
-          // Given:
-          let { item_id, type_id } = input();
-          let endpoint = `${API_BASE}/${item_id}/types/${type_id}`;
-
-          // When:
-          let res = await request("delete", endpoint);
-
-          // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
-        });
-      }
-    });
-  });
-
-  afterEach(setup.after_each);
-  afterAll(setup.after_all);
 });

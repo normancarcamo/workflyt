@@ -1,72 +1,102 @@
 [
   {
-    "role_id": "979f9d9b-e01f-4554-8df0-601cb6f354cf",
-    "permission_id": "e84ffc31-6f6f-45b1-96c1-ef11a4826ba3",
-    "created_at": "2018-11-11T12:13:41.285Z",
-    "updated_at": "2018-11-11T12:13:41.285Z",
-    "deleted_at": null
+    "role_id": "e08f7ad4-0d89-4bbf-8a5d-11ba64791c74",
+    "permission_id": "f524b681-d763-4b65-97ff-df1719a1c90b",
+    "created_at": "2018-11-10T23:55:42.645Z",
+    "updated_at": "2018-11-10T23:55:42.645Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "ce92efd1-5eb3-4399-b613-f49119f912eb",
-    "permission_id": "904eaa42-075d-41cd-baa5-5362a9027804",
-    "created_at": "2018-11-10T18:55:06.380Z",
-    "updated_at": "2018-11-10T18:55:06.380Z",
-    "deleted_at": null
+    "role_id": "443e3fd0-fecf-46ae-8c4e-d8f76fb70266",
+    "permission_id": "5a033532-83ed-4ba7-a4a7-c3ced039e8b9",
+    "created_at": "2018-11-14T21:16:48.552Z",
+    "updated_at": "2018-11-14T21:16:48.552Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "ec39ec91-9c15-40f4-823a-0f9b3666f1d2",
-    "permission_id": "d1e2db98-54c3-4df4-acdb-405e8f17aea7",
-    "created_at": "2018-11-10T18:25:58.602Z",
-    "updated_at": "2018-11-10T18:25:58.602Z",
-    "deleted_at": null
+    "role_id": "5f39b5bf-2761-4d66-96ce-66ace86a0289",
+    "permission_id": "980b19ba-e833-40ed-ac8f-191f0e0b7c58",
+    "created_at": "2018-11-14T04:34:52.503Z",
+    "updated_at": "2018-11-14T04:34:52.503Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "b82afe9b-eaed-4cfe-a4b3-ca556a6a3455",
-    "permission_id": "aeb067c9-0d53-412f-9564-f1873b2e5abe",
-    "created_at": "2018-11-14T13:00:31.146Z",
-    "updated_at": "2018-11-14T13:00:31.146Z",
-    "deleted_at": null
+    "role_id": "b5325153-a284-4c1a-b971-5442a88b7d0f",
+    "permission_id": "904b5309-9e70-44eb-bef9-76c8afdc5f25",
+    "created_at": "2018-11-13T01:41:36.979Z",
+    "updated_at": "2018-11-13T01:41:36.979Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "fecb44c3-6a9d-4325-ac53-02bf00e371a7",
-    "permission_id": "2a2334fe-42cf-4b76-903c-232c69a067d6",
-    "created_at": "2018-11-14T06:08:56.845Z",
-    "updated_at": "2018-11-14T06:08:56.845Z",
-    "deleted_at": null
+    "role_id": "17b27f90-d224-40d5-98eb-c6f0e6b43236",
+    "permission_id": "99516af2-2725-4b2f-a23b-a97002316c6b",
+    "created_at": "2018-11-13T18:12:14.100Z",
+    "updated_at": "2018-11-13T18:12:14.100Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "80c594fa-3fd4-4e93-96eb-11efc3e94acc",
-    "permission_id": "dd9c6d97-8e68-4222-9652-c673c11b2e0b",
-    "created_at": "2018-11-11T01:01:41.183Z",
-    "updated_at": "2018-11-11T01:01:41.183Z",
-    "deleted_at": null
+    "role_id": "17b27f90-d224-40d5-98eb-c6f0e6b43236",
+    "permission_id": "33dd9e6f-32b3-4461-9f1e-ec82e66ffadb",
+    "created_at": "2018-11-12T17:53:11.840Z",
+    "updated_at": "2018-11-12T17:53:11.840Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "582f97ee-5698-4025-8125-5a10a72744b6",
-    "permission_id": "904eaa42-075d-41cd-baa5-5362a9027804",
-    "created_at": "2018-11-11T18:04:49.251Z",
-    "updated_at": "2018-11-11T18:04:49.251Z",
-    "deleted_at": null
+    "role_id": "9c3e9214-d5f9-4433-9850-b02d3c42d697",
+    "permission_id": "26352965-ed57-411b-8732-588eceefffae",
+    "created_at": "2018-11-14T07:35:39.305Z",
+    "updated_at": "2018-11-14T07:35:39.305Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "a1f7abd8-6a2d-4c1f-aa1a-e69c04e2a0a8",
-    "permission_id": "ac60e785-2774-4824-8883-7d4db0252d14",
-    "created_at": "2018-11-14T20:04:57.801Z",
-    "updated_at": "2018-11-14T20:04:57.801Z",
-    "deleted_at": null
+    "role_id": "b5325153-a284-4c1a-b971-5442a88b7d0f",
+    "permission_id": "a55b59d7-2b50-4d09-a87b-874637dc8600",
+    "created_at": "2018-11-14T17:04:10.923Z",
+    "updated_at": "2018-11-14T17:04:10.923Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "e0dd329f-095a-49e7-9543-0223da67be94",
-    "permission_id": "82f4fb78-b46b-473d-8359-cabd595c4ae6",
-    "created_at": "2018-11-12T12:06:24.393Z",
-    "updated_at": "2018-11-12T12:06:24.393Z",
-    "deleted_at": null
+    "role_id": "e08f7ad4-0d89-4bbf-8a5d-11ba64791c74",
+    "permission_id": "cce0b40c-f209-41f3-b688-203fc2386d2a",
+    "created_at": "2018-11-12T04:53:27.822Z",
+    "updated_at": "2018-11-12T04:53:27.822Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "role_id": "34b89120-eed3-4f06-9b24-90393c8f1137",
-    "permission_id": "b7e8f2a0-9fbc-403b-8333-908a6ba2f5a3",
-    "created_at": "2018-11-13T00:12:55.117Z",
-    "updated_at": "2018-11-13T00:12:55.117Z",
-    "deleted_at": null
+    "role_id": "245d425d-4049-4b20-ae3a-7cf4a6cf2996",
+    "permission_id": "0798b614-eafd-4a71-b905-3f8d981612f6",
+    "created_at": "2018-11-14T14:16:22.840Z",
+    "updated_at": "2018-11-14T14:16:22.840Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   }
 ]

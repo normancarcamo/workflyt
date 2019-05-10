@@ -23,40 +23,27 @@ function getSalesman(users_roles, users, roles, employees) {
 }
 
 module.exports = function(customer, employee, users, roles, users_roles) {
-
   const data = [];
-  const q_order = [];
-  const i_order = [];
 
   for (let i = 0; i < 30; i++) {
     const created_at = faker.date.between(
-      new Date("2018-11-10"),
-      new Date("2018-11-15")
+      new Date("2019-11-10"),
+      new Date("2019-11-15")
     );
-    const type = faker.helpers.randomize([ "quote", "invoice" ]);
-    let code = "0000000";
-    let status = "open";
-
-    if (type === "quote") {
-      q_order.push(i);
-      code = `QTE${("0000000" + q_order.length).substr(-7,7)}`;
-      status = faker.helpers.randomize([ "open", "awaiting", "confirmed", "canceled" ]);
-    } else {
-      i_order.push(i);
-      code = `IVC${("0000000" + i_order.length).substr(-7,7)}`;
-      status = faker.helpers.randomize([ "open", "canceled", "done" ]);
-    }
 
     data.push({
       "id": faker.random.uuid(),
       "customer_id": faker.helpers.randomize(customer.map(e => e.id)),
       "salesman_id": getSalesman(users_roles, users, roles, employee).id,
-      "code": code,
-      "type": type,
-      "status": status,
+      "subject": faker.commerce.productName(),
+      "code": `QUO-19/${("000000" + i).substr(-6,6)}`,
+      "status": faker.helpers.randomize([ "open", "awaiting", "confirmed", "cancelled" ]),
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     });
   }
 

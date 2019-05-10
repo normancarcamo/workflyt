@@ -1,6 +1,6 @@
 import { is } from '@playscode/fns';
 
-describe("Environmental variables stored in process.env:", () => {
+describe("Environmental variables:", () => {
   describe("base:", () => {
     it("expect APP_NAME have a value", () => {
       expect(process.env.APP_NAME).toBeDefined();

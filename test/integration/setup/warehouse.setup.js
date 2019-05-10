@@ -7,126 +7,56 @@ const is_mocked = JSON.parse(process.env.MOCK);
 const setup = setup_factory(db, is_mocked), scenario = {};
 const { Warehouse } = db.sequelize.models;
 
+// ----------------------------------------------------------------------------
+
 scenario.get_warehouses = {
   pass: [
     {
       id: uuid(),
-      description: 'querystring is: empty',
-      input: () => ({ search: {} })
+      description: 'query sent is: {}',
+      input: async () => ({})
     },
     {
       id: uuid(),
-      description: 'querystring is: undefined',
-      input: () => ({ search: undefined })
+      description: 'query sent is: { search: {} }',
+      input: async () => ({ search: {} })
     },
     {
       id: uuid(),
-      description: 'querystring is: ?search[name]=war',
-      input: () => ({ search: { name: 'war' } })
+      description: 'query sent is: undefined',
+      input: async () => ({ search: undefined })
     },
     {
       id: uuid(),
-      description: 'querystring is: ?search[name]=Hardware',
-      input: () => ({ search: { name: 'Hardware' } })
+      description: "query sent is: { search: { name: 'ccccc' } }",
+      input: async () => ({ search: { name: 'ccccc' } })
     },
     {
       id: uuid(),
-      description: 'querystring is: ?search[code]=SPL',
-      input: () => ({ search: { code: 'SPL' } })
-    },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[name][like]=%ware%',
-      input: () => ({ search: { name: { like: '%ware%'} } })
-    },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[code][like]=%SPL%',
-      input: () => ({ search: { code: { like: '%SPL%'} } })
-    },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[name][eq]=Hardware',
-      input: () => ({ search: { name: { eq: 'Hardware'} } })
-    },
-    {
-      id: uuid(),
-      description: 'querystring is: ?search[code][eq]=SPL',
-      input: () => ({ search: { code: { eq: 'SPL'} } })
+      description: "query sent is: { search: { name: { like: '%vvv%' } } }",
+      input: async () => ({ search: { name: { like: '%vvv%' } } })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'querystring is: ?search=null',
-      input: () => ({ search: null })
+      description: 'Query validation fail',
+      input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'querystring is sent but something is wrong in the server',
-      input: () => ({ search: { name: { eq: 'Hardware'} } })
-    },
+      description: 'Warehouse search action throw error',
+      input: async () => ({ search: { name: { eq: 'model' } } })
+    }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findAll').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      } else {
-        jest.spyOn(Warehouse, 'findAll').mockImplementation(options => {
-          // search:
-          const { search } = input();
-
-          if (is.object(search) && is.empty(search)) {
-            return Promise.resolve(setup.instance.warehouses);
-          }
-
-          if (is.undefined(search)) {
-            return Promise.resolve(setup.instance.warehouses);
-          }
-
-          if (search.name === 'war') {
-            return Promise.resolve([]);
-          }
-
-          if (search.name === 'Hardware') {
-            return Promise.resolve([setup.instance.warehouses[0]]);
-          }
-
-          if (search.code === 'SPL') {
-            return Promise.resolve([]);
-          }
-
-          if (is.object(search.name)) {
-            if (search.name.like === '%war%') {
-              return Promise.resolve([setup.instance.warehouses[0]]);
-            }
-            if (search.name.eq === 'Hardware') {
-              return Promise.resolve([setup.instance.warehouses[0]]);
-            }
-          }
-
-          if (is.object(search.code)) {
-            if (search.code.like === '%SPL%') {
-              return Promise.resolve(setup.instance.warehouses);
-            }
-            if (search.code.eq === 'SPL') {
-              return Promise.resolve([]);
-            }
-          }
-
-          // TODO: add querystring for "fields".
-
-          return Promise.resolve([]);
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findAll').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Warehouse search action throw error') {
+      return jest.spyOn(Warehouse, 'findAll')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findAll')
+        .mockResolvedValue([]);
     }
   }
 };
@@ -135,75 +65,44 @@ scenario.create_warehouses = {
   pass: [
     {
       id: uuid(),
-      description: 'values are sent as array',
-      input: () => ({
-        values: [ { name: "sps" } ]
-      })
+      description: 'Values are sent as array',
+      input: async () => ({ values: [{ name: 'bingo' }] })
     },
     {
       id: uuid(),
-      description: 'values are sent as object',
-      input: () => ({
-        values: { name: "tgu" }
-      })
+      description: 'Values are sent as object',
+      input: async () => ({ values: { name: 'bingo' } })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'values are sent as an array but server reject',
-      input: () => ({
-        values: [ { name: "sps" } ]
-      })
+      description: 'Query validation fail',
+      input: async () => ({ values: { name: '' } })
     },
     {
       id: uuid(),
-      description: 'values are sent as object but server reject',
-      input: () => ({
-        values: { name: "tgu" }
-      })
+      description: 'Action create throw error',
+      input: async () => ({ values: { name: 'demo' } })
     }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Warehouse, 'createMany').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      } else {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          commit: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Warehouse, 'createMany').mockImplementation((values, options) => {
-          if (Array.isArray(values)) {
-            let result = values.reduce((initial, values, index) => {
-              initial.push(Warehouse.build({
-                code: 'SPL0083748',
-                ...values
-              }, options));
-              return initial;
-            }, []);
-            return Promise.resolve(result);
-          } else {
-            return Promise.resolve(Warehouse.build({
-              code: 'SPL0083748',
-              ...values
-            }));
-          }
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Warehouse, 'createMany').mockRejectedValue(new Error(
-          'Mock Error'
-        ));
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Action create throw error' && is_mocked) {
+      return jest.spyOn(Warehouse, 'createMany')
+        .mockRejectedValue(new Error('error mocked'));
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'createMany')
+        .mockImplementation(async (values, options) => {
+        if (Array.isArray(values)) {
+          return values.reduce((initial, values) => {
+            initial.push(Warehouse.build(values, options));
+            return initial;
+          }, []);
+        } else {
+          return Warehouse.build(values, options);
+        }
+      });
     }
   },
 };
@@ -212,38 +111,44 @@ scenario.get_warehouse = {
   pass: [
     {
       id: uuid(),
-      description: 'warehouse is found',
-      input: () => ({ warehouse_id: setup.instance.warehouses[0].id })
+      description: 'Warehouse is found',
+      input: async () => ({ warehouse_id: setup.instance.warehouses[0].id })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'warehouse is not found',
-      input: () => ({ warehouse_id: setup.instance.warehouses[0].id })
-    }
+      description: 'Warehouse id param is malformed',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is not found',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id
+      })
+    },
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue(null);
-      } else {
-        jest.spyOn(Warehouse, 'findByPk').mockImplementation(id => {
-          return Promise.resolve({
-            id,
-            code: 'SPL0084789',
-            name: 'SAT',
-            extra: null,
-            created_at: '2019-01-06T08:34:31.609Z',
-            updated_at: '2019-01-06T08:34:31.625Z',
-            deleted_at: null
-          })
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue(null);
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Warehouse is not found' && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue(null);
+    }
+    if (stage === 'Warehouse was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockResolvedValue(setup.instance.warehouses[0]);
     }
   }
 };
@@ -252,53 +157,69 @@ scenario.update_warehouse = {
   pass: [
     {
       id: uuid(),
-      description: 'warehouse was updated',
-      input: () => ({
+      description: 'Warehouse is updated',
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
-        values: { name: 'any name' }
+        values: { name: 'Warehouse A' }
       })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'warehouse was not updated',
-      input: () => ({
-        warehouse_id: setup.instance.warehouses[0].id,
-        values: { name: 'any name' }
+      description: 'Warehouse id param is malformed',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        values: { name: 'Warehouse A' }
       })
-    }
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is not found',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        values: { name: 'Warehouse A' }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        values: { name: 'Warehouse A' }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be updated',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        values: { name: 'Warehouse A' }
+      })
+    },
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          update: payload => Promise.reject(new Error('Mock Error'))
-        });
-      } else {
-        jest.spyOn(Warehouse, 'findByPk').mockImplementation(id => {
-          return Promise.resolve({
-            update: payload => {
-              return Promise.resolve({
-                id,
-                code: 'SPL0083834',
-                name: 'SAT',
-                extra: null,
-                created_at: '2019-01-06T06:33:36.582Z',
-                updated_at: '2019-01-06T06:33:36.709Z',
-                deleted_at: null,
-                ...payload
-              })
-            }
-          })
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          update: payload => Promise.reject(new Error('Mock Error'))
-        });
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Warehouse is not found' && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue(null);
+    }
+    if (stage === 'Warehouse was trying to be retrieved') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (stage === 'Warehouse was trying to be updated') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        update: async payload => {
+          throw new Error('error mocked.');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        update: async (payload, options) => Warehouse.build({
+          ...setup.instance.warehouses[0].dataValues,
+          ...payload
+        }, options)
+      });
     }
   }
 };
@@ -307,137 +228,119 @@ scenario.delete_warehouse = {
   pass: [
     {
       id: uuid(),
-      description: 'warehouse was deleted',
-      input: () => ({
-        warehouse_id: setup.instance.warehouses[0].id,
-        query: {
-          force: is_mocked ? false : true
+      description: 'Warehouse is deleted without options',
+      input: async () => {
+        return {
+          warehouse_id: setup.instance.warehouses[0].id,
+          query: {}
         }
+      }
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is deleted using force option as true',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        query: { force: true }
       })
-    }
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is deleted using force option as false',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        query: { force: false }
+      })
+    },
   ],
   fail: [
     {
       id: uuid(),
-      description: 'warehouse could not be deleted',
-      input: () => ({
-        warehouse_id: setup.instance.warehouses[0].id,
-        query: {
-          force: is_mocked ? false : true
-        }
+      description: 'Warehouse id param is malformed',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        query: {}
       })
-    }
-  ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          destroy: payload => Promise.reject(new Error('Mock Error'))
-        });
-      } else {
-        jest.spyOn(Warehouse, 'findByPk').mockImplementation(id => {
-          return Promise.resolve({
-            destroy: payload => {
-              if (payload.force) {
-                return Promise.resolve([]);
-              } else {
-                return Promise.resolve(Warehouse.build({
-                  id,
-                  code: 'SPL0083834',
-                  name: 'SAT',
-                  extra: null,
-                  created_at: '2019-01-06T06:33:36.582Z',
-                  updated_at: '2019-01-06T06:33:36.709Z',
-                  deleted_at: new Date().toISOString()
-                }))
-              }
-            }
-          });
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          destroy: payload => Promise.reject(new Error('Mock Error'))
-        });
-      }
-    }
-  }
-};
-
-scenario.add_items = {
-  pass: [
+    },
     {
       id: uuid(),
-      description: "items are added sucessfully to a warehouse",
-      input: () => ({
-        warehouse_id: setup.instance.warehouses[0].id,
-        items: setup.instance.items.map(item => item.id)
+      description: 'Warehouse is not found',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        query: {}
       })
-    }
-  ],
-  fail: [
+    },
     {
       id: uuid(),
-      description: "items are not added to a warehouse",
-      input: () => ({
-        warehouse_id: setup.instance.warehouses[0].id,
-        items: setup.instance.items.map(item => item.id)
-      })
-    }
-  ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          addItems: payload => Promise.reject(new Error('Mock Error'))
-        });
-      } else {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          commit: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          addItems: payload => Promise.resolve(payload)
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(db.sequelize, 'transaction').mockResolvedValue({
-          rollback: jest.fn().mockResolvedValue()
-        });
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          addItems: payload => Promise.reject(new Error('Mock Error'))
-        });
-      }
-    }
-  }
-};
-
-scenario.get_items = {
-  pass: [
-    {
-      id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
         query: {}
       })
     },
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: 'Warehouse was trying to be removed',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        query: {}
+      })
+    },
+  ],
+  mock: async ({ input, fail, stage }) => {
+    if (stage === 'Warehouse is not found' && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue(null);
+    }
+    if (stage === 'Warehouse was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (stage === 'Warehouse was trying to be removed') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        destroy: async payload => {
+          throw new Error('error mocked.');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        destroy: async payload => {
+          if (payload.force) {
+            return [];
+          } else {
+            setup.instance.warehouses[0].deleted_at = new Date().toISOString();
+            return setup.instance.warehouses[0];
+          }
+        }
+      });
+    }
+  }
+};
+
+// ----------------------------------------------------------------------------
+
+scenario.get_items = {
+  pass: [
+    {
+      id: uuid(),
+      description: "Query is: empty",
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: "Query is: name='dknd'",
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
         query: { search: { name: 'dknd' } }
       })
     },
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: "Query is: name like %disk%",
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
         query: { search: { name: { like: '%disk%' } } }
       })
@@ -446,38 +349,137 @@ scenario.get_items = {
   fail: [
     {
       id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
-        warehouse_id: setup.instance.warehouses[0].id,
-        query: null
-      }),
+      description: 'Warehouse param id validation fail',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        query: {}
+      })
     },
     {
       id: uuid(),
-      description: 'querystring is sent but something is wrong in the server',
-      input: () => ({
+      description: 'Warehouse is not found',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
-        query: { name: { eq: 'Hardware'} }
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Items were trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        query: {}
       })
     }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.reject(new Error('Mock Error'))
-        });
-      } else {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items)
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.reject(new Error('Mock Error'))
-        });
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (fail && stage === 'Warehouse is not found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (fail && stage === 'Warehouse was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('Warehouse error mocked'));
+    }
+    if (fail && stage === 'Items were trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => {
+          throw new Error('Warehouse.getItems error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async payload => setup.instance.items
+      });
+    }
+  }
+};
+
+scenario.set_items = {
+  pass: [
+    {
+      id: uuid(),
+      description: "Items are set",
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        items: setup.instance.items.map(item => item.id)
+      })
+    }
+  ],
+  fail: [
+    {
+      id: uuid(),
+      description: 'Warehouse param id validation fail',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        items: setup.instance.items.map(item => item.id)
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Items ids validation fail',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        items: [
+          '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+          '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s'
+        ]
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is not found',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        items: setup.instance.items.map(item => item.id)
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: "Items cannot be set",
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        items: setup.instance.items.map(item => item.id)
+      })
+    },
+  ],
+  mock: async ({ input, fail, stage }) => {
+    if (fail && stage === 'Warehouse is not found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (fail && stage === 'Warehouse was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('Warehouse error mocked'));
+    }
+    if (fail && stage === 'Items cannot be set') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        addItems: async (items) => {
+          throw new Error('Warehouse.addItems error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        addItems: async payload => []
+      });
     }
   }
 };
@@ -486,8 +488,8 @@ scenario.get_item = {
   pass: [
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: "Item is found",
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
         item_id: setup.instance.items[0].id
       })
@@ -496,30 +498,78 @@ scenario.get_item = {
   fail: [
     {
       id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
+      description: 'Warehouse param id is invalid',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
+        item_id: setup.instance.items[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item param id is invalid',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is not found',
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
         item_id: setup.instance.items[0].id
-      }),
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id
+      })
     }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(null)
-        });
-      } else {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items[0])
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(null)
-        });
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (fail && stage === 'Warehouse is not found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (fail && stage === 'Item is not found') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => null
+      });
+    }
+    if (fail && stage === 'Warehouse was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('Warehouse.findByPk error mocked'));
+    }
+    if (fail && stage === 'Item was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => {
+          throw new Error('Warehouse.getItems error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => setup.instance.items[0]
+      });
     }
   }
 };
@@ -528,8 +578,8 @@ scenario.update_item = {
   pass: [
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
+      description: "Item is found",
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
         item_id: setup.instance.items[0].id,
         values: { extra: { units: 20 } }
@@ -539,34 +589,104 @@ scenario.update_item = {
   fail: [
     {
       id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
+      description: 'Warehouse param id is invalid',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item param id is invalid',
+      input: async () => {
+        return {
+          warehouse_id: setup.instance.warehouses[0].id,
+          item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
+          values: { extra: { units: 20 } }
+        }
+      }
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is not found',
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
         item_id: setup.instance.items[0].id,
         values: { extra: { units: 20 } }
-      }),
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 21 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be updated',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
     }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items[0]),
-          addItem: () => Promise.reject(new Error('Mock error'))
-        });
-      } else {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items[0]),
-          addItem: payload => Promise.resolve(setup.instance.items[0]),
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items[0]),
-          addItem: () => Promise.reject(new Error('Mock error'))
-        });
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (fail && stage === 'Warehouse is not found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (fail && stage === 'Item is not found') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => null
+      });
+    }
+    if (fail && stage === 'Warehouse was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('Warehouse.findByPk error mocked'));
+    }
+    if (fail && stage === 'Item was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => {
+          throw new Error('Warehouse.getItems error mocked');
+        }
+      });
+    }
+    if (fail && stage === 'Item was trying to be updated') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => ({}),
+        addItem: async (uuid, options) => {
+          throw new Error('req.warehouse.addItem error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => ({ mocked: "yes" }),
+        addItem: async (values, options) => setup.instance.items[0]
+      });
     }
   }
 };
@@ -575,46 +695,123 @@ scenario.remove_item = {
   pass: [
     {
       id: uuid(),
-      description: "querystring is ...",
-      input: () => ({
-        warehouse_id: setup.instance.warehouses[0].id,
-        item_id: setup.instance.items[0].id
-      })
+      description: "Item is found",
+      input: async () => {
+        let warehouse = setup.instance.warehouses[0];
+        let item = setup.instance.items[0];
+        return {
+          warehouse_id: warehouse.id,
+          item_id: item.id
+        }
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'querystring is malformed',
-      input: () => ({
+      description: 'Warehouse param id is invalid',
+      input: async () => ({
+        warehouse_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item param id is invalid',
+      input: async () => {
+        return {
+          warehouse_id: setup.instance.warehouses[0].id,
+          item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
+          values: { extra: { units: 20 } }
+        }
+      }
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse is not found',
+      input: async () => ({
         warehouse_id: setup.instance.warehouses[0].id,
-        item_id: setup.instance.items[0].id
-      }),
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item is not found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 21 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Warehouse was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be found',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Item was trying to be removed',
+      input: async () => ({
+        warehouse_id: setup.instance.warehouses[0].id,
+        item_id: setup.instance.items[0].id,
+        values: { extra: { units: 20 } }
+      })
     }
   ],
-  mock: ({ input, fail }) => {
-    if (is_mocked) {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items[0]),
-          removeItem: () => Promise.reject(new Error('Mock error'))
-        });
-      } else {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items[0]),
-          removeItem: payload => Promise.resolve(setup.instance.items[0])
-        });
-      }
-    } else {
-      if (fail) {
-        jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
-          getItems: payload => Promise.resolve(setup.instance.items[0]),
-          removeItem: () => Promise.reject(new Error('Mock error'))
-        });
-      }
+  mock: async ({ input, fail, stage }) => {
+    if (fail && stage === 'Warehouse is not found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (fail && stage === 'Item is not found') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => null
+      });
+    }
+    if (fail && stage === 'Warehouse was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk')
+        .mockRejectedValue(new Error('Warehouse.findByPk error mocked'));
+    }
+    if (fail && stage === 'Item was trying to be found') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => {
+          throw new Error('Warehouse.getItems error mocked');
+        }
+      });
+    }
+    if (fail && stage === 'Item was trying to be removed') {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: async (options) => ({}),
+        removeItem: async (uuid, options) => {
+          throw new Error('req.warehouse.removeItem error mocked');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Warehouse, 'findByPk').mockResolvedValue({
+        getItems: (payload, options) => Promise.resolve({}),
+        removeItem: async (payload, options) => setup.instance.items[0]
+      });
     }
   }
 };
+
+// ----------------------------------------------------------------------------
 
 module.exports.scenario = scenario;
 

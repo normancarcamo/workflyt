@@ -18,14 +18,20 @@ const roles = [
 ];
 
 for (let i = 0; i < roles.length; i++) {
-  let created_at = faker.date.between(new Date("2018-11-10"), new Date("2018-11-15"));
+  let created_at = faker.date.between(
+    new Date("2018-11-10"),
+    new Date("2018-11-15")
+  );
   data.push({
     "id": faker.random.uuid(),
-    "code": `ROL${("0000000" + (i+1)).substr(-7,7)}`,
+    "code": `ROL/${("000000" + (i+1)).substr(-6,6)}`,
     "name": roles[i],
     "created_at": created_at,
     "updated_at": created_at,
-    "deleted_at": null
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   });
 }
 

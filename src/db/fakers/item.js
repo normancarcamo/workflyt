@@ -16,23 +16,23 @@ module.exports = function(category) {
 
     let type = faker.helpers.randomize([ "product", "material", "service" ]);
     let name = "";
-    let code = "0000000";
+    let code = "000000";
 
     switch(type) {
       case "product":
         products.push(i);
         name = `${faker.commerce.productName()}-${i}`;
-        code = `PRD${("0000000" + (products.length)).substr(-7,7)}`;
+        code = `PRD/${(code + (products.length)).substr(-6,6)}`;
         break;
       case "material":
         materials.push(i);
         name = `${faker.commerce.productMaterial()}-${i}`;
-        code = `MTR${("0000000" + (materials.length)).substr(-7,7)}`;
+        code = `MAT/${(code + (materials.length)).substr(-6,6)}`;
         break;
       default:
         services.push(i);
         name = `${faker.lorem.sentence()}-${i}`;
-        code = `SRV${("0000000" + (services.length)).substr(-7,7)}`;
+        code = `SER/${(code + (services.length)).substr(-6,6)}`;
     }
 
     data.push({
@@ -45,7 +45,10 @@ module.exports = function(category) {
       "price": faker.commerce.price(),
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     });
   }
 

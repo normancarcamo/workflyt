@@ -1,4 +1,4 @@
-describe('app.js', () => {
+describe('src/app.js', () => {
   beforeAll(() => {
     const { default: db } = require('src/db/models');
     db.sequelize = { models: {}};

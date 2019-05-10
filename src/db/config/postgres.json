@@ -2,7 +2,7 @@
   "development": {
     "username": "dev",
     "password": "dev",
-    "database": "disema_dev",
+    "database": "workflyt_dev",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
@@ -10,7 +10,7 @@
   "test": {
     "username": "dev",
     "password": "dev",
-    "database": "disema_test",
+    "database": "workflyt_test",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
@@ -18,7 +18,7 @@
   "production": {
     "username": "dev",
     "password": "dev",
-    "database": "disema_production",
+    "database": "workflyt_prod",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
@@ -26,7 +26,7 @@
   "stage": {
     "username": "dev",
     "password": "dev",
-    "database": "disema_stage",
+    "database": "workflyt_stage",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false

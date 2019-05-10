@@ -2,7 +2,7 @@
 
 import Schema from "../schemas/customer";
 
-import Hooks from "../hooks/customer";
+import Methods from "../methods/shared";
 
 import { Customer as Associations } from "../associations";
 
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Associations(Model);
 
-  Hooks(Model, sequelize);
+  Methods.call(Model, sequelize);
 
   return Model;
 };

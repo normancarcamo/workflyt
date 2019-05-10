@@ -74,7 +74,7 @@ export default {
     version: false,
     sync: {
       force: true,
-      match: /disema_test/
+      match: /workflyt_test/
     },
   },
   development: {
@@ -87,7 +87,7 @@ export default {
     version: false,
     sync: {
       force: false,
-      match: /disema_dev/
+      match: /workflyt_dev/
     },
   },
   production: {
@@ -100,7 +100,7 @@ export default {
     version: false,
     sync: {
       force: false,
-      match: /disema_production/
+      match: /workflyt_prod/
     },
   },
   stage: {
@@ -113,7 +113,7 @@ export default {
     version: false,
     sync: {
       force: false,
-      match: /disema_stage/
+      match: /workflyt_stage/
     },
   }
 };

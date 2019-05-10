@@ -17,7 +17,7 @@ module.exports = function(DataTypes) {
         references: {
           model: {
             tableName: "category",
-            schema: "nz"
+            schema: "public"
           },
           key: "id"
         },
@@ -25,10 +25,10 @@ module.exports = function(DataTypes) {
         onDelete: "SET NULL"
       },
       code: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
-        defaultValue: "unset"
+        defaultValue: 'unset'
       },
       name: {
         type: DataTypes.STRING(50),
@@ -52,10 +52,31 @@ module.exports = function(DataTypes) {
       deleted_at: {
         type: DataTypes.DATE,
         allowNull: true
+      },
+      created_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      updated_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      deleted_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       }
     },
     options: {
-      schema: "nz",
+      schema: "public",
       tableName: "category"
     }
   }

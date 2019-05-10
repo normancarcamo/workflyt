@@ -14,20 +14,20 @@ module.exports = function(quote) {
       new Date("2018-11-15")
     );
     const type = faker.helpers.randomize([ "work", "installation" ]);
-    let code = "0000000";
+    let code = "000000";
     let status = faker.helpers.randomize([
       "awaiting",
       "working",
-      "canceled",
+      "cancelled",
       "done"
     ]);
 
     if (type === "installation") {
       i_order.push(i);
-      code = `IOR${("0000000" + i_order.length).substr(-7,7)}`
+      code = `ORI-19/${(code + i_order.length).substr(-6,6)}`
     } else {
       w_order.push(i);
-      code = `WOR${("0000000" + w_order.length).substr(-7,7)}`
+      code = `ORW-19/${(code + w_order.length).substr(-6,6)}`
     }
 
     data.push({
@@ -38,7 +38,10 @@ module.exports = function(quote) {
       "status": status,
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     });
   }
 

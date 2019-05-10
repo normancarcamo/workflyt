@@ -35,12 +35,15 @@ module.exports = function(department) {
         ...uuids.filter(uuid => uuid !== uuids[i])
       ]),
       "department_id": faker.helpers.randomize(department.map(e => e.id)),
-      "code": `WRK${("0000000" + (i + 1)).substr(-7,7)}`,
+      "code": `EMP/${("000000" + (i+1)).substr(-6,6)}`,
       "firstname": names[i],
       "lastname": faker.name.findName(),
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     });
   }
 

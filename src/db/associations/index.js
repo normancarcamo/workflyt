@@ -1,6 +1,6 @@
 export function Category(Category) {
   Category.associate = function(models) {
-    Category.Items = Category.hasMany(models.Item, {
+    Category.hasMany(models.Item, {
       as: {
         singular: "item",
         plural: "items"
@@ -9,7 +9,7 @@ export function Category(Category) {
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    Category.Parent = Category.belongsTo(models.Category, {
+    Category.belongsTo(models.Category, {
       as: "parent",
       foreignKey: "parent_id",
       onUpdate: 'CASCADE',
@@ -20,30 +20,30 @@ export function Category(Category) {
 
 export function Customer(Customer) {
   Customer.associate = function(models) {
-    Customer.Quotes = Customer.hasMany(models.Quote, {
+    Customer.hasMany(models.Quote, {
       as: {
         singular: "quote",
         plural: "quotes"
       },
       foreignKey: 'customer_id',
       onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'CASCADE'
     });
   }
 }
 
 export function Department(Department) {
   Department.associate = function(models) {
-    Department.Employees = Department.hasMany(models.Employee, {
+    Department.hasMany(models.Employee, {
       as: {
         singular: "employee",
         plural: "employees"
       },
       foreignKey: "department_id",
       onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'CASCADE'
     });
-    Department.Orders = Department.belongsToMany(models.Order, {
+    Department.belongsToMany(models.Order, {
       as: {
         singular: "order",
         plural: "orders"
@@ -57,22 +57,116 @@ export function Department(Department) {
   }
 }
 
-export function Stock(Stock) {
-  Stock.associate = function(models) {
-    Stock.Item = Stock.belongsTo(models.Item, {
-      as: "item",
-      foreignKey: "item_id"
+export function Employee(Employee) {
+  Employee.associate = function(models) {
+    Employee.belongsTo(models.Department, {
+      as: "department",
+      foreignKey: "department_id"
+    });
+    Employee.hasOne(models.User, {
+      as: "user",
+      foreignKey: "employee_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    Employee.hasOne(models.Employee, {
+      as: "supervisor",
+      foreignKey: "supervisor_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    Employee.hasMany(models.Quote, {
+      as: {
+        singular: "quote",
+        plural: "quotes"
+      },
+      foreignKey: 'salesman_id',
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+    Employee.belongsToMany(models.Order, {
+      as: {
+        singular: "order",
+        plural: "orders"
+      },
+      through: models.OrderEmployees,
+      foreignKey: "employee_id",
+      otherKey: "order_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+  }
+}
+
+export function Item(Item) {
+  Item.associate = function(models) {
+    Item.belongsTo(models.Category, {
+      as: 'category',
+      foreignKey: 'category_id'
+    });
+    Item.hasMany(models.Stock, {
+      as: {
+        singular: "stock",
+        plural: "stocks"
+      },
+      foreignKey: "item_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+    Item.belongsToMany(models.Warehouse, {
+      as: {
+        singular: "warehouse",
+        plural: "warehouses"
+      },
+      through: models.WarehouseItems,
+      foreignKey: "item_id",
+      otherKey: "warehouse_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+    Item.belongsToMany(models.Supplier, {
+      as: {
+        singular: "supplier",
+        plural: "suppliers"
+      },
+      through: models.SupplierItems,
+      foreignKey: "item_id",
+      otherKey: "supplier_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+    Item.belongsToMany(models.Order, {
+      as: {
+        singular: "order",
+        plural: "orders"
+      },
+      through: models.OrderItems,
+      foreignKey: "item_id",
+      otherKey: "order_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+    Item.belongsToMany(models.Quote, {
+      as: {
+        singular: "quote",
+        plural: "quotes"
+      },
+      through: models.QuoteItems,
+      foreignKey: "item_id",
+      otherKey: "quote_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
     });
   }
 }
 
 export function Order(Order) {
   Order.associate = function(models) {
-    Order.Quote = Order.belongsTo(models.Quote, {
+    Order.belongsTo(models.Quote, {
       as: "quote",
       foreignKey: "quote_id"
     });
-    Order.Departments = Order.belongsToMany(models.Department, {
+    Order.belongsToMany(models.Department, {
       as: {
         singular: "department",
         plural: "departments"
@@ -83,7 +177,7 @@ export function Order(Order) {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
-    Order.Items = Order.belongsToMany(models.Item, {
+    Order.belongsToMany(models.Item, {
       as: {
         singular: "item",
         plural: "items"
@@ -94,12 +188,23 @@ export function Order(Order) {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
+    Order.belongsToMany(models.Employee, {
+      as: {
+        singular: "employee",
+        plural: "employees"
+      },
+      through: models.OrderEmployees,
+      foreignKey: "order_id",
+      otherKey: "employee_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
   }
 }
 
 export function Permission(Permission) {
   Permission.associate = function(models) {
-    Permission.Roles = Permission.belongsToMany(models.Role, {
+    Permission.belongsToMany(models.Role, {
       as: {
         singular: "role",
         plural: "roles",
@@ -113,99 +218,26 @@ export function Permission(Permission) {
   }
 }
 
-export function Item(Item) {
-  Item.associate = function(models) {
-    Item.Category = Item.belongsTo(models.Category, {
-      as: 'category',
-      foreignKey: 'category_id'
-    });
-    Item.Stocks = Item.hasMany(models.Stock, {
-      as: {
-        singular: "stock",
-        plural: "stocks"
-      },
-      foreignKey: "item_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    Item.Warehouses = Item.belongsToMany(models.Warehouse, {
-      as: {
-        singular: "warehouse",
-        plural: "warehouses"
-      },
-      through: models.WarehouseItems,
-      foreignKey: "item_id",
-      otherKey: "warehouse_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
-    Item.Suppliers = Item.belongsToMany(models.Supplier, {
-      as: {
-        singular: "supplier",
-        plural: "suppliers"
-      },
-      through: models.SupplierItems,
-      foreignKey: "item_id",
-      otherKey: "supplier_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
-    Item.Orders = Item.belongsToMany(models.Order, {
-      as: {
-        singular: "order",
-        plural: "orders"
-      },
-      through: models.OrderItems,
-      foreignKey: "item_id",
-      otherKey: "order_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
-    Item.Quotes = Item.belongsToMany(models.Quote, {
-      as: {
-        singular: "quote",
-        plural: "quotes"
-      },
-      through: models.QuoteItems,
-      foreignKey: "item_id",
-      otherKey: "quote_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
-    Item.Types = Item.belongsToMany(models.Item, {
-      as: {
-        singular: "type",
-        plural: "types"
-      },
-      through: models.ItemTypes,
-      foreignKey: "item_id",
-      otherKey: "type_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
-  }
-}
-
 export function Quote(Quote) {
   Quote.associate = function(models) {
-    Quote.Orders = Quote.hasMany(models.Order, {
+    Quote.hasMany(models.Order, {
       as: {
         singular: "order",
         plural: "orders"
       },
       foreignKey: "quote_id",
       onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'CASCADE'
     });
-    Quote.Customer = Quote.belongsTo(models.Customer, {
+    Quote.belongsTo(models.Customer, {
       as: "customer",
       foreignKey: "customer_id"
     });
-    Quote.Salesman = Quote.belongsTo(models.Employee, {
+    Quote.belongsTo(models.Employee, {
       as: "Salesman",
       foreignKey: "salesman_id"
     });
-    Quote.Items = Quote.belongsToMany(models.Item, {
+    Quote.belongsToMany(models.Item, {
       as: {
         singular: "item",
         plural: "items"
@@ -221,7 +253,7 @@ export function Quote(Quote) {
 
 export function Role(Role) {
   Role.associate = function(models) {
-    Role.Users = Role.belongsToMany(models.User, {
+    Role.belongsToMany(models.User, {
       as: {
         singular: "user",
         plural: "users",
@@ -232,7 +264,7 @@ export function Role(Role) {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
-    Role.Permissions = Role.belongsToMany(models.Permission, {
+    Role.belongsToMany(models.Permission, {
       as: {
         singular: "permission",
         plural: "permissions"
@@ -246,9 +278,18 @@ export function Role(Role) {
   }
 }
 
+export function Stock(Stock) {
+  Stock.associate = function(models) {
+    Stock.belongsTo(models.Item, {
+      as: "item",
+      foreignKey: "item_id"
+    });
+  }
+}
+
 export function Supplier(Supplier) {
   Supplier.associate = function(models) {
-    Supplier.Items = Supplier.belongsToMany(models.Item, {
+    Supplier.belongsToMany(models.Item, {
       as: {
         singular: "item",
         plural: "items",
@@ -264,11 +305,11 @@ export function Supplier(Supplier) {
 
 export function User(User) {
   User.associate = function(models) {
-    User.Employee = User.belongsTo(models.Employee, {
+    User.belongsTo(models.Employee, {
       as: "employee",
       foreignKey: "employee_id"
     });
-    User.Roles = User.belongsToMany(models.Role, {
+    User.belongsToMany(models.Role, {
       as: {
         singular: "role",
         plural: "roles",
@@ -279,12 +320,365 @@ export function User(User) {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
+
+    User.hasOne(models.Category, {
+      // as:
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Category, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Category, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Company, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Company, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Company, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Customer, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Customer, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Customer, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Department, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Department, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Department, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Employee, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Employee, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Employee, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Item, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Item, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Item, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.OrderDepartments, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.OrderDepartments, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.OrderDepartments, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.OrderEmployees, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.OrderEmployees, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.OrderEmployees, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.OrderItems, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.OrderItems, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.OrderItems, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Order, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Order, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Order, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Permission, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Permission, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Permission, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.QuoteItems, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.QuoteItems, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.QuoteItems, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Quote, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Quote, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Quote, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.RolePermissions, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.RolePermissions, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.RolePermissions, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Role, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Role, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Role, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Stock, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Stock, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Stock, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.SupplierItems, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.SupplierItems, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.SupplierItems, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Supplier, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Supplier, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Supplier, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.UserRoles, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.UserRoles, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.UserRoles, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.User, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.User, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.User, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.WarehouseItems, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.WarehouseItems, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.WarehouseItems, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    User.hasOne(models.Warehouse, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Warehouse, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Warehouse, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
   }
 }
 
 export function Warehouse(Warehouse) {
   Warehouse.associate = function(models) {
-    Warehouse.Items = Warehouse.belongsToMany(models.Item, {
+    Warehouse.belongsToMany(models.Item, {
       as: {
         singular: 'item',
         plural: 'items',
@@ -294,36 +688,6 @@ export function Warehouse(Warehouse) {
       otherKey: "item_id",
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
-    });
-  }
-}
-
-export function Employee(Employee) {
-  Employee.associate = function(models) {
-    Employee.Department = Employee.belongsTo(models.Department, {
-      as: "department",
-      foreignKey: "department_id"
-    });
-    Employee.User = Employee.hasOne(models.User, {
-      as: "user",
-      foreignKey: "employee_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    Employee.Supervisor = Employee.hasOne(models.Employee, {
-      as: "supervisor",
-      foreignKey: "supervisor_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    Employee.Quotes = Employee.hasMany(models.Quote, {
-      as: {
-        singular: "salesman",
-        plural: "salesmans"
-      },
-      foreignKey: "salesman_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
     });
   }
 }

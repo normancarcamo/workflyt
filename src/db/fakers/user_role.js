@@ -16,7 +16,10 @@ module.exports = function(users, roles) {
       "role_id": faker.helpers.randomize(role),
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     });
   }
 
@@ -27,14 +30,20 @@ module.exports = function(users, roles) {
       "role_id": role[salesmanIndex],
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     };
     data[1] = {
       "user_id": user[1],
       "role_id": role[salesmanIndex],
       "created_at": created_at,
       "updated_at": created_at,
-      "deleted_at": null
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "deleted_by": null
     };
   }
 

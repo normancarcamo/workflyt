@@ -13,45 +13,52 @@ module.exports = function(DataTypes) {
       },
       customer_id: {
         type: DataTypes.UUID,
-        allowNull: true,
+        allowNull: false,
+        unique: false,
         references: {
           model: {
-            schema: "nz",
+            schema: "public",
             tableName: "customer"
           },
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL"
+        onDelete: "CASCADE"
       },
       salesman_id: {
         type: DataTypes.UUID,
-        allowNull: true,
+        allowNull: false,
+        unique: false,
         references: {
           model: {
-            schema: "nz",
+            schema: "public",
             tableName: "employee"
           },
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL"
+        onDelete: "CASCADE"
       },
       code: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
-        defaultValue: "unset"
+        defaultValue: 'unset'
       },
-      type: {
-        type: DataTypes.STRING(20),
-        allowNull: false,
-        defaultValue: "quote"
+      subject: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false,
+        defaultValue: 'No subject'
       },
       status: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.ENUM([
+          "open", "confirmed", "other", "approved",
+          "pending", "awaiting", "authorized",
+          "cancelled", "done"
+        ]),
         allowNull: false,
-        defaultValue: "open"
+        defaultValue: "awaiting"
       },
       extra: {
         type: DataTypes.JSONB,
@@ -70,10 +77,31 @@ module.exports = function(DataTypes) {
       deleted_at: {
         type: DataTypes.DATE,
         allowNull: true
+      },
+      created_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      updated_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      deleted_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: false,
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       }
     },
     options: {
-      schema: "nz",
+      schema: "public",
       tableName: "quote"
     }
   }

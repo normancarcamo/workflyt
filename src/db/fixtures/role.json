@@ -1,82 +1,112 @@
 [
   {
-    "id": "979f9d9b-e01f-4554-8df0-601cb6f354cf",
-    "code": "ROL0000001",
+    "id": "b5325153-a284-4c1a-b971-5442a88b7d0f",
+    "code": "ROL/000001",
     "name": "Admin",
-    "created_at": "2018-11-13T15:02:57.304Z",
-    "updated_at": "2018-11-13T15:02:57.304Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T00:17:47.904Z",
+    "updated_at": "2018-11-13T00:17:47.904Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "ce92efd1-5eb3-4399-b613-f49119f912eb",
-    "code": "ROL0000002",
+    "id": "a13027de-f234-4580-9fbd-168c4e77c0bd",
+    "code": "ROL/000002",
     "name": "Developer",
-    "created_at": "2018-11-14T16:38:38.200Z",
-    "updated_at": "2018-11-14T16:38:38.200Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T02:32:34.281Z",
+    "updated_at": "2018-11-13T02:32:34.281Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "ec39ec91-9c15-40f4-823a-0f9b3666f1d2",
-    "code": "ROL0000003",
+    "id": "17b27f90-d224-40d5-98eb-c6f0e6b43236",
+    "code": "ROL/000003",
     "name": "Test",
-    "created_at": "2018-11-12T18:12:28.965Z",
-    "updated_at": "2018-11-12T18:12:28.965Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T04:00:21.858Z",
+    "updated_at": "2018-11-13T04:00:21.858Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "b82afe9b-eaed-4cfe-a4b3-ca556a6a3455",
-    "code": "ROL0000004",
+    "id": "d6ceb004-2eb0-44ea-b5fe-5786abea32d8",
+    "code": "ROL/000004",
     "name": "Guest",
-    "created_at": "2018-11-13T21:12:59.750Z",
-    "updated_at": "2018-11-13T21:12:59.750Z",
-    "deleted_at": null
+    "created_at": "2018-11-14T02:53:45.478Z",
+    "updated_at": "2018-11-14T02:53:45.478Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "fecb44c3-6a9d-4325-ac53-02bf00e371a7",
-    "code": "ROL0000005",
+    "id": "245d425d-4049-4b20-ae3a-7cf4a6cf2996",
+    "code": "ROL/000005",
     "name": "Salesman",
-    "created_at": "2018-11-12T22:35:44.196Z",
-    "updated_at": "2018-11-12T22:35:44.196Z",
-    "deleted_at": null
+    "created_at": "2018-11-13T03:42:37.510Z",
+    "updated_at": "2018-11-13T03:42:37.510Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "80c594fa-3fd4-4e93-96eb-11efc3e94acc",
-    "code": "ROL0000006",
+    "id": "e08f7ad4-0d89-4bbf-8a5d-11ba64791c74",
+    "code": "ROL/000006",
     "name": "Designer",
-    "created_at": "2018-11-10T15:30:42.533Z",
-    "updated_at": "2018-11-10T15:30:42.533Z",
-    "deleted_at": null
+    "created_at": "2018-11-12T08:50:19.152Z",
+    "updated_at": "2018-11-12T08:50:19.152Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "582f97ee-5698-4025-8125-5a10a72744b6",
-    "code": "ROL0000007",
+    "id": "9c3e9214-d5f9-4433-9850-b02d3c42d697",
+    "code": "ROL/000007",
     "name": "Printer",
-    "created_at": "2018-11-12T13:59:37.215Z",
-    "updated_at": "2018-11-12T13:59:37.215Z",
-    "deleted_at": null
+    "created_at": "2018-11-11T09:39:02.293Z",
+    "updated_at": "2018-11-11T09:39:02.293Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "a1f7abd8-6a2d-4c1f-aa1a-e69c04e2a0a8",
-    "code": "ROL0000008",
+    "id": "71dc945a-4e17-4b28-8fb4-7f1b80dbfa18",
+    "code": "ROL/000008",
     "name": "Welder",
-    "created_at": "2018-11-10T09:30:36.030Z",
-    "updated_at": "2018-11-10T09:30:36.030Z",
-    "deleted_at": null
+    "created_at": "2018-11-11T01:53:39.848Z",
+    "updated_at": "2018-11-11T01:53:39.848Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "e0dd329f-095a-49e7-9543-0223da67be94",
-    "code": "ROL0000009",
+    "id": "5f39b5bf-2761-4d66-96ce-66ace86a0289",
+    "code": "ROL/000009",
     "name": "Woodman",
-    "created_at": "2018-11-10T01:13:56.894Z",
-    "updated_at": "2018-11-10T01:13:56.894Z",
-    "deleted_at": null
+    "created_at": "2018-11-12T10:35:56.201Z",
+    "updated_at": "2018-11-12T10:35:56.201Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   },
   {
-    "id": "34b89120-eed3-4f06-9b24-90393c8f1137",
-    "code": "ROL0000010",
+    "id": "443e3fd0-fecf-46ae-8c4e-d8f76fb70266",
+    "code": "ROL/000010",
     "name": "Carpenter",
-    "created_at": "2018-11-13T08:40:09.582Z",
-    "updated_at": "2018-11-13T08:40:09.582Z",
-    "deleted_at": null
+    "created_at": "2018-11-12T07:29:59.246Z",
+    "updated_at": "2018-11-12T07:29:59.246Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   }
 ]

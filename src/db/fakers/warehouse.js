@@ -25,11 +25,14 @@ for (let i = 0; i < 5; i++) {
 
   data.push({
     "id": faker.random.uuid(),
-    "code": `WRH${("0000000" + (i+1)).substr(-7,7)}`,
+    "code": `WRH/${("000000" + (i+1)).substr(-6,6)}`,
     "name": names[i],
     "created_at": created_at,
     "updated_at": created_at,
-    "deleted_at": null
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
   });
 }
 
