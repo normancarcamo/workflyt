@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Permission';
+import { schema, validate } from 'src/validations/Permission';
 
 const { Permission } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getPermissions = [
-  validate(validations.getPermissions),
+  validate(schema.getPermissions),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getPermissions = [
 ];
 
 export const createPermissions = [
-  validate(validations.createPermissions),
+  validate(schema.createPermissions),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createPermissions = [
 ];
 
 export const getPermission = [
-  validate(validations.getPermission),
+  validate(schema.getPermission),
   async function params(req, res, next) {
     try {
       req.permission = await Permission.findByPk(req.params.permission);
@@ -75,7 +74,7 @@ export const getPermission = [
 ];
 
 export const updatePermission = [
-  validate(validations.updatePermission),
+  validate(schema.updatePermission),
   async function params(req, res, next) {
     try {
       req.permission = await Permission.findByPk(req.params.permission);
@@ -102,7 +101,7 @@ export const updatePermission = [
 ];
 
 export const deletePermission = [
-  validate(validations.deletePermission),
+  validate(schema.deletePermission),
   async function params(req, res, next) {
     try {
       req.permission = await Permission.findByPk(req.params.permission);

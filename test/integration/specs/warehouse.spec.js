@@ -11,10 +11,14 @@ describe("Warehouse Service:", () => {
 
   describe("get warehouses", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_warehouses.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_warehouses.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_warehouses.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_warehouses.mock) {
+            await scenario.get_warehouses.mock({ fail: false, description });
+          }
 
           // Given:
           let querystring = await input();
@@ -23,17 +27,25 @@ describe("Warehouse Service:", () => {
           let res = await request("get", API_BASE).query(querystring);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_warehouses.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_warehouses.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_warehouses.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_warehouses.mock) {
+            await scenario.get_warehouses.mock({ fail: true, description });
+          }
 
           // Given:
           let querystring = await input();
@@ -42,9 +54,13 @@ describe("Warehouse Service:", () => {
           let res = await request("get", API_BASE).query(querystring);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -52,25 +68,38 @@ describe("Warehouse Service:", () => {
 
   describe("create warehouses:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.create_warehouses.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.create_warehouses.pass) {
+        it(`${id} - ${description}`, async () => {
           // Given:
-          await scenario.create_warehouses.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.create_warehouses.mock) {
+            await scenario.create_warehouses.mock({ fail: false, description });
+          }
 
           // When:
           let res = await request("post", API_BASE).send(await input());
 
           // Then:
-          expect(res.statusCode).toEqual(201);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(201);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.create_warehouses.fail) {
-        it(description, async () => {
-          await scenario.create_warehouses.mock({ input, fail: true, stage: description });
+      for (let { id, description, mock, input, then } of scenario.create_warehouses.fail) {
+        it(`${id} - ${description}`, async () => {
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.create_warehouses.mock) {
+            await scenario.create_warehouses.mock({ fail: true, description });
+          }
+
           // Given:
           let data = await input();
 
@@ -78,9 +107,13 @@ describe("Warehouse Service:", () => {
           let res = await request("post", API_BASE).send(data);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -88,10 +121,14 @@ describe("Warehouse Service:", () => {
 
   describe("get warehouse:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_warehouse.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_warehouse.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_warehouse.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_warehouse.mock) {
+            await scenario.get_warehouse.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id } = await input();
@@ -100,17 +137,25 @@ describe("Warehouse Service:", () => {
           let res = await request("get", `${API_BASE}/${warehouse_id}`);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_warehouse.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_warehouse.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_warehouse.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_warehouse.mock) {
+            await scenario.get_warehouse.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id } = await input();
@@ -119,9 +164,13 @@ describe("Warehouse Service:", () => {
           let res = await request("get", `${API_BASE}/${warehouse_id}`);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -129,10 +178,14 @@ describe("Warehouse Service:", () => {
 
   describe("update warehouse:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.update_warehouse.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_warehouse.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_warehouse.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_warehouse.mock) {
+            await scenario.update_warehouse.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id, values } = await input();
@@ -142,17 +195,25 @@ describe("Warehouse Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.update_warehouse.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_warehouse.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_warehouse.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_warehouse.mock) {
+            await scenario.update_warehouse.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id, values } = await input();
@@ -162,9 +223,13 @@ describe("Warehouse Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -172,10 +237,14 @@ describe("Warehouse Service:", () => {
 
   describe("delete warehouse:", () => {
     describe('should return data object empty when:', () => {
-      for (let { id, description, input } of scenario.delete_warehouse.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.delete_warehouse.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.delete_warehouse.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.delete_warehouse.mock) {
+            await scenario.delete_warehouse.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id, query } = await input();
@@ -185,17 +254,25 @@ describe("Warehouse Service:", () => {
           let res = await request("delete", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.delete_warehouse.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.delete_warehouse.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.delete_warehouse.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.delete_warehouse.mock) {
+            await scenario.delete_warehouse.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id, query } = await input();
@@ -205,9 +282,13 @@ describe("Warehouse Service:", () => {
           let res = await request("delete", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -215,10 +296,14 @@ describe("Warehouse Service:", () => {
 
   describe("get items:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_items.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_items.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_items.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_items.mock) {
+            await scenario.get_items.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id, query } = await input();
@@ -228,17 +313,25 @@ describe("Warehouse Service:", () => {
           let res = await request("get", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_items.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_items.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_items.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_items.mock) {
+            await scenario.get_items.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id, query } = await input();
@@ -248,9 +341,13 @@ describe("Warehouse Service:", () => {
           let res = await request("get", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -258,10 +355,14 @@ describe("Warehouse Service:", () => {
 
   describe("set items:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.set_items.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.set_items.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.set_items.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.set_items.mock) {
+            await scenario.set_items.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id, items } = await input();
@@ -271,17 +372,25 @@ describe("Warehouse Service:", () => {
           let res = await request("post", endpoint).send({ values: items });
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.set_items.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.set_items.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.set_items.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.set_items.mock) {
+            await scenario.set_items.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id, items } = await input();
@@ -291,9 +400,13 @@ describe("Warehouse Service:", () => {
           let res = await request("post", endpoint).send({ values: items });
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -301,10 +414,14 @@ describe("Warehouse Service:", () => {
 
   describe("get item:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_item.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_item.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_item.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_item.mock) {
+            await scenario.get_item.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id, item_id } = await input();
@@ -314,17 +431,25 @@ describe("Warehouse Service:", () => {
           let res = await request("get", endpoint);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_item.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_item.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_item.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_item.mock) {
+            await scenario.get_item.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id, item_id } = await input();
@@ -334,9 +459,13 @@ describe("Warehouse Service:", () => {
           let res = await request("get", endpoint);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -344,10 +473,14 @@ describe("Warehouse Service:", () => {
 
   describe("update item:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.update_item.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_item.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_item.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_item.mock) {
+            await scenario.update_item.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id, item_id, values } = await input();
@@ -357,17 +490,25 @@ describe("Warehouse Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.update_item.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_item.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_item.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_item.mock) {
+            await scenario.update_item.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id, item_id, values } = await input();
@@ -377,9 +518,13 @@ describe("Warehouse Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -387,10 +532,14 @@ describe("Warehouse Service:", () => {
 
   describe("remove item:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.remove_item.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.remove_item.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.remove_item.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.remove_item.mock) {
+            await scenario.remove_item.mock({ fail: false, description });
+          }
 
           // Given:
           let { warehouse_id, item_id } = await input();
@@ -400,17 +549,25 @@ describe("Warehouse Service:", () => {
           let res = await request("delete", endpoint);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.remove_item.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.remove_item.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.remove_item.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.remove_item.mock) {
+            await scenario.remove_item.mock({ fail: true, description });
+          }
 
           // Given:
           let { warehouse_id, item_id } = await input();
@@ -420,9 +577,13 @@ describe("Warehouse Service:", () => {
           let res = await request("delete", endpoint);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });

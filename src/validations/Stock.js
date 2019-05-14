@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getStocks = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getStocks = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -25,7 +27,7 @@ export const getStocks = schema.request.keys({
   })
 });
 
-export const createStocks = schema.request.keys({
+module.exports.schema.createStocks = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -47,12 +49,12 @@ export const createStocks = schema.request.keys({
   })
 });
 
-export const getStock = schema.request.keys({
+module.exports.schema.getStock = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ stock: schema.id.required() })
 });
 
-export const updateStock = schema.request.keys({
+module.exports.schema.updateStock = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ stock: schema.id.required() }),
   body: schema.body.keys({
@@ -73,8 +75,10 @@ export const updateStock = schema.request.keys({
   })
 });
 
-export const deleteStock = schema.request.keys({
+module.exports.schema.deleteStock = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ stock: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
+
+module.exports.validate = validate;

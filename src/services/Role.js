@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Role';
+import { schema, validate } from 'src/validations/Role';
 
 const { Role, RolePermissions } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getRoles = [
-  validate(validations.getRoles),
+  validate(schema.getRoles),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getRoles = [
 ];
 
 export const createRoles = [
-  validate(validations.createRoles),
+  validate(schema.createRoles),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createRoles = [
 ];
 
 export const getRole = [
-  validate(validations.getRole),
+  validate(schema.getRole),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);
@@ -75,7 +74,7 @@ export const getRole = [
 ];
 
 export const updateRole = [
-  validate(validations.updateRole),
+  validate(schema.updateRole),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);
@@ -102,7 +101,7 @@ export const updateRole = [
 ];
 
 export const deleteRole = [
-  validate(validations.deleteRole),
+  validate(schema.deleteRole),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);
@@ -138,7 +137,7 @@ export const deleteRole = [
 ];
 
 export const getPermissions = [
-  validate(validations.getPermissions),
+  validate(schema.getPermissions),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);
@@ -185,7 +184,7 @@ export const getPermissions = [
 ];
 
 export const setPermissions = [
-  validate(validations.setPermissions),
+  validate(schema.setPermissions),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);
@@ -212,7 +211,7 @@ export const setPermissions = [
 ]
 
 export const getPermission = [
-  validate(validations.getPermission),
+  validate(schema.getPermission),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);
@@ -248,7 +247,7 @@ export const getPermission = [
 ];
 
 export const updatePermission = [
-  validate(validations.updatePermission),
+  validate(schema.updatePermission),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);
@@ -291,7 +290,7 @@ export const updatePermission = [
 ];
 
 export const removePermission = [
-  validate(validations.removePermission),
+  validate(schema.removePermission),
   async function params(req, res, next) {
     try {
       req.role = await Role.findByPk(req.params.role);

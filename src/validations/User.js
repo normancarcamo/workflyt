@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getUsers = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getUsers = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -24,7 +26,7 @@ export const getUsers = schema.request.keys({
   })
 });
 
-export const createUsers = schema.request.keys({
+module.exports.schema.createUsers = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -46,12 +48,12 @@ export const createUsers = schema.request.keys({
   })
 });
 
-export const getUser = schema.request.keys({
+module.exports.schema.getUser = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ user: schema.id.required() })
 });
 
-export const updateUser = schema.request.keys({
+module.exports.schema.updateUser = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ user: schema.id.required() }),
   body: schema.body.keys({
@@ -72,13 +74,13 @@ export const updateUser = schema.request.keys({
   })
 });
 
-export const deleteUser = schema.request.keys({
+module.exports.schema.deleteUser = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ user: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const getRoles = schema.request.keys({
+module.exports.schema.getRoles = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ user: schema.id.required() }),
   query: schema.query.append({
@@ -102,14 +104,14 @@ export const getRoles = schema.request.keys({
   })
 });
 
-export const setRoles = schema.request.keys({
+module.exports.schema.setRoles = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ user: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getRole = schema.request.keys({
+module.exports.schema.getRole = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     user: schema.id.required(),
@@ -117,7 +119,7 @@ export const getRole = schema.request.keys({
   })
 });
 
-export const updateRole = schema.request.keys({
+module.exports.schema.updateRole = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     user: schema.id.required(),
@@ -138,10 +140,12 @@ export const updateRole = schema.request.keys({
   })
 });
 
-export const removeRole = schema.request.keys({
+module.exports.schema.removeRole = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     user: schema.id.required(),
     role: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getCustomers = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getCustomers = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -23,7 +25,7 @@ export const getCustomers = schema.request.keys({
   })
 });
 
-export const createCustomer = schema.request.keys({
+module.exports.schema.createCustomer = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -43,12 +45,12 @@ export const createCustomer = schema.request.keys({
   })
 });
 
-export const getCustomer = schema.request.keys({
+module.exports.schema.getCustomer = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ customer: schema.id.required() })
 });
 
-export const updateCustomer = schema.request.keys({
+module.exports.schema.updateCustomer = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ customer: schema.id.required() }),
   body: schema.body.keys({
@@ -67,13 +69,13 @@ export const updateCustomer = schema.request.keys({
   })
 });
 
-export const deleteCustomer = schema.request.keys({
+module.exports.schema.deleteCustomer = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ customer: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const getQuotes = schema.request.keys({
+module.exports.schema.getQuotes = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ customer: schema.id.required() }),
   query: schema.query.append({
@@ -101,17 +103,19 @@ export const getQuotes = schema.request.keys({
   })
 });
 
-export const setQuotes = schema.request.keys({
+module.exports.schema.setQuotes = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ customer: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getQuote = schema.request.keys({
+module.exports.schema.getQuote = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     customer: schema.id.required(),
     quote: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

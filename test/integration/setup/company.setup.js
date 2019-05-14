@@ -1,9 +1,9 @@
 import uuid from 'uuid/v4';
 import setup_factory from './index';
-import db from "src/db/models";
+import db from 'src/db/models';
 
 const is_mocked = JSON.parse(process.env.MOCK);
-const setup = setup_factory(db, is_mocked), scenario = {};
+const setup = setup_factory(db, is_mocked, 'Company'), scenario = {};
 const { Company } = db.sequelize.models;
 
 scenario.get_companies = {
@@ -32,27 +32,29 @@ scenario.get_companies = {
       id: uuid(),
       description: "query sent is: { search: { name: { like: '%vvvvv%' } } }",
       input: async () => ({ search: { name: { like: '%vvvvv%' } } })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Query search validation fail',
       input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'Company search action throws error',
+      description: 'Action throws error',
       input: async () => ({ search: { name: { eq: 'model' } } })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Company search action throws error') {
+  mock: async ({ fail, description }) => {
+    scenario.case = 'get_companies';
+    if (description === 'Action throws error') {
       return jest.spyOn(Company, 'findAll')
         .mockRejectedValue(new Error('error mocked.'));
     }
     if (!fail && is_mocked) {
-      return jest.spyOn(Company, 'findAll').mockResolvedValue([]);
+      return jest.spyOn(Company, 'findAll')
+        .mockResolvedValue([]);
     }
   }
 };
@@ -62,33 +64,52 @@ scenario.create_companies = {
     {
       id: uuid(),
       description: 'Values are sent as array',
-      input: async () => ({ values: [{ name: "sps" }] })
+      input: async () => ({ values: [{ name: 'sps' }] })
     },
     {
       id: uuid(),
       description: 'Values are sent as object',
-      input: async () => ({ values: { name: "tgu" } })
+      input: async () => ({ values: { name: 'tgu' } })
+    },
+    {
+      id: uuid(),
+      description: `is created by a specific user`,
+      input: async () => ({
+        values: {
+          name: 'demo',
+          created_by: setup.instance.users[0].id,
+          updated_by: setup.instance.users[0].id,
+        }
+      }),
+      then: async (res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
+        expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Array but validation fail',
-      input: async () => ({ values: [ { name: "" } ] })
+      description: 'Send array with invalid values',
+      input: async () => ({ values: [ { name: '' } ] })
     },
     {
       id: uuid(),
-      description: 'Object but validation fail',
-      input: async () => ({ values: { name: "" } })
+      description: 'Send object with invalid values',
+      input: async () => ({ values: { name: '' } })
     },
     {
       id: uuid(),
-      description: 'Action throw error',
-      input: async () => ({ values: { name: "Company A" } })
+      description: 'Action throws error',
+      input: async () => ({ values: { name: 'Company A' } })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Action throw error' && is_mocked) {
+  mock: async ({ fail, description }) => {
+    scenario.case = 'create_companies';
+    if (description === 'Action throws error') {
       return jest.spyOn(Company, 'createMany')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -101,11 +122,11 @@ scenario.create_companies = {
             return initial;
           }, []);
         } else {
-          return Promise.resolve(Company.build(values, options));
+          return Company.build(values, options);
         }
       });
     }
-  },
+  }
 };
 
 scenario.get_company = {
@@ -128,7 +149,7 @@ scenario.get_company = {
     },
     {
       id: uuid(),
-      description: 'Company is not found',
+      description: 'Company was not found',
       input: async () => ({
         company_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111'
       })
@@ -139,13 +160,15 @@ scenario.get_company = {
       input: async () => ({
         company_id: setup.instance.companies[0].id
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Company is not found' && is_mocked) {
-      return jest.spyOn(Company, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Company was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    scenario.case = 'get_company';
+    if (description === 'Company was not found' && is_mocked) {
+      return jest.spyOn(Company, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Company was trying to be found') {
       return jest.spyOn(Company, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -178,7 +201,7 @@ scenario.update_company = {
     },
     {
       id: uuid(),
-      description: 'Company is not found',
+      description: 'Company was not found',
       input: async () => ({
         company_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         values: { name: 'Company A' }
@@ -199,17 +222,19 @@ scenario.update_company = {
         company_id: setup.instance.companies[0].id,
         values: { name: 'Company A' }
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Company is not found' && is_mocked) {
-      return jest.spyOn(Company, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Company was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    scenario.case = 'update_company';
+    if (description === 'Company was not found' && is_mocked) {
+      return jest.spyOn(Company, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Company was trying to be found') {
       return jest.spyOn(Company, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Company was trying to be updated') {
+    if (description === 'Company was trying to be updated') {
       return jest.spyOn(Company, 'findByPk').mockResolvedValue({
         update: async payload => {
           throw new Error('error mocked.');
@@ -243,7 +268,7 @@ scenario.delete_company = {
       description: 'Company is deleted with force option a true',
       input: async () => ({
         company_id: setup.instance.companies[0].id,
-        query: { force: true}
+        query: { force: true }
       })
     },
     {
@@ -253,12 +278,12 @@ scenario.delete_company = {
         company_id: setup.instance.companies[0].id,
         query: { force: false }
       })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Company id is malformed',
+      description: 'Company id param is malformed',
       input: async () => ({
         company_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: {}
@@ -266,7 +291,7 @@ scenario.delete_company = {
     },
     {
       id: uuid(),
-      description: 'Company is not found',
+      description: 'Company was not found',
       input: async () => ({
         company_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         query: {}
@@ -287,17 +312,19 @@ scenario.delete_company = {
         company_id: setup.instance.companies[0].id,
         query: {}
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Company is not found' && is_mocked) {
-      return jest.spyOn(Company, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Company was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    scenario.case = 'delete_company';
+    if (description === 'Company was not found' && is_mocked) {
+      return jest.spyOn(Company, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Company was trying to be found') {
       return jest.spyOn(Company, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Company was trying to be removed') {
+    if (description === 'Company was trying to be removed') {
       return jest.spyOn(Company, 'findByPk').mockResolvedValue({
         destroy: async payload => {
           throw new Error('error mocked.');

@@ -16,7 +16,8 @@ module.exports = function(DataTypes) {
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        validate: { isUUID: 4 }
       },
       department_id: {
         type: DataTypes.UUID,
@@ -30,7 +31,8 @@ module.exports = function(DataTypes) {
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        validate: { isUUID: 4 }
       },
       extra: {
         type: DataTypes.JSONB,
@@ -39,12 +41,14 @@ module.exports = function(DataTypes) {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       deleted_at: {
         type: DataTypes.DATE,

@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getItems = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getItems = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -30,7 +32,7 @@ export const getItems = schema.request.keys({
   })
 });
 
-export const createItems = schema.request.keys({
+module.exports.schema.createItems = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(schema.values.keys({
@@ -53,12 +55,12 @@ export const createItems = schema.request.keys({
   })
 });
 
-export const getItem = schema.request.keys({
+module.exports.schema.getItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ item: schema.id.required() })
 });
 
-export const updateItem = schema.request.keys({
+module.exports.schema.updateItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ item: schema.id.required() }),
   body: schema.body.keys({
@@ -81,13 +83,13 @@ export const updateItem = schema.request.keys({
   })
 });
 
-export const deleteItem = schema.request.keys({
+module.exports.schema.deleteItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ item: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const getStocks = schema.request.keys({
+module.exports.schema.getStocks = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -112,17 +114,19 @@ export const getStocks = schema.request.keys({
   })
 });
 
-export const setStocks = schema.request.keys({
+module.exports.schema.setStocks = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ item: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getStock = schema.request.keys({
+module.exports.schema.getStock = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     item: schema.id.required(),
     stock: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

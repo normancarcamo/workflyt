@@ -1,9 +1,9 @@
 import uuid from 'uuid/v4';
 import setup_factory from './index';
-import db from "src/db/models";
+import db from 'src/db/models';
 
 const is_mocked = JSON.parse(process.env.MOCK);
-const setup = setup_factory(db, is_mocked), scenario = {};
+const setup = setup_factory(db, is_mocked, 'Category'), scenario = {};
 const { Category } = db.sequelize.models;
 
 scenario.get_categories = {
@@ -32,7 +32,7 @@ scenario.get_categories = {
       id: uuid(),
       description: "query sent is: { search: { name: { like: '%vvvvv%' } } }",
       input: async () => ({ search: { name: { like: '%vvvvv%' } } })
-    },
+    }
   ],
   fail: [
     {
@@ -42,17 +42,19 @@ scenario.get_categories = {
     },
     {
       id: uuid(),
-      description: 'Category search action throw error',
-      input: async () => ({ search: { name: { eq: 'model' } } })
-    },
+      description: 'Action throw error',
+      input: async () => ({ search: { name: { eq: 'Category A' } } })
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category search action throw error' && is_mocked) {
+  mock: async ({ fail, description }) => {
+    scenario.case = 'get_categories';
+    if (description === 'Action throw error') {
       return jest.spyOn(Category, 'findAll')
         .mockRejectedValue(new Error('error mocked.'));
     }
     if (!fail && is_mocked) {
-      return jest.spyOn(Category, 'findAll').mockResolvedValue([]);
+      return jest.spyOn(Category, 'findAll')
+        .mockResolvedValue([]);
     }
   }
 };
@@ -62,36 +64,58 @@ scenario.create_categories = {
     {
       id: uuid(),
       description: 'Values are valid',
-      input: async () => ({ values: { name: "demo" } })
+      input: async () => ({ values: { name: 'demo' } })
+    },
+    {
+      id: uuid(),
+      description: `Category is created by a specific user`,
+      input: async () => ({
+        values: {
+          name: 'demo',
+          created_by: setup.instance.users[0].id,
+          updated_by: setup.instance.users[0].id
+        }
+      }),
+      then: async (res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
+        expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fails',
+      description: 'Values sent are invalid or malformed',
       input: async () => ({ values: null })
     },
     {
       id: uuid(),
-      description: 'Query validation fails using an invalid name',
+      description: 'Query validation fails using an name invalid',
       input: async () => ({ values: { name: '' } })
     },
     {
       id: uuid(),
       description: 'Category create action throw error',
-      input: async () => ({ values: { name: 'model' } })
+      input: async () => ({ values: { name: 'Category A' } })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category create action throw error' && is_mocked) {
+  mock: async ({ fail, description }) => {
+    scenario.case = 'create_categories';
+    if (description === 'Category create action throw error') {
       return jest.spyOn(Category, 'create')
         .mockRejectedValue(new Error('error mocked.'));
     }
     if (!fail && is_mocked) {
-      return jest.spyOn(Category, 'create')
-        .mockResolvedValue(setup.instance.categories[0]);
+      return jest.spyOn(Category, 'create').mockResolvedValue(Category.build({
+        ...setup.instance.categories[0].dataValues,
+        created_by: setup.instance.users[0].id,
+        updated_by: setup.instance.users[0].id,
+      }));
     }
-  },
+  }
 };
 
 scenario.get_category = {
@@ -102,25 +126,29 @@ scenario.get_category = {
       input: async () => ({
         category_id: setup.instance.categories[0].id
       })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
-      input: async () => ({ category_id: setup.instance.categories[0].id })
+      description: 'Category id param is malformed',
+      input: async () => ({
+        category_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111dd'
+      })
     },
     {
       id: uuid(),
-      description: 'Category is not found',
+      description: 'Category was not found',
       input: async () => ({
         category_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111'
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category is not found' && is_mocked) {
-      return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
+  mock: async ({ fail, description }) => {
+    scenario.case = 'get_category';
+    if (description === 'Category was not found' && is_mocked) {
+      return jest.spyOn(Category, 'findByPk')
+        .mockResolvedValue(null);
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Category, 'findByPk')
@@ -138,12 +166,12 @@ scenario.update_category = {
         category_id: setup.instance.categories[0].id,
         values: { name: 'Category A' }
       })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query Validation fail',
+      description: 'Query values validation fail',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
         values: null
@@ -151,7 +179,7 @@ scenario.update_category = {
     },
     {
       id: uuid(),
-      description: 'Category is not found',
+      description: 'Category was not found',
       input: async () => ({
         category_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         values: { name: 'Category A' }
@@ -172,17 +200,19 @@ scenario.update_category = {
         category_id: setup.instance.categories[0].id,
         values: { name: 'Category A' }
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category is not found' && is_mocked) {
-      return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Category was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    scenario.case = 'update_category';
+    if (description === 'Category was not found' && is_mocked) {
+      return jest.spyOn(Category, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Category was trying to be found') {
       return jest.spyOn(Category, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Category was trying to be updated') {
+    if (description === 'Category was trying to be updated') {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
         update: async (payload, options) => {
           throw new Error('error mocked.');
@@ -225,12 +255,12 @@ scenario.delete_category = {
         category_id: setup.instance.categories[0].id,
         query: { force: false }
       })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Category id param is malformed',
       input: async () => ({
         category_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: {}
@@ -238,7 +268,7 @@ scenario.delete_category = {
     },
     {
       id: uuid(),
-      description: 'Category is not found',
+      description: 'Category was not found',
       input: async () => ({
         category_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         query: {}
@@ -255,32 +285,32 @@ scenario.delete_category = {
     {
       id: uuid(),
       description: 'Category was trying to be deleted',
-      input: async () => {
-        return {
-          category_id: setup.instance.categories[0].id,
-          query: {}
-        }
-      }
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category is not found' && is_mocked) {
-      return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
+      input: async () => ({
+        category_id: setup.instance.categories[0].id,
+        query: {}
+      })
     }
-    if (stage === 'Category was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    scenario.case = 'delete_category';
+    if (description === 'Category was not found' && is_mocked) {
+      return jest.spyOn(Category, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Category was trying to be found') {
       return jest.spyOn(Category, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Category was trying to be deleted') {
+    if (description === 'Category was trying to be deleted') {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
-        destroy: async payload => {
+        destroy: async (options) => {
           throw new Error('error mocked.');
         }
       });
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
-        destroy: async payload => {
+        destroy: async (options) => {
           let category = setup.instance.categories[0];
           category.deleted_at = new Date().toISOString();
           return category;
@@ -331,12 +361,12 @@ scenario.get_items = {
         category_id: setup.instance.categories[0].id,
         query: { search: { name: { like: '%vvvvv%' } } }
       })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Query search validation fail',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
         query: { search: null }
@@ -344,7 +374,7 @@ scenario.get_items = {
     },
     {
       id: uuid(),
-      description: 'Category not found',
+      description: 'Category was not found',
       input: async () => ({
         category_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         query: { search: { name: { eq: 'model' } } }
@@ -360,31 +390,32 @@ scenario.get_items = {
     },
     {
       id: uuid(),
-      description: 'Items where trying to be found',
+      description: 'Items were trying to be found',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
         query: { search: { name: { eq: 'model' } } }
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category not found' && is_mocked) {
-      return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Category was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Category was not found' && is_mocked) {
+      return jest.spyOn(Category, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Category was trying to be found') {
       return jest.spyOn(Category, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Items where trying to be found') {
+    if (description === 'Items were trying to be found') {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
-        getItems: async payload => {
+        getItems: async (options) => {
           throw new Error('error mocked.');
         }
       });
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
-        getItems: async payload => setup.instance.items
+        getItems: async (options) => setup.instance.items
       });
     }
   }
@@ -394,12 +425,12 @@ scenario.set_items = {
   pass: [
     {
       id: uuid(),
-      description: "Items are set to a category",
+      description: 'Items are set to a category',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
         items: setup.instance.items.map(i => i.id)
       })
-    },
+    }
   ],
   fail: [
     {
@@ -415,7 +446,7 @@ scenario.set_items = {
       description: 'Items ids values are malformed',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
-        items: ['11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s']
+        items: [ '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s' ]
       })
     },
     {
@@ -436,21 +467,23 @@ scenario.set_items = {
     },
     {
       id: uuid(),
-      description: "Items were trying to be set",
+      description: 'Items were trying to be set',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
         items: setup.instance.items.map(i => i.id)
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category is not found' && is_mocked) {
-      return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
+  mock: async ({ fail, description }) => {
+    if (description === 'Category is not found' && is_mocked) {
+      return jest.spyOn(Category, 'findByPk')
+        .mockResolvedValue(null);
     }
-    if (stage === 'Category was trying to be found') {
-      return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
+    if (description === 'Category was trying to be found') {
+      return jest.spyOn(Category, 'findByPk')
+        .mockResolvedValue(new Error('error mocked.'));
     }
-    if (stage === 'Items were trying to be set') {
+    if (description === 'Items were trying to be set') {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
         addItems: async (payload, options) => {
           throw new Error('error mocked.');
@@ -469,7 +502,7 @@ scenario.get_item = {
   pass: [
     {
       id: uuid(),
-      description: "Category is found",
+      description: 'Category is found',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
         item_id: setup.instance.items[0].id
@@ -526,20 +559,20 @@ scenario.get_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category was not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Category was not found' && is_mocked) {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Item was not found' && is_mocked) {
+    if (description === 'Item was not found' && is_mocked) {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
-        getItems: async payload => Promise.resolve(null)
+        getItems: async payload => null
       });
     }
-    if (stage === 'Category was trying to be found') {
+    if (description === 'Category was trying to be found') {
       return jest.spyOn(Category, 'findByPk')
-      .mockRejectedValue(new Error('Mock Error'));
+      .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Item was trying to be found') {
+    if (description === 'Item was trying to be found') {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
         getItems: async payload => {
           throw new Error('error mocked.');
@@ -558,7 +591,7 @@ scenario.remove_item = {
   pass: [
     {
       id: uuid(),
-      description: "Item is found",
+      description: 'Item is found',
       input: async () => ({
         category_id: setup.instance.categories[0].id,
         item_id: setup.instance.items[0].id
@@ -623,27 +656,27 @@ scenario.remove_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Category was not found' && is_mocked) {
+  mock: async ({ fail, description }) => {
+    if (description === 'Category was not found' && is_mocked) {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Item was not found' && is_mocked) {
+    if (description === 'Item was not found' && is_mocked) {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
         getItems: async payload => null
       });
     }
-    if (stage === 'Category was trying to be found') {
+    if (description === 'Category was trying to be found') {
       return jest.spyOn(Category, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Item was trying to be found') {
+    if (description === 'Item was trying to be found') {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
         getItems: async payload => {
           throw new Error('error mocked.');
         }
       });
     }
-    if (stage === 'Item was trying to be removed') {
+    if (description === 'Item was trying to be removed') {
       return jest.spyOn(Category, 'findByPk').mockResolvedValue({
         getItems: async payload => ({
           setCategory: async (payload) => {

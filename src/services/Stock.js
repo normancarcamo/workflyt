@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Stock';
+import { schema, validate } from 'src/validations/Stock';
 
 const { Stock } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getStocks = [
-  validate(validations.getStocks),
+  validate(schema.getStocks),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getStocks = [
 ];
 
 export const createStocks = [
-  validate(validations.createStocks),
+  validate(schema.createStocks),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createStocks = [
 ];
 
 export const getStock = [
-  validate(validations.getStock),
+  validate(schema.getStock),
   async function params(req, res, next) {
     try {
       req.stock = await Stock.findByPk(req.params.stock);
@@ -75,7 +74,7 @@ export const getStock = [
 ];
 
 export const updateStock = [
-  validate(validations.updateStock),
+  validate(schema.updateStock),
   async function params(req, res, next) {
     try {
       req.stock = await Stock.findByPk(req.params.stock);
@@ -102,7 +101,7 @@ export const updateStock = [
 ];
 
 export const deleteStock = [
-  validate(validations.deleteStock),
+  validate(schema.deleteStock),
   async function params(req, res, next) {
     try {
       req.stock = await Stock.findByPk(req.params.stock);

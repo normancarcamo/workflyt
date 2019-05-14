@@ -9,7 +9,8 @@ module.exports = function(DataTypes) {
         primaryKey: true,
         allowNull: false,
         unique: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: DataTypes.UUIDV4,
+        validate: { isUUID: 4 }
       },
       employee_id: {
         type: DataTypes.UUID,
@@ -29,16 +30,19 @@ module.exports = function(DataTypes) {
         type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
-        defaultValue: 'unset'
+        defaultValue: 'unset',
+        validate: { notEmpty: true }
       },
       username: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(100),
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: { len: [2, 100], notEmpty: true }
       },
       password: {
-        type: DataTypes.STRING(100),
-        allowNull: false
+        type: DataTypes.STRING(250),
+        allowNull: false,
+        validate: { len: [5, 250], notEmpty: true }
       },
       extra: {
         type: DataTypes.JSONB,
@@ -47,12 +51,14 @@ module.exports = function(DataTypes) {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       deleted_at: {
         type: DataTypes.DATE,

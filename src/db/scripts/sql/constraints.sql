@@ -33,6 +33,33 @@ references category(id)
 on update cascade
 on delete set null;
 
+-- foreign key: created_by
+
+alter table category
+add constraint category_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table category
+add constraint category_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table category
+add constraint category_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- company --------------------------------------------------------------------
 
 -- primary key: id
@@ -58,6 +85,33 @@ drop constraint if exists company_name_key;
 alter table company
 add constraint company_name_key
 unique (name);
+
+-- foreign key: created_by
+
+alter table company
+add constraint company_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table company
+add constraint company_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table company
+add constraint company_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
 
 -- customer -------------------------------------------------------------------
 
@@ -85,31 +139,95 @@ alter table customer
 add constraint customer_name_key
 unique (name);
 
+-- foreign key: created_by
+alter table customer
+drop constraint if exists customer_created_by_fkey;
+alter table customer
+add constraint customer_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table customer
+drop constraint if exists customer_updated_by_fkey;
+alter table customer
+add constraint customer_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table customer
+drop constraint if exists customer_deleted_by_fkey;
+alter table customer
+add constraint customer_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- deparment ------------------------------------------------------------------
 
 -- primary key: id
 
-alter table deparment
-drop constraint if exists deparment_pkey;
-alter table deparment
-add constraint deparment_pkey
+alter table department
+drop constraint if exists department_pkey;
+alter table department
+add constraint department_pkey
 primary key (id);
 
 -- unique: code
 
-alter table deparment
-drop constraint if exists deparment_code_key;
-alter table deparment
-add constraint deparment_code_key
+alter table department
+drop constraint if exists department_code_key;
+alter table department
+add constraint department_code_key
 unique (code);
 
 -- unique: name
 
-alter table deparment
-drop constraint if exists deparment_name_key;
-alter table deparment
-add constraint deparment_name_key
+alter table department
+drop constraint if exists department_name_key;
+alter table department
+add constraint department_name_key
 unique (name);
+
+-- foreign key: created_by
+alter table department
+drop constraint if exists department_created_by_fkey;
+alter table department
+add constraint department_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table department
+drop constraint if exists department_updated_by_fkey;
+alter table department
+add constraint department_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table department
+drop constraint if exists department_deleted_by_fkey;
+alter table department
+add constraint department_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
 
 -- employee -------------------------------------------------------------------
 
@@ -144,6 +262,38 @@ alter table employee
 add constraint employee_supervisor_id_fkey
 foreign key (supervisor_id)
 references employee(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table employee
+drop constraint if exists employee_created_by_fkey;
+alter table employee
+add constraint employee_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table employee
+drop constraint if exists employee_updated_by_fkey;
+alter table employee
+add constraint employee_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table employee
+drop constraint if exists employee_deleted_by_fkey;
+alter table employee
+add constraint employee_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 
@@ -182,6 +332,38 @@ references category(id)
 on update cascade
 on delete set null;
 
+-- foreign key: created_by
+alter table item
+drop constraint if exists item_created_by_fkey;
+alter table item
+add constraint item_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table item
+drop constraint if exists item_updated_by_fkey;
+alter table item
+add constraint item_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table item
+drop constraint if exists item_deleted_by_fkey;
+alter table item
+add constraint item_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- order_department -----------------------------------------------------------
 
 -- primary key: order_id, department_id
@@ -205,6 +387,38 @@ alter table order_department
 add constraint order_department_department_id_fkey
 foreign key (department_id)
 references department(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table order_department
+drop constraint if exists order_department_created_by_fkey;
+alter table order_department
+add constraint order_department_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table order_department
+drop constraint if exists order_department_updated_by_fkey;
+alter table order_department
+add constraint order_department_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table order_department
+drop constraint if exists order_department_deleted_by_fkey;
+alter table order_department
+add constraint order_department_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 
@@ -234,6 +448,38 @@ references item(id)
 on update cascade
 on delete set null;
 
+-- foreign key: created_by
+alter table order_item
+drop constraint if exists order_item_created_by_fkey;
+alter table order_item
+add constraint order_item_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table order_item
+drop constraint if exists order_item_updated_by_fkey;
+alter table order_item
+add constraint order_item_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table order_item
+drop constraint if exists order_item_deleted_by_fkey;
+alter table order_item
+add constraint order_item_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- order_employee -------------------------------------------------------------
 
 -- primary key: order_id, employee_id
@@ -257,6 +503,38 @@ alter table order_employee
 add constraint order_employee_employee_id_fkey
 foreign key (employee_id)
 references employee(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table order_employee
+drop constraint if exists order_employee_created_by_fkey;
+alter table order_employee
+add constraint order_employee_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table order_employee
+drop constraint if exists order_employee_updated_by_fkey;
+alter table order_employee
+add constraint order_employee_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table order_employee
+drop constraint if exists order_employee_deleted_by_fkey;
+alter table order_employee
+add constraint order_employee_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 
@@ -287,6 +565,38 @@ references quote(id)
 on update cascade
 on delete set null;
 
+-- foreign key: created_by
+alter table orders
+drop constraint if exists orders_created_by_fkey;
+alter table orders
+add constraint orders_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table orders
+drop constraint if exists orders_updated_by_fkey;
+alter table orders
+add constraint orders_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table orders
+drop constraint if exists orders_deleted_by_fkey;
+alter table orders
+add constraint orders_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- permission -----------------------------------------------------------------
 
 -- primary key: id
@@ -312,6 +622,38 @@ drop constraint if exists permission_name_key;
 alter table permission
 add constraint permission_name_key
 unique (name);
+
+-- foreign key: created_by
+alter table permission
+drop constraint if exists permission_created_by_fkey;
+alter table permission
+add constraint permission_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table permission
+drop constraint if exists permission_updated_by_fkey;
+alter table permission
+add constraint permission_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table permission
+drop constraint if exists permission_deleted_by_fkey;
+alter table permission
+add constraint permission_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
 
 -- quote ----------------------------------------------------------------------
 
@@ -349,6 +691,38 @@ references employee(id)
 on update cascade
 on delete set null;
 
+-- foreign key: created_by
+alter table quote
+drop constraint if exists quote_created_by_fkey;
+alter table quote
+add constraint quote_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table quote
+drop constraint if exists quote_updated_by_fkey;
+alter table quote
+add constraint quote_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table quote
+drop constraint if exists quote_deleted_by_fkey;
+alter table quote
+add constraint quote_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- quote_item -----------------------------------------------------------------
 
 -- primary key: quote_id, item_id
@@ -372,6 +746,38 @@ alter table quote_item
 add constraint quote_item_item_id_fkey
 foreign key (item_id)
 references item(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table quote_item
+drop constraint if exists quote_item_created_by_fkey;
+alter table quote_item
+add constraint quote_item_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table quote_item
+drop constraint if exists quote_item_updated_by_fkey;
+alter table quote_item
+add constraint quote_item_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table quote_item
+drop constraint if exists quote_item_deleted_by_fkey;
+alter table quote_item
+add constraint quote_item_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 
@@ -400,6 +806,38 @@ drop constraint if exists role_name_key;
 alter table role
 add constraint role_name_key
 unique (name);
+
+-- foreign key: created_by
+alter table role
+drop constraint if exists role_created_by_fkey;
+alter table role
+add constraint role_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table role
+drop constraint if exists role_updated_by_fkey;
+alter table role
+add constraint role_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table role
+drop constraint if exists role_deleted_by_fkey;
+alter table role
+add constraint role_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
 
 -- role_permission ------------------------------------------------------------
 
@@ -433,6 +871,38 @@ references permission(id)
 on update cascade
 on delete set null;
 
+-- foreign key: created_by
+alter table role_permission
+drop constraint if exists role_permission_created_by_fkey;
+alter table role_permission
+add constraint role_permission_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table role_permission
+drop constraint if exists role_permission_updated_by_fkey;
+alter table role_permission
+add constraint role_permission_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table role_permission
+drop constraint if exists role_permission_deleted_by_fkey;
+alter table role_permission
+add constraint role_permission_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- stock ----------------------------------------------------------------------
 
 -- primary key: id
@@ -451,6 +921,38 @@ alter table stock
 add constraint stock_item_id_fkey
 foreign key (item_id)
 references item(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table stock
+drop constraint if exists stock_created_by_fkey;
+alter table stock
+add constraint stock_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table stock
+drop constraint if exists stock_updated_by_fkey;
+alter table stock
+add constraint stock_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table stock
+drop constraint if exists stock_deleted_by_fkey;
+alter table stock
+add constraint stock_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 
@@ -479,6 +981,38 @@ drop constraint if exists supplier_name_key;
 alter table supplier
 add constraint supplier_name_key
 unique (name);
+
+-- foreign key: created_by
+alter table supplier
+drop constraint if exists supplier_created_by_fkey;
+alter table supplier
+add constraint supplier_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table supplier
+drop constraint if exists supplier_updated_by_fkey;
+alter table supplier
+add constraint supplier_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table supplier
+drop constraint if exists supplier_deleted_by_fkey;
+alter table supplier
+add constraint supplier_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
 
 -- supplier_item --------------------------------------------------------------
 
@@ -509,6 +1043,38 @@ alter table supplier_item
 add constraint supplier_item_item_id_fkey
 foreign key (item_id)
 references item(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table supplier_item
+drop constraint if exists supplier_item_created_by_fkey;
+alter table supplier_item
+add constraint supplier_item_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table supplier_item
+drop constraint if exists supplier_item_updated_by_fkey;
+alter table supplier_item
+add constraint supplier_item_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table supplier_item
+drop constraint if exists supplier_item_deleted_by_fkey;
+alter table supplier_item
+add constraint supplier_item_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 
@@ -544,6 +1110,38 @@ references role(id)
 on update cascade
 on delete set null;
 
+-- foreign key: created_by
+alter table user_role
+drop constraint if exists user_role_created_by_fkey;
+alter table user_role
+add constraint user_role_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table user_role
+drop constraint if exists user_role_updated_by_fkey;
+alter table user_role
+add constraint user_role_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table user_role
+drop constraint if exists user_role_deleted_by_fkey;
+alter table user_role
+add constraint user_role_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
+
 -- users ----------------------------------------------------------------------
 
 -- primary key: id
@@ -568,7 +1166,7 @@ alter table users
 drop constraint if exists users_username_key;
 alter table users
 add constraint users_username_key
-unique (name);
+unique (username);
 
 -- foreign key: employee_id
 
@@ -577,6 +1175,38 @@ alter table users
 add constraint users_employee_id_fkey
 foreign key (employee_id)
 references employee(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table users
+drop constraint if exists users_created_by_fkey;
+alter table users
+add constraint users_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table users
+drop constraint if exists users_updated_by_fkey;
+alter table users
+add constraint users_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table users
+drop constraint if exists users_deleted_by_fkey;
+alter table users
+add constraint users_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 
@@ -605,6 +1235,38 @@ drop constraint if exists warehouse_name_key;
 alter table warehouse
 add constraint warehouse_name_key
 unique (name);
+
+-- foreign key: created_by
+alter table warehouse
+drop constraint if exists warehouse_created_by_fkey;
+alter table warehouse
+add constraint warehouse_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table warehouse
+drop constraint if exists warehouse_updated_by_fkey;
+alter table warehouse
+add constraint warehouse_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table warehouse
+drop constraint if exists warehouse_deleted_by_fkey;
+alter table warehouse
+add constraint warehouse_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
+on update cascade
+on delete set null;
 
 -- warehouse_item -------------------------------------------------------------
 
@@ -635,6 +1297,38 @@ alter table warehouse_item
 add constraint warehouse_item_item_id_fkey
 foreign key (item_id)
 references item(id)
+on update cascade
+on delete set null;
+
+-- foreign key: created_by
+alter table warehouse_item
+drop constraint if exists warehouse_item_created_by_fkey;
+alter table warehouse_item
+add constraint warehouse_item_created_by_fkey
+foreign key (created_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: updated_by
+
+alter table warehouse_item
+drop constraint if exists warehouse_item_updated_by_fkey;
+alter table warehouse_item
+add constraint warehouse_item_updated_by_fkey
+foreign key (updated_by)
+references users(id)
+on update cascade
+on delete set null;
+
+-- foreign key: deleted_by
+
+alter table warehouse_item
+drop constraint if exists warehouse_item_deleted_by_fkey;
+alter table warehouse_item
+add constraint warehouse_item_deleted_by_fkey
+foreign key (deleted_by)
+references users(id)
 on update cascade
 on delete set null;
 

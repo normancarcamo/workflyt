@@ -32,6 +32,7 @@
     "@babel/runtime": "^7.1.5",
     "@ncardez/joi-xss": "^1.0.1",
     "@playscode/fns": "github:normancarcamo/fns",
+    "axios": "^0.18.0",
     "babel-plugin-inline-dotenv": "^1.2.0",
     "babel-plugin-module-resolver": "^3.1.1",
     "body-parser": "^1.18.3",

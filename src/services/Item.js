@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Item';
+import { schema, validate } from 'src/validations/Item';
 
 const { Item } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getItems = [
-  validate(validations.getItems),
+  validate(schema.getItems),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getItems = [
 ];
 
 export const createItems = [
-  validate(validations.createItems),
+  validate(schema.createItems),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createItems = [
 ];
 
 export const getItem = [
-  validate(validations.getItem),
+  validate(schema.getItem),
   async function params(req, res, next) {
     try {
       req.item = await Item.findByPk(req.params.item);
@@ -75,7 +74,7 @@ export const getItem = [
 ];
 
 export const updateItem = [
-  validate(validations.updateItem),
+  validate(schema.updateItem),
   async function params(req, res, next) {
     try {
       req.item = await Item.findByPk(req.params.item);
@@ -102,7 +101,7 @@ export const updateItem = [
 ];
 
 export const deleteItem = [
-  validate(validations.deleteItem),
+  validate(schema.deleteItem),
   async function params(req, res, next) {
     try {
       req.item = await Item.findByPk(req.params.item);
@@ -138,7 +137,7 @@ export const deleteItem = [
 ];
 
 export const getStocks = [
-  validate(validations.getStocks),
+  validate(schema.getStocks),
   async function params(req, res, next) {
     try {
       req.item = await Item.findByPk(req.params.item);
@@ -185,7 +184,7 @@ export const getStocks = [
 ];
 
 export const setStocks = [
-  validate(validations.setStocks),
+  validate(schema.setStocks),
   async function params(req, res, next) {
     try {
       req.item = await Item.findByPk(req.params.item);
@@ -212,7 +211,7 @@ export const setStocks = [
 ];
 
 export const getStock = [
-  validate(validations.getStock),
+  validate(schema.getStock),
   async function params(req, res, next) {
     try {
       req.item = await Item.findByPk(req.params.item);

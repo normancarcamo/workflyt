@@ -1,13 +1,12 @@
-import { Joi, schema, validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Company';
+import { schema, validate } from 'src/validations/Company';
 
 const { Company } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getCompanies = [
-  validate(validations.getCompanies),
+  validate(schema.getCompanies),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getCompanies = [
 ];
 
 export const createCompanies = [
-  validate(validations.createCompanies),
+  validate(schema.createCompanies),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createCompanies = [
 ];
 
 export const getCompany = [
-  validate(validations.getCompany),
+  validate(schema.getCompany),
   async function params(req, res, next) {
     try {
       req.company = await Company.findByPk(req.params.company);
@@ -75,7 +74,7 @@ export const getCompany = [
 ];
 
 export const updateCompany = [
-  validate(validations.updateCompany),
+  validate(schema.updateCompany),
   async function params(req, res, next) {
     try {
       req.company = await Company.findByPk(req.params.company);
@@ -102,7 +101,7 @@ export const updateCompany = [
 ];
 
 export const deleteCompany = [
-  validate(validations.deleteCompany),
+  validate(schema.deleteCompany),
   async function params(req, res, next) {
     try {
       req.company = await Company.findByPk(req.params.company);

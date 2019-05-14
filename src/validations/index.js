@@ -1,7 +1,11 @@
 const { ValidationError } = require("@playscode/fns/lib/errors");
 const base = require("joi");
 const xss = require("@ncardez/joi-xss");
-const Joi = base.extend(xss("object"), xss("array"), xss("string"));
+const Joi = base.extend(
+  xss("object"),
+  xss("array"),
+  xss("string")
+);
 
 // Schemas --------------------------------------------------------------------
 

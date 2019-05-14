@@ -63,7 +63,7 @@ export function Employee(Employee) {
       as: "department",
       foreignKey: "department_id"
     });
-    Employee.hasOne(models.User, {
+    Employee.User = Employee.hasOne(models.User, {
       as: "user",
       foreignKey: "employee_id",
       onUpdate: 'CASCADE',
@@ -305,7 +305,7 @@ export function Supplier(Supplier) {
 
 export function User(User) {
   User.associate = function(models) {
-    User.belongsTo(models.Employee, {
+    User.Employee = User.belongsTo(models.Employee, {
       as: "employee",
       foreignKey: "employee_id"
     });

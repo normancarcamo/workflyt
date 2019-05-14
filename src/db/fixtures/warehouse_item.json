@@ -1,389 +1,389 @@
 [
   {
-    "warehouse_id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
-    "item_id": "5e404135-556a-4503-a13a-13b6c8ec52d0",
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "513dd381-6527-4ec8-a067-a7e243083ba2",
     "extra": {
-      "units": 148
+      "units": 98
     },
-    "created_at": "2018-11-11T14:21:06.383Z",
-    "updated_at": "2018-11-11T14:21:06.383Z",
+    "created_at": "2018-11-11T20:44:57.011Z",
+    "updated_at": "2018-11-11T20:44:57.011Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
-    "item_id": "a1822e36-1c03-4da2-994f-f5cfad4ea21a",
+    "warehouse_id": "54582e45-0ca0-4b65-9f81-383d56b0cd78",
+    "item_id": "9502f985-3ce5-41ab-ac04-57c00c4e73f6",
     "extra": {
-      "units": 143
+      "units": 182
     },
-    "created_at": "2018-11-14T05:50:11.571Z",
-    "updated_at": "2018-11-14T05:50:11.571Z",
+    "created_at": "2018-11-11T05:24:29.155Z",
+    "updated_at": "2018-11-11T05:24:29.155Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "9fbbc268-6539-4048-9f10-437989b63bb7",
-    "item_id": "2e5f026f-ff0a-432d-815a-1ffd5385be3d",
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "cc9cb3ad-f561-4894-90c4-95a3488b5ebb",
     "extra": {
-      "units": 31
+      "units": 90
     },
-    "created_at": "2018-11-12T04:52:01.861Z",
-    "updated_at": "2018-11-12T04:52:01.861Z",
+    "created_at": "2018-11-10T08:55:04.126Z",
+    "updated_at": "2018-11-10T08:55:04.126Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "66cc21b3-4b75-4d2d-b3e6-f3e1001e420c",
-    "item_id": "c5199309-6b86-439d-87f9-f5089b4e3860",
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "330cb9e8-aa66-4794-a7c8-24277a4645ea",
     "extra": {
-      "units": 93
+      "units": 112
     },
-    "created_at": "2018-11-13T14:51:03.599Z",
-    "updated_at": "2018-11-13T14:51:03.599Z",
+    "created_at": "2018-11-11T23:58:58.876Z",
+    "updated_at": "2018-11-11T23:58:58.876Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
-    "item_id": "435efa2b-146a-4c6f-8ce8-c4fa8e2643a2",
+    "warehouse_id": "54582e45-0ca0-4b65-9f81-383d56b0cd78",
+    "item_id": "3cd55097-9f16-488a-802d-36298edd4fdd",
     "extra": {
-      "units": 158
+      "units": 119
     },
-    "created_at": "2018-11-10T17:34:22.715Z",
-    "updated_at": "2018-11-10T17:34:22.715Z",
+    "created_at": "2018-11-13T00:49:17.433Z",
+    "updated_at": "2018-11-13T00:49:17.433Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
-    "item_id": "bfe18460-6b78-4c1f-930f-e6ba81df54c5",
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "602d32f3-d17a-4772-8dc4-0cb69a78a26d",
     "extra": {
-      "units": 45
+      "units": 176
     },
-    "created_at": "2018-11-14T20:19:21.890Z",
-    "updated_at": "2018-11-14T20:19:21.890Z",
+    "created_at": "2018-11-13T03:05:42.864Z",
+    "updated_at": "2018-11-13T03:05:42.864Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
-    "item_id": "b4e7d06e-5aef-4bdf-8b33-9605eedc37d5",
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "3068db55-6526-4097-bd94-17e4145e61cd",
     "extra": {
-      "units": 92
+      "units": 118
     },
-    "created_at": "2018-11-12T03:56:25.117Z",
-    "updated_at": "2018-11-12T03:56:25.117Z",
+    "created_at": "2018-11-14T15:30:06.870Z",
+    "updated_at": "2018-11-14T15:30:06.870Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
-    "item_id": "a0da25b0-6d9f-472f-8ccf-3998f7ce0c85",
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "7e894c55-c296-4d96-a79e-9198ff15afde",
     "extra": {
-      "units": 20
+      "units": 56
     },
-    "created_at": "2018-11-13T18:43:10.278Z",
-    "updated_at": "2018-11-13T18:43:10.278Z",
+    "created_at": "2018-11-14T04:24:31.120Z",
+    "updated_at": "2018-11-14T04:24:31.120Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
-    "item_id": "a0957cad-d5ad-4565-92bf-2ece72ae3ab1",
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "737e9d92-81cf-47e2-aa46-26a722360262",
     "extra": {
-      "units": 35
+      "units": 142
     },
-    "created_at": "2018-11-11T14:36:08.941Z",
-    "updated_at": "2018-11-11T14:36:08.941Z",
+    "created_at": "2018-11-11T18:47:43.829Z",
+    "updated_at": "2018-11-11T18:47:43.829Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
-    "item_id": "8c6dfce1-c3b7-4b66-8342-245696d8a126",
+    "warehouse_id": "54582e45-0ca0-4b65-9f81-383d56b0cd78",
+    "item_id": "5b0e45b3-3009-4160-9b1d-67aa74114389",
     "extra": {
-      "units": 146
+      "units": 79
     },
-    "created_at": "2018-11-14T15:34:56.566Z",
-    "updated_at": "2018-11-14T15:34:56.566Z",
+    "created_at": "2018-11-14T17:31:29.400Z",
+    "updated_at": "2018-11-14T17:31:29.400Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "9fbbc268-6539-4048-9f10-437989b63bb7",
-    "item_id": "337aaf2b-b331-41bc-8e3d-619e7d555acd",
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "760faf99-12fd-4fee-a300-00a0b1af92d1",
     "extra": {
-      "units": 75
+      "units": 51
     },
-    "created_at": "2018-11-12T14:45:23.255Z",
-    "updated_at": "2018-11-12T14:45:23.255Z",
+    "created_at": "2018-11-12T05:06:41.304Z",
+    "updated_at": "2018-11-12T05:06:41.304Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
-    "item_id": "29be7057-8edb-47e5-8e54-095ce317ab2f",
+    "warehouse_id": "54582e45-0ca0-4b65-9f81-383d56b0cd78",
+    "item_id": "ccd6aab3-2fde-4bb1-b802-8652b75aa746",
     "extra": {
-      "units": 109
+      "units": 175
     },
-    "created_at": "2018-11-11T12:57:03.928Z",
-    "updated_at": "2018-11-11T12:57:03.928Z",
+    "created_at": "2018-11-14T12:11:02.542Z",
+    "updated_at": "2018-11-14T12:11:02.542Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "9fbbc268-6539-4048-9f10-437989b63bb7",
-    "item_id": "d9120bd9-06f1-406e-b142-6045dfc7442a",
-    "extra": {
-      "units": 99
-    },
-    "created_at": "2018-11-10T21:38:33.113Z",
-    "updated_at": "2018-11-10T21:38:33.113Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "e9ed5891-c500-4c2c-a917-3e4a5580d444",
-    "item_id": "1f9f15b4-8d10-47b2-9eaa-313760535499",
-    "extra": {
-      "units": 151
-    },
-    "created_at": "2018-11-14T22:37:04.071Z",
-    "updated_at": "2018-11-14T22:37:04.071Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "66cc21b3-4b75-4d2d-b3e6-f3e1001e420c",
-    "item_id": "a6912180-84ba-4e3a-b8c1-342cc6cc2058",
-    "extra": {
-      "units": 10
-    },
-    "created_at": "2018-11-11T12:37:17.948Z",
-    "updated_at": "2018-11-11T12:37:17.948Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "9fbbc268-6539-4048-9f10-437989b63bb7",
-    "item_id": "01f9ce9a-37c5-4cd2-b18b-dc7f5e7b19f9",
-    "extra": {
-      "units": 109
-    },
-    "created_at": "2018-11-12T14:04:30.476Z",
-    "updated_at": "2018-11-12T14:04:30.476Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "66cc21b3-4b75-4d2d-b3e6-f3e1001e420c",
-    "item_id": "e7666bb0-4ba1-4b55-ac0a-a941d27b2057",
-    "extra": {
-      "units": 126
-    },
-    "created_at": "2018-11-11T10:59:01.817Z",
-    "updated_at": "2018-11-11T10:59:01.817Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "66cc21b3-4b75-4d2d-b3e6-f3e1001e420c",
-    "item_id": "b5921589-bcba-4e79-9e7a-a46c7d43c956",
-    "extra": {
-      "units": 27
-    },
-    "created_at": "2018-11-12T03:53:46.357Z",
-    "updated_at": "2018-11-12T03:53:46.357Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
-    "item_id": "26116aeb-cdc4-457d-812e-89516683e3fa",
-    "extra": {
-      "units": 171
-    },
-    "created_at": "2018-11-12T07:35:50.465Z",
-    "updated_at": "2018-11-12T07:35:50.465Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "66cc21b3-4b75-4d2d-b3e6-f3e1001e420c",
-    "item_id": "e51216b4-3eb0-4740-a754-c62a6c1891ce",
-    "extra": {
-      "units": 104
-    },
-    "created_at": "2018-11-10T13:17:05.323Z",
-    "updated_at": "2018-11-10T13:17:05.323Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
-    "item_id": "d5b18103-44fb-4f8d-b8d7-382886eda8e7",
-    "extra": {
-      "units": 52
-    },
-    "created_at": "2018-11-11T09:54:13.037Z",
-    "updated_at": "2018-11-11T09:54:13.037Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
-    "item_id": "de4ea6d8-cd03-420e-bb4c-82f471db278a",
-    "extra": {
-      "units": 93
-    },
-    "created_at": "2018-11-10T00:42:16.892Z",
-    "updated_at": "2018-11-10T00:42:16.892Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "e9ed5891-c500-4c2c-a917-3e4a5580d444",
-    "item_id": "e4b995ef-f537-425d-b1f4-4cd6a794c428",
-    "extra": {
-      "units": 148
-    },
-    "created_at": "2018-11-14T09:45:41.164Z",
-    "updated_at": "2018-11-14T09:45:41.164Z",
-    "deleted_at": null,
-    "created_by": null,
-    "updated_by": null,
-    "deleted_by": null
-  },
-  {
-    "warehouse_id": "e9ed5891-c500-4c2c-a917-3e4a5580d444",
-    "item_id": "64c459da-8e56-42d8-930a-d28948033fc4",
+    "warehouse_id": "c55fd48a-0bb7-472b-80d3-fd09df5c7718",
+    "item_id": "807f029f-0a2f-4d22-91c4-4510e08b0b45",
     "extra": {
       "units": 7
     },
-    "created_at": "2018-11-11T17:28:04.051Z",
-    "updated_at": "2018-11-11T17:28:04.051Z",
+    "created_at": "2018-11-11T09:01:19.765Z",
+    "updated_at": "2018-11-11T09:01:19.765Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "9fbbc268-6539-4048-9f10-437989b63bb7",
-    "item_id": "190657c2-d489-435d-9488-0b65cf391442",
+    "warehouse_id": "af01bb35-fc25-4c6b-bd22-2186e4477391",
+    "item_id": "427c78dd-af7e-4b60-90cb-80941ddf58be",
     "extra": {
-      "units": 115
+      "units": 185
     },
-    "created_at": "2018-11-14T02:47:56.471Z",
-    "updated_at": "2018-11-14T02:47:56.471Z",
+    "created_at": "2018-11-11T11:15:54.387Z",
+    "updated_at": "2018-11-11T11:15:54.387Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "9fbbc268-6539-4048-9f10-437989b63bb7",
-    "item_id": "8d9a3d6f-432c-4280-b6f6-54a6179c48a1",
+    "warehouse_id": "af01bb35-fc25-4c6b-bd22-2186e4477391",
+    "item_id": "42021a0f-23ad-49ee-8290-73beea46374d",
     "extra": {
-      "units": 141
+      "units": 121
     },
-    "created_at": "2018-11-12T09:23:41.217Z",
-    "updated_at": "2018-11-12T09:23:41.217Z",
+    "created_at": "2018-11-10T13:11:30.868Z",
+    "updated_at": "2018-11-10T13:11:30.868Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "9fbbc268-6539-4048-9f10-437989b63bb7",
-    "item_id": "95512def-572c-40a6-8890-546bde2587a6",
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "95c692b0-6746-4e7d-80c1-37f6d2992f89",
     "extra": {
-      "units": 173
+      "units": 51
     },
-    "created_at": "2018-11-11T18:40:58.414Z",
-    "updated_at": "2018-11-11T18:40:58.414Z",
+    "created_at": "2018-11-10T02:26:03.290Z",
+    "updated_at": "2018-11-10T02:26:03.290Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "e9ed5891-c500-4c2c-a917-3e4a5580d444",
-    "item_id": "779a7a34-d2ff-42f8-86d9-186ecae68b57",
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "aa9afb4e-d4f8-4a2b-b8a2-83dd736bad49",
     "extra": {
-      "units": 105
+      "units": 133
     },
-    "created_at": "2018-11-12T09:01:57.670Z",
-    "updated_at": "2018-11-12T09:01:57.670Z",
+    "created_at": "2018-11-10T15:37:57.500Z",
+    "updated_at": "2018-11-10T15:37:57.500Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "d949abb9-5757-4591-977a-f32ba5acbdeb",
-    "item_id": "6af3634f-b33b-4adb-ab03-fc213ce9623b",
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "48c44d11-5a7e-4ceb-93df-806de0532a51",
     "extra": {
-      "units": 130
+      "units": 100
     },
-    "created_at": "2018-11-10T01:01:16.842Z",
-    "updated_at": "2018-11-10T01:01:16.842Z",
+    "created_at": "2018-11-11T03:56:42.535Z",
+    "updated_at": "2018-11-11T03:56:42.535Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "warehouse_id": "29b2b5ed-84c9-45a3-af17-3a2c411df97c",
-    "item_id": "5b65acb6-f121-4e3b-baf4-7ac5b6ed2de8",
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "4dcb01e1-6dd5-40f7-a7af-08c22f825582",
+    "extra": {
+      "units": 140
+    },
+    "created_at": "2018-11-14T05:49:06.165Z",
+    "updated_at": "2018-11-14T05:49:06.165Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "af01bb35-fc25-4c6b-bd22-2186e4477391",
+    "item_id": "2bf31f04-7d3a-48d6-a1f0-5ae339554f9e",
+    "extra": {
+      "units": 133
+    },
+    "created_at": "2018-11-14T18:53:46.312Z",
+    "updated_at": "2018-11-14T18:53:46.312Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "af01bb35-fc25-4c6b-bd22-2186e4477391",
+    "item_id": "a3012637-f267-4a2b-a6f2-cad1238658fa",
+    "extra": {
+      "units": 143
+    },
+    "created_at": "2018-11-10T06:06:01.545Z",
+    "updated_at": "2018-11-10T06:06:01.545Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "62411ec5-256f-470a-9ac7-c267806a5a82",
+    "extra": {
+      "units": 3
+    },
+    "created_at": "2018-11-11T02:55:27.437Z",
+    "updated_at": "2018-11-11T02:55:27.437Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "c55fd48a-0bb7-472b-80d3-fd09df5c7718",
+    "item_id": "028a04aa-0fff-44eb-869f-d0d696ca48b2",
+    "extra": {
+      "units": 3
+    },
+    "created_at": "2018-11-13T12:47:34.893Z",
+    "updated_at": "2018-11-13T12:47:34.893Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "321abdcd-c646-42c9-b3b7-86f382542b07",
+    "item_id": "5640bf95-b0ae-44c7-a91c-55c7aaddb5dc",
+    "extra": {
+      "units": 71
+    },
+    "created_at": "2018-11-11T20:24:44.442Z",
+    "updated_at": "2018-11-11T20:24:44.442Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "af01bb35-fc25-4c6b-bd22-2186e4477391",
+    "item_id": "00a1ae5e-62ac-41ae-86eb-810599229581",
     "extra": {
       "units": 82
     },
-    "created_at": "2018-11-14T21:52:38.039Z",
-    "updated_at": "2018-11-14T21:52:38.039Z",
+    "created_at": "2018-11-11T16:21:14.988Z",
+    "updated_at": "2018-11-11T16:21:14.988Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "63d8f56a-1f3a-40c9-9761-ef57f3f17a15",
+    "extra": {
+      "units": 110
+    },
+    "created_at": "2018-11-14T06:14:05.551Z",
+    "updated_at": "2018-11-14T06:14:05.551Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "f26c72fa-645e-4234-91f4-b299c53c5e92",
+    "extra": {
+      "units": 89
+    },
+    "created_at": "2018-11-11T20:40:43.335Z",
+    "updated_at": "2018-11-11T20:40:43.335Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "c55fd48a-0bb7-472b-80d3-fd09df5c7718",
+    "item_id": "a6068fab-ced0-4445-a444-d94907366202",
+    "extra": {
+      "units": 27
+    },
+    "created_at": "2018-11-13T14:52:27.806Z",
+    "updated_at": "2018-11-13T14:52:27.806Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "4098be53-42a1-4d8d-95cc-a2143d502975",
+    "item_id": "f5cbb524-6226-4253-a999-fa8cc58dad0d",
+    "extra": {
+      "units": 17
+    },
+    "created_at": "2018-11-11T13:42:27.267Z",
+    "updated_at": "2018-11-11T13:42:27.267Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "af01bb35-fc25-4c6b-bd22-2186e4477391",
+    "item_id": "bbdbf2c9-9a9e-4a56-8d82-219894597e9c",
+    "extra": {
+      "units": 151
+    },
+    "created_at": "2018-11-11T04:00:42.647Z",
+    "updated_at": "2018-11-11T04:00:42.647Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,

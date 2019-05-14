@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Category'
+import { schema, validate } from 'src/validations/Category'
 
 const { Category } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getCategories = [
-  validate(validations.getCategories),
+  validate(schema.getCategories),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -39,7 +38,7 @@ export const getCategories = [
 ];
 
 export const createCategories = [
-  validate(validations.createCategories),
+  validate(schema.createCategories),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -53,7 +52,7 @@ export const createCategories = [
 ];
 
 export const getCategory = [
-  validate(validations.getCategory),
+  validate(schema.getCategory),
   async function params(req, res, next) {
     try {
       req.category = await Category.findByPk(req.params.category);
@@ -73,7 +72,7 @@ export const getCategory = [
 ];
 
 export const updateCategory = [
-  validate(validations.updateCategory),
+  validate(schema.updateCategory),
   async function params(req, res, next) {
     try {
       req.category = await Category.findByPk(req.params.category);
@@ -100,7 +99,7 @@ export const updateCategory = [
 ];
 
 export const deleteCategory = [
-  validate(validations.deleteCategory),
+  validate(schema.deleteCategory),
   async function params(req, res, next) {
     try {
       req.category = await Category.findByPk(req.params.category);
@@ -136,7 +135,7 @@ export const deleteCategory = [
 ];
 
 export const getItems = [
-  validate(validations.getItems),
+  validate(schema.getItems),
   async function params(req, res, next) {
     try {
       req.category = await Category.findByPk(req.params.category);
@@ -179,7 +178,7 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(validations.setItems),
+  validate(schema.setItems),
   async function params(req, res, next) {
     try {
       req.category = await Category.findByPk(req.params.category);
@@ -206,7 +205,7 @@ export const setItems = [
 ];
 
 export const getItem = [
-  validate(validations.getItem),
+  validate(schema.getItem),
   async function params(req, res, next) {
     try {
       req.category = await Category.findByPk(req.params.category);
@@ -242,7 +241,7 @@ export const getItem = [
 ];
 
 export const removeItem = [
-  validate(validations.removeItem),
+  validate(schema.removeItem),
   async function params(req, res, next) {
     try {
       req.category = await Category.findByPk(req.params.category);

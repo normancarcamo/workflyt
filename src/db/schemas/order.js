@@ -9,7 +9,8 @@ module.exports = function(DataTypes) {
         primaryKey: true,
         allowNull: false,
         unique: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: DataTypes.UUIDV4,
+        validate: { isUUID: 4 }
       },
       quote_id: {
         type: DataTypes.UUID,
@@ -23,23 +24,33 @@ module.exports = function(DataTypes) {
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        validate: { isUUID: 4 }
       },
       code: {
         type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
-        defaultValue: 'unset'
+        defaultValue: 'unset',
+        validate: { notEmpty: true }
       },
       type: {
         type: DataTypes.ENUM([ "work", "installation" ]),
         allowNull: false,
-        defaultValue: "work"
+        defaultValue: "work",
+        validate: {
+          isIn: [[ "work", "installation" ]],
+          notEmpty: true
+        }
       },
       status: {
         type: DataTypes.ENUM([ "awaiting", "working", "cancelled", "done" ]),
         allowNull: false,
-        defaultValue: "awaiting"
+        defaultValue: "awaiting",
+        validate: {
+          isIn: [[ "awaiting", "working", "cancelled", "done" ]],
+          notEmpty: true
+        }
       },
       extra: {
         type: DataTypes.JSONB,
@@ -48,12 +59,14 @@ module.exports = function(DataTypes) {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       deleted_at: {
         type: DataTypes.DATE,

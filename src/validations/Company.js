@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getCompanies = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getCompanies = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -23,7 +25,7 @@ export const getCompanies = schema.request.keys({
   })
 });
 
-export const createCompanies = schema.request.keys({
+module.exports.schema.createCompanies = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -43,12 +45,12 @@ export const createCompanies = schema.request.keys({
   })
 });
 
-export const getCompany = schema.request.keys({
+module.exports.schema.getCompany = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ company: schema.id.required() })
 });
 
-export const updateCompany = schema.request.keys({
+module.exports.schema.updateCompany = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ company: schema.id.required() }),
   body: schema.body.keys({
@@ -67,8 +69,10 @@ export const updateCompany = schema.request.keys({
   })
 });
 
-export const deleteCompany = schema.request.keys({
+module.exports.schema.deleteCompany = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ company: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
+
+module.exports.validate = validate;

@@ -122,12 +122,10 @@ router
   .delete(EmployeeService.deleteEmployee)
   .all(methodNotAllowed);
 router
-  .route('/employees/:employee/users')
-  .post(EmployeeService.setUser)
-  .all(methodNotAllowed);
-router
-  .route('/employees/:employee/users/:user')
+  .route('/employees/:employee/user')
   .get(EmployeeService.getUser)
+  .post(EmployeeService.setUser)
+  .delete(EmployeeService.removeUser)
   .all(methodNotAllowed);
 router
   .route('/employees/:employee/quotes')

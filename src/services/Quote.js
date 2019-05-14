@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Quote';
+import { schema, validate } from 'src/validations/Quote';
 
 const { Quote, QuoteItems } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getQuotes = [
-  validate(validations.getQuotes),
+  validate(schema.getQuotes),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getQuotes = [
 ];
 
 export const createQuotes = [
-  validate(validations.createQuotes),
+  validate(schema.createQuotes),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createQuotes = [
 ];
 
 export const getQuote = [
-  validate(validations.getQuote),
+  validate(schema.getQuote),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -75,7 +74,7 @@ export const getQuote = [
 ];
 
 export const updateQuote = [
-  validate(validations.updateQuote),
+  validate(schema.updateQuote),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -102,7 +101,7 @@ export const updateQuote = [
 ];
 
 export const deleteQuote = [
-  validate(validations.deleteQuote),
+  validate(schema.deleteQuote),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -138,7 +137,7 @@ export const deleteQuote = [
 ];
 
 export const getItems = [
-  validate(validations.getItems),
+  validate(schema.getItems),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -185,7 +184,7 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(validations.setItems),
+  validate(schema.setItems),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -212,7 +211,7 @@ export const setItems = [
 ]
 
 export const getItem = [
-  validate(validations.getItem),
+  validate(schema.getItem),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -248,7 +247,7 @@ export const getItem = [
 ];
 
 export const updateItem = [
-  validate(validations.updateItem),
+  validate(schema.updateItem),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -293,7 +292,7 @@ export const updateItem = [
 ];
 
 export const removeItem = [
-  validate(validations.removeItem),
+  validate(schema.removeItem),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -336,7 +335,7 @@ export const removeItem = [
 ];
 
 export const getOrders = [
-  validate(validations.getOrders),
+  validate(schema.getOrders),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -383,7 +382,7 @@ export const getOrders = [
 ];
 
 export const setOrders = [
-  validate(validations.setOrders),
+  validate(schema.setOrders),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);
@@ -410,7 +409,7 @@ export const setOrders = [
 ];
 
 export const getOrder = [
-  validate(validations.getOrder),
+  validate(schema.getOrder),
   async function params(req, res, next) {
     try {
       req.quote = await Quote.findByPk(req.params.quote);

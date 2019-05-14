@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Supplier';
+import { schema, validate } from 'src/validations/Supplier';
 
 const { Supplier } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getSuppliers = [
-  validate(validations.getSuppliers),
+  validate(schema.getSuppliers),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getSuppliers = [
 ];
 
 export const createSuppliers = [
-  validate(validations.createSuppliers),
+  validate(schema.createSuppliers),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createSuppliers = [
 ];
 
 export const getSupplier = [
-  validate(validations.getSupplier),
+  validate(schema.getSupplier),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);
@@ -75,7 +74,7 @@ export const getSupplier = [
 ];
 
 export const updateSupplier = [
-  validate(validations.updateSupplier),
+  validate(schema.updateSupplier),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);
@@ -102,7 +101,7 @@ export const updateSupplier = [
 ];
 
 export const deleteSupplier = [
-  validate(validations.deleteSupplier),
+  validate(schema.deleteSupplier),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);
@@ -138,7 +137,7 @@ export const deleteSupplier = [
 ];
 
 export const getItems = [
-  validate(validations.getItems),
+  validate(schema.getItems),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);
@@ -185,7 +184,7 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(validations.setItems),
+  validate(schema.setItems),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);
@@ -212,7 +211,7 @@ export const setItems = [
 ];
 
 export const getItem = [
-  validate(validations.getItem),
+  validate(schema.getItem),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);
@@ -248,7 +247,7 @@ export const getItem = [
 ];
 
 export const updateItem = [
-  validate(validations.updateItem),
+  validate(schema.updateItem),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);
@@ -293,7 +292,7 @@ export const updateItem = [
 ];
 
 export const removeItem = [
-  validate(validations.removeItem),
+  validate(schema.removeItem),
   async function params(req, res, next) {
     try {
       req.supplier = await Supplier.findByPk(req.params.supplier);

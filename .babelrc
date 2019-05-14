@@ -13,6 +13,7 @@
           "./src/db",
           "./src/services",
           "./src/utils",
+          "./src/validations",
           "./test"
         ]
       }

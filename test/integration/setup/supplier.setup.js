@@ -1,13 +1,10 @@
 import uuid from 'uuid/v4';
 import setup_factory from './index';
-import db from "src/db/models";
-import { is } from '@playscode/fns';
+import db from 'src/db/models';
 
 const is_mocked = JSON.parse(process.env.MOCK);
-const setup = setup_factory(db, is_mocked), scenario = {};
+const setup = setup_factory(db, is_mocked, 'Supplier'), scenario = {};
 const { Supplier } = db.sequelize.models;
-
-// ----------------------------------------------------------------------------
 
 scenario.get_suppliers = {
   pass: [
@@ -28,29 +25,29 @@ scenario.get_suppliers = {
     },
     {
       id: uuid(),
-      description: "query sent is: { search: { name: 'ccccc' } }",
+      description: 'query sent is: { search: { name: "ccccc" } }',
       input: async () => ({ search: { name: 'ccccc' } })
     },
     {
       id: uuid(),
-      description: "query sent is: { search: { name: { like: '%vvv%' } } }",
+      description: 'query sent is: { search: { name: { like: "%vvv%" } } }',
       input: async () => ({ search: { name: { like: '%vvv%' } } })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Query search validation fail',
       input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'Supplier search action throw error',
+      description: 'Action throw error',
       input: async () => ({ search: { name: { eq: 'model' } } })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Supplier search action throw error') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throw error') {
       return jest.spyOn(Supplier, 'findAll')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -72,22 +69,40 @@ scenario.create_suppliers = {
       id: uuid(),
       description: 'Values are sent as object',
       input: async () => ({ values: { name: 'bingo' } })
+    },
+    {
+      id: uuid(),
+      description: `Supplier is created by a specific user`,
+      input: async () => ({
+        values: {
+          name: 'demo',
+          created_by: setup.instance.users[0].id,
+          updated_by: setup.instance.users[0].id
+        }
+      }),
+      then: async (res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
+        expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Values are invalid',
       input: async () => ({ values: { name: '' } })
     },
     {
       id: uuid(),
-      description: 'Action create throw error',
+      description: 'Action throw error',
       input: async () => ({ values: { name: 'demo' } })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Action create throw error' && is_mocked) {
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throw error') {
       return jest.spyOn(Supplier, 'createMany')
         .mockRejectedValue(new Error('error mocked'));
     }
@@ -104,7 +119,7 @@ scenario.create_suppliers = {
         }
       });
     }
-  },
+  }
 };
 
 scenario.get_supplier = {
@@ -136,13 +151,14 @@ scenario.get_supplier = {
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Supplier is not found' && is_mocked) {
-      return jest.spyOn(Supplier, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Supplier was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Supplier is not found' && is_mocked) {
+      return jest.spyOn(Supplier, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -196,17 +212,18 @@ scenario.update_supplier = {
         supplier_id: setup.instance.suppliers[0].id,
         values: { name: 'Supplier A' }
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Supplier is not found' && is_mocked) {
-      return jest.spyOn(Supplier, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Supplier was trying to be retrieved') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Supplier is not found' && is_mocked) {
+      return jest.spyOn(Supplier, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Supplier was trying to be updated') {
+    if (description === 'Supplier was trying to be updated') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         update: async payload => {
           throw new Error('error mocked.');
@@ -229,12 +246,10 @@ scenario.delete_supplier = {
     {
       id: uuid(),
       description: 'Supplier is deleted without options',
-      input: async () => {
-        return {
-          supplier_id: setup.instance.suppliers[0].id,
-          query: {}
-        }
-      }
+      input: async () => ({
+        supplier_id: setup.instance.suppliers[0].id,
+        query: {}
+      })
     },
     {
       id: uuid(),
@@ -251,7 +266,7 @@ scenario.delete_supplier = {
         supplier_id: setup.instance.suppliers[0].id,
         query: { force: false }
       })
-    },
+    }
   ],
   fail: [
     {
@@ -285,17 +300,18 @@ scenario.delete_supplier = {
         supplier_id: setup.instance.suppliers[0].id,
         query: {}
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Supplier is not found' && is_mocked) {
-      return jest.spyOn(Supplier, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Supplier was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Supplier is not found' && is_mocked) {
+      return jest.spyOn(Supplier, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Supplier was trying to be removed') {
+    if (description === 'Supplier was trying to be removed') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         destroy: async payload => {
           throw new Error('error mocked.');
@@ -317,13 +333,11 @@ scenario.delete_supplier = {
   }
 };
 
-// ----------------------------------------------------------------------------
-
 scenario.get_items = {
   pass: [
     {
       id: uuid(),
-      description: "Query is: empty",
+      description: 'Query is: empty',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         query: {}
@@ -331,7 +345,7 @@ scenario.get_items = {
     },
     {
       id: uuid(),
-      description: "Query is: name='dknd'",
+      description: 'Query is: name=dknd',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         query: { search: { name: 'dknd' } }
@@ -339,7 +353,7 @@ scenario.get_items = {
     },
     {
       id: uuid(),
-      description: "Query is: name like %disk%",
+      description: 'Query is: name like %disk%',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         query: { search: { name: { like: '%disk%' } } }
@@ -349,7 +363,7 @@ scenario.get_items = {
   fail: [
     {
       id: uuid(),
-      description: 'Supplier param id validation fail',
+      description: 'Supplier param id is malformed',
       input: async () => ({
         supplier_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: {}
@@ -380,19 +394,19 @@ scenario.get_items = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Supplier is not found') {
+  mock: async ({ fail, description }) => {
+    if (fail && description === 'Supplier is not found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Supplier was trying to be found') {
+    if (fail && description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
-        .mockRejectedValue(new Error('Supplier error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Items were trying to be found') {
+    if (fail && description === 'Items were trying to be found') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Supplier.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -408,7 +422,7 @@ scenario.set_items = {
   pass: [
     {
       id: uuid(),
-      description: "Items are set",
+      description: 'Items are set',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         items: setup.instance.items.map(item => item.id)
@@ -418,7 +432,7 @@ scenario.set_items = {
   fail: [
     {
       id: uuid(),
-      description: 'Supplier param id validation fail',
+      description: 'Supplier param id is malformed',
       input: async () => ({
         supplier_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         items: setup.instance.items.map(item => item.id)
@@ -426,7 +440,7 @@ scenario.set_items = {
     },
     {
       id: uuid(),
-      description: 'Items ids validation fail',
+      description: 'Items ids are malformed',
       input: async () => ({
         supplier_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         items: [
@@ -448,31 +462,31 @@ scenario.set_items = {
       description: 'Supplier was trying to be found',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
-        query: {}
+        items: setup.instance.items.map(item => item.id)
       })
     },
     {
       id: uuid(),
-      description: "Items cannot be set",
+      description: 'Items cannot be set',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         items: setup.instance.items.map(item => item.id)
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Supplier is not found') {
+  mock: async ({ fail, description }) => {
+    if (fail && description === 'Supplier is not found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Supplier was trying to be found') {
+    if (fail && description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
-        .mockRejectedValue(new Error('Supplier error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Items cannot be set') {
+    if (fail && description === 'Items cannot be set') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         addItems: async (items) => {
-          throw new Error('Supplier.addItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -488,7 +502,7 @@ scenario.get_item = {
   pass: [
     {
       id: uuid(),
-      description: "Item is found",
+      description: 'Item is found',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         item_id: setup.instance.items[0].id
@@ -498,7 +512,7 @@ scenario.get_item = {
   fail: [
     {
       id: uuid(),
-      description: 'Supplier param id is invalid',
+      description: 'Supplier param id is malformed',
       input: async () => ({
         supplier_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
         item_id: setup.instance.items[0].id
@@ -506,7 +520,7 @@ scenario.get_item = {
     },
     {
       id: uuid(),
-      description: 'Item param id is invalid',
+      description: 'Item param id is malformed',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa'
@@ -516,7 +530,7 @@ scenario.get_item = {
       id: uuid(),
       description: 'Supplier is not found',
       input: async () => ({
-        supplier_id: setup.instance.suppliers[0].id,
+        supplier_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         item_id: setup.instance.items[0].id
       })
     },
@@ -525,7 +539,7 @@ scenario.get_item = {
       description: 'Item is not found',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
-        item_id: setup.instance.items[0].id
+        item_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d'
       })
     },
     {
@@ -545,24 +559,24 @@ scenario.get_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Supplier is not found') {
+  mock: async ({ fail, description }) => {
+    if (fail && description === 'Supplier is not found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Item is not found') {
+    if (fail && description === 'Item is not found') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => null
       });
     }
-    if (fail && stage === 'Supplier was trying to be found') {
+    if (fail && description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
-        .mockRejectedValue(new Error('Supplier.findByPk error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Item was trying to be found') {
+    if (fail && description === 'Item was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Supplier.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -578,7 +592,7 @@ scenario.update_item = {
   pass: [
     {
       id: uuid(),
-      description: "Item is found",
+      description: 'Item is found',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
         item_id: setup.instance.items[0].id,
@@ -589,7 +603,7 @@ scenario.update_item = {
   fail: [
     {
       id: uuid(),
-      description: 'Supplier param id is invalid',
+      description: 'Supplier param id is malformed',
       input: async () => ({
         supplier_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
         item_id: setup.instance.items[0].id,
@@ -598,7 +612,7 @@ scenario.update_item = {
     },
     {
       id: uuid(),
-      description: 'Item param id is invalid',
+      description: 'Item param id is malformed',
       input: async () => {
         return {
           supplier_id: setup.instance.suppliers[0].id,
@@ -611,7 +625,7 @@ scenario.update_item = {
       id: uuid(),
       description: 'Supplier is not found',
       input: async () => ({
-        supplier_id: setup.instance.suppliers[0].id,
+        supplier_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         item_id: setup.instance.items[0].id,
         values: { extra: { units: 20 } }
       })
@@ -621,7 +635,7 @@ scenario.update_item = {
       description: 'Item is not found',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
-        item_id: setup.instance.items[0].id,
+        item_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         values: { extra: { units: 21 } }
       })
     },
@@ -653,38 +667,38 @@ scenario.update_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Supplier is not found') {
+  mock: async ({ fail, description }) => {
+    if (fail && description === 'Supplier is not found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Item is not found') {
+    if (fail && description === 'Item is not found') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => null
       });
     }
-    if (fail && stage === 'Supplier was trying to be found') {
+    if (fail && description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
-        .mockRejectedValue(new Error('Supplier.findByPk error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Item was trying to be found') {
+    if (fail && description === 'Item was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Supplier.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
-    if (fail && stage === 'Item was trying to be updated') {
+    if (fail && description === 'Item was trying to be updated') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => ({}),
         addItem: async (uuid, options) => {
-          throw new Error('req.supplier.addItem error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
-        getItems: async (options) => ({ mocked: "yes" }),
+        getItems: async (options) => ({ mocked: 'yes' }),
         addItem: async (values, options) => setup.instance.items[0]
       });
     }
@@ -695,21 +709,17 @@ scenario.remove_item = {
   pass: [
     {
       id: uuid(),
-      description: "Item is found",
-      input: async () => {
-        let supplier = setup.instance.suppliers[0];
-        let item = setup.instance.items[0];
-        return {
-          supplier_id: supplier.id,
-          item_id: item.id
-        }
-      }
+      description: 'Item is found',
+      input: async () => ({
+        supplier_id: setup.instance.suppliers[0].id,
+        item_id: setup.instance.items[0].id
+      })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Supplier param id is invalid',
+      description: 'Supplier param id is malformed',
       input: async () => ({
         supplier_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
         item_id: setup.instance.items[0].id,
@@ -718,20 +728,18 @@ scenario.remove_item = {
     },
     {
       id: uuid(),
-      description: 'Item param id is invalid',
-      input: async () => {
-        return {
-          supplier_id: setup.instance.suppliers[0].id,
-          item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
-          values: { extra: { units: 20 } }
-        }
-      }
+      description: 'Item param id is malformed',
+      input: async () => ({
+        supplier_id: setup.instance.suppliers[0].id,
+        item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
+        values: { extra: { units: 20 } }
+      })
     },
     {
       id: uuid(),
       description: 'Supplier is not found',
       input: async () => ({
-        supplier_id: setup.instance.suppliers[0].id,
+        supplier_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         item_id: setup.instance.items[0].id,
         values: { extra: { units: 20 } }
       })
@@ -741,7 +749,7 @@ scenario.remove_item = {
       description: 'Item is not found',
       input: async () => ({
         supplier_id: setup.instance.suppliers[0].id,
-        item_id: setup.instance.items[0].id,
+        item_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         values: { extra: { units: 21 } }
       })
     },
@@ -773,45 +781,45 @@ scenario.remove_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Supplier is not found') {
+  mock: async ({ fail, description }) => {
+    if (fail && description === 'Supplier is not found') {
       return jest.spyOn(Supplier, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Item is not found') {
+    if (fail && description === 'Item is not found') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => null
       });
     }
-    if (fail && stage === 'Supplier was trying to be found') {
+    if (fail && description === 'Supplier was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk')
-        .mockRejectedValue(new Error('Supplier.findByPk error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Item was trying to be found') {
+    if (fail && description === 'Item was trying to be found') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Supplier.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
-    if (fail && stage === 'Item was trying to be removed') {
+    if (fail && description === 'Item was trying to be removed') {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
         getItems: async (options) => ({}),
         removeItem: async (uuid, options) => {
-          throw new Error('req.supplier.removeItem error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Supplier, 'findByPk').mockResolvedValue({
-        getItems: (payload, options) => Promise.resolve({}),
-        removeItem: async (payload, options) => setup.instance.items[0]
+        getItems: async (payload, options) => ({}),
+        removeItem: async (payload, options) => {
+          return setup.instance.items[0];
+        }
       });
     }
   }
 };
-
-// ----------------------------------------------------------------------------
 
 module.exports.scenario = scenario;
 

@@ -1,13 +1,10 @@
 import uuid from 'uuid/v4';
 import setup_factory from './index';
-import db from "src/db/models";
-import { is } from '@playscode/fns';
+import db from 'src/db/models';
 
 const is_mocked = JSON.parse(process.env.MOCK);
-const setup = setup_factory(db, is_mocked), scenario = {};
+const setup = setup_factory(db, is_mocked, 'Quote'), scenario = {};
 const { Quote } = db.sequelize.models;
-
-// ----------------------------------------------------------------------------
 
 scenario.get_quotes = {
   pass: [
@@ -28,29 +25,29 @@ scenario.get_quotes = {
     },
     {
       id: uuid(),
-      description: "query sent is: { search: { subject: 'ccccc' } }",
+      description: 'query sent is: { search: { subject: "ccccc" } }',
       input: async () => ({ search: { subject: 'ccccc' } })
     },
     {
       id: uuid(),
-      description: "query sent is: { search: { subject: { like: '%vvv%' } } }",
+      description: 'query sent is: { search: { subject: { like: "%vvv%" } } }',
       input: async () => ({ search: { subject: { like: '%vvv%' } } })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Query search validation fail',
       input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'Quote search action throw error',
+      description: 'Action throw error',
       input: async () => ({ search: { subject: { eq: 'model' } } })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Quote search action throw error') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throw error') {
       return jest.spyOn(Quote, 'findAll')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -82,50 +79,64 @@ scenario.create_quotes = {
           salesman_id: setup.instance.employees[0].id
         }
       })
+    },
+    {
+      id: uuid(),
+      description: `Quote is created by a specific user`,
+      input: async () => ({
+        values: {
+          customer_id: setup.instance.customers[0].id,
+          salesman_id: setup.instance.employees[0].id,
+          subject: 'demo subject description',
+          created_by: setup.instance.users[0].id,
+          updated_by: setup.instance.users[0].id
+        }
+      }),
+      then: async (res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
+        expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
       description: 'Values are sent as an array but validation fail',
-      input: async () => {
-        return {
-          values: [{
-            customer_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
-            salesman_id: setup.instance.employees[0].id,
-          }]
-        }
-      }
+      input: async () => ({
+        values: [{
+          customer_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+          salesman_id: setup.instance.employees[0].id,
+        }]
+      })
     },
     {
       id: uuid(),
       description: 'Values are sent as object but validation fail',
-      input: async () => {
-        return {
-          values: {
-            customer_id: setup.instance.customers[0].id,
-            salesman_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
-          }
+      input: async () => ({
+        values: {
+          customer_id: setup.instance.customers[0].id,
+          salesman_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         }
-      }
+      })
     },
     {
       id: uuid(),
-      description: 'Values are sent, but action throw error',
-      input: async () => {
-        return {
-          values: {
-            customer_id: setup.instance.customers[0].id,
-            salesman_id: setup.instance.employees[0].id
-          }
+      description: 'Action throw error',
+      input: async () => ({
+        values: {
+          customer_id: setup.instance.customers[0].id,
+          salesman_id: setup.instance.employees[0].id
         }
-      }
+      })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Values are sent, but action throw error' && is_mocked) {
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throw error') {
       return jest.spyOn(Quote, 'createMany')
-        .mockRejectedValue(new Error('error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Quote, 'createMany')
@@ -140,7 +151,7 @@ scenario.create_quotes = {
         }
       });
     }
-  },
+  }
 };
 
 scenario.get_quote = {
@@ -174,13 +185,14 @@ scenario.get_quote = {
       input: async () => ({
         quote_id: setup.instance.quotes[0].id
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Quote is not found' && is_mocked) {
-      return jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Quote was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
+      return jest.spyOn(Quote, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -205,7 +217,7 @@ scenario.update_quote = {
   fail: [
     {
       id: uuid(),
-      description: 'Quote id param is malformed',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         values: { subject: 'Quote subject' }
@@ -234,17 +246,18 @@ scenario.update_quote = {
         quote_id: setup.instance.quotes[0].id,
         values: { subject: 'Quote subject' }
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Quote is not found' && is_mocked) {
-      return jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Quote was trying to be retrieved') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
+      return jest.spyOn(Quote, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Quote was trying to be updated') {
+    if (description === 'Quote was trying to be updated') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         update: async payload => {
           throw new Error('error mocked.');
@@ -267,12 +280,10 @@ scenario.delete_quote = {
     {
       id: uuid(),
       description: 'Quote is deleted without options',
-      input: async () => {
-        return {
-          quote_id: setup.instance.quotes[0].id,
-          query: {}
-        }
-      }
+      input: async () => ({
+        quote_id: setup.instance.quotes[0].id,
+        query: {}
+      })
     },
     {
       id: uuid(),
@@ -289,12 +300,12 @@ scenario.delete_quote = {
         quote_id: setup.instance.quotes[0].id,
         query: { force: false }
       })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Quote id param is malformed',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: {}
@@ -323,17 +334,18 @@ scenario.delete_quote = {
         quote_id: setup.instance.quotes[0].id,
         query: {}
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Quote is not found' && is_mocked) {
-      return jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Quote was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
+      return jest.spyOn(Quote, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Quote was trying to be removed') {
+    if (description === 'Quote was trying to be removed') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         destroy: async payload => {
           throw new Error('error mocked.');
@@ -355,13 +367,11 @@ scenario.delete_quote = {
   }
 };
 
-// ----------------------------------------------------------------------------
-
 scenario.get_items = {
   pass: [
     {
       id: uuid(),
-      description: "Query is: empty",
+      description: 'Query is: empty',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         query: {}
@@ -369,7 +379,7 @@ scenario.get_items = {
     },
     {
       id: uuid(),
-      description: "Query is: name='dknd'",
+      description: 'Query is: name=dknd',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         query: { search: { name: 'dknd' } }
@@ -377,7 +387,7 @@ scenario.get_items = {
     },
     {
       id: uuid(),
-      description: "Query is: name like %disk%",
+      description: 'Query is: name like %disk%',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         query: { search: { name: { like: '%disk%' } } }
@@ -387,7 +397,7 @@ scenario.get_items = {
   fail: [
     {
       id: uuid(),
-      description: 'Quote param id validation fail',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: {}
@@ -418,19 +428,19 @@ scenario.get_items = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Quote is not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
-        .mockRejectedValue(new Error('Quote error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Items were trying to be found') {
+    if (description === 'Items were trying to be found') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Quote.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -446,7 +456,7 @@ scenario.set_items = {
   pass: [
     {
       id: uuid(),
-      description: "Items are set",
+      description: 'Items are set',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         items: setup.instance.items.map(item => item.id)
@@ -456,7 +466,7 @@ scenario.set_items = {
   fail: [
     {
       id: uuid(),
-      description: 'Quote param id validation fail',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         items: setup.instance.items.map(item => item.id)
@@ -464,7 +474,7 @@ scenario.set_items = {
     },
     {
       id: uuid(),
-      description: 'Items ids validation fail',
+      description: 'Items ids are malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         items: [
@@ -491,26 +501,26 @@ scenario.set_items = {
     },
     {
       id: uuid(),
-      description: "Items cannot be set",
+      description: 'Items cannot be set',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         items: setup.instance.items.map(item => item.id)
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Quote is not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
-        .mockRejectedValue(new Error('Quote error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Items cannot be set') {
+    if (description === 'Items cannot be set') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         addItems: async (items) => {
-          throw new Error('Quote.addItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -526,7 +536,7 @@ scenario.get_item = {
   pass: [
     {
       id: uuid(),
-      description: "Item is found",
+      description: 'Item is found',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         item_id: setup.instance.items[0].id
@@ -536,7 +546,7 @@ scenario.get_item = {
   fail: [
     {
       id: uuid(),
-      description: 'Quote param id is invalid',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
         item_id: setup.instance.items[0].id
@@ -544,7 +554,7 @@ scenario.get_item = {
     },
     {
       id: uuid(),
-      description: 'Item param id is invalid',
+      description: 'Item param id is malformed',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa'
@@ -554,7 +564,7 @@ scenario.get_item = {
       id: uuid(),
       description: 'Quote is not found',
       input: async () => ({
-        quote_id: setup.instance.quotes[0].id,
+        quote_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         item_id: setup.instance.items[0].id
       })
     },
@@ -563,7 +573,7 @@ scenario.get_item = {
       description: 'Item is not found',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
-        item_id: setup.instance.items[0].id
+        item_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d'
       })
     },
     {
@@ -583,24 +593,24 @@ scenario.get_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Quote is not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Item is not found') {
+    if (description === 'Item is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => null
       });
     }
-    if (fail && stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
-        .mockRejectedValue(new Error('Quote.findByPk error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Item was trying to be found') {
+    if (description === 'Item was trying to be found') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Quote.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -616,7 +626,7 @@ scenario.update_item = {
   pass: [
     {
       id: uuid(),
-      description: "Item is found",
+      description: 'Item is found',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         item_id: setup.instance.items[0].id,
@@ -627,7 +637,7 @@ scenario.update_item = {
   fail: [
     {
       id: uuid(),
-      description: 'Quote param id is invalid',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
         item_id: setup.instance.items[0].id,
@@ -636,20 +646,18 @@ scenario.update_item = {
     },
     {
       id: uuid(),
-      description: 'Item param id is invalid',
-      input: async () => {
-        return {
-          quote_id: setup.instance.quotes[0].id,
-          item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
-          values: { extra: { units: 20 } }
-        }
-      }
+      description: 'Item param id is malformed',
+      input: async () => ({
+        quote_id: setup.instance.quotes[0].id,
+        item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
+        values: { extra: { units: 20 } }
+      })
     },
     {
       id: uuid(),
       description: 'Quote is not found',
       input: async () => ({
-        quote_id: setup.instance.quotes[0].id,
+        quote_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         item_id: setup.instance.items[0].id,
         values: { extra: { units: 20 } }
       })
@@ -659,7 +667,7 @@ scenario.update_item = {
       description: 'Item is not found',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
-        item_id: setup.instance.items[0].id,
+        item_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         values: { extra: { units: 21 } }
       })
     },
@@ -691,38 +699,38 @@ scenario.update_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Quote is not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Item is not found') {
+    if (description === 'Item is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => null
       });
     }
-    if (fail && stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
-        .mockRejectedValue(new Error('Quote.findByPk error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Item was trying to be found') {
+    if (description === 'Item was trying to be found') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Quote.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
-    if (fail && stage === 'Item was trying to be updated') {
+    if (description === 'Item was trying to be updated') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => ({}),
         addItem: async (uuid, options) => {
-          throw new Error('req.quote.addItem error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-        getItems: async (options) => ({ mocked: "yes" }),
+        getItems: async (options) => ({ mocked: 'yes' }),
         addItem: async (values, options) => setup.instance.items[0]
       });
     }
@@ -733,21 +741,17 @@ scenario.remove_item = {
   pass: [
     {
       id: uuid(),
-      description: "Item is found",
-      input: async () => {
-        let quote = setup.instance.quotes[0];
-        let item = setup.instance.items[0];
-        return {
-          quote_id: quote.id,
-          item_id: item.id
-        }
-      }
+      description: 'Item is found',
+      input: async () => ({
+        quote_id: setup.instance.quotes[0].id,
+        item_id: setup.instance.items[0].id
+      })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Quote param id is invalid',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
         item_id: setup.instance.items[0].id,
@@ -756,20 +760,18 @@ scenario.remove_item = {
     },
     {
       id: uuid(),
-      description: 'Item param id is invalid',
-      input: async () => {
-        return {
-          quote_id: setup.instance.quotes[0].id,
-          item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
-          values: { extra: { units: 20 } }
-        }
-      }
+      description: 'Item param id is malformed',
+      input: async () => ({
+        quote_id: setup.instance.quotes[0].id,
+        item_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa',
+        values: { extra: { units: 20 } }
+      })
     },
     {
       id: uuid(),
       description: 'Quote is not found',
       input: async () => ({
-        quote_id: setup.instance.quotes[0].id,
+        quote_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         item_id: setup.instance.items[0].id,
         values: { extra: { units: 20 } }
       })
@@ -779,7 +781,7 @@ scenario.remove_item = {
       description: 'Item is not found',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
-        item_id: setup.instance.items[0].id,
+        item_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         values: { extra: { units: 21 } }
       })
     },
@@ -811,45 +813,43 @@ scenario.remove_item = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Quote is not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Item is not found') {
+    if (description === 'Item is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => null
       });
     }
-    if (fail && stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
-        .mockRejectedValue(new Error('Quote.findByPk error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Item was trying to be found') {
+    if (description === 'Item was trying to be found') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => {
-          throw new Error('Quote.getItems error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
-    if (fail && stage === 'Item was trying to be removed') {
+    if (description === 'Item was trying to be removed') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getItems: async (options) => ({}),
         removeItem: async (uuid, options) => {
-          throw new Error('req.quote.removeItem error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-        getItems: (payload, options) => Promise.resolve({}),
+        getItems: async (payload, options) => ({}),
         removeItem: async (payload, options) => setup.instance.items[0]
       });
     }
   }
 };
-
-// ----------------------------------------------------------------------------
 
 scenario.get_orders = {
   pass: [
@@ -879,7 +879,7 @@ scenario.get_orders = {
     },
     {
       id: uuid(),
-      description: "query sent is: { search: { code: 'ccccc' } }",
+      description: 'query sent is: { search: { code: "ccccc" } }',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         query: { search: { code: 'ccccc' } }
@@ -887,7 +887,7 @@ scenario.get_orders = {
     },
     {
       id: uuid(),
-      description: "query sent is: { search: { code: { like: '%ccccc%' } } }",
+      description: 'query sent is: { search: { code: { like: "%ccccc% } } }',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         query: { search: { code: { like: '%ccccc%' } } }
@@ -926,19 +926,18 @@ scenario.get_orders = {
         quote_id: setup.instance.quotes[0].id,
         query: {}
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Quote is not found' && is_mocked) {
-      return jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'Quote was trying to be found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk')
-        .mockImplementation(async (id, options) => {
-          throw new Error('error mocked.');
-        });
+        .mockResolvedValue(null);
     }
-    if (stage === 'Orders were trying to be found') {
+    if (description === 'Quote was trying to be found') {
+      return jest.spyOn(Quote, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'Orders were trying to be found') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getOrders: async payload => {
           throw new Error('error mocked.');
@@ -957,7 +956,7 @@ scenario.set_orders = {
   pass: [
     {
       id: uuid(),
-      description: "Orders are added",
+      description: 'Orders are added',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         orders: setup.instance.orders.map(order => order.id)
@@ -967,7 +966,7 @@ scenario.set_orders = {
   fail: [
     {
       id: uuid(),
-      description: 'Quote param id validation fail',
+      description: 'Quote param id is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         orders: setup.instance.orders.map(order => order.id)
@@ -991,26 +990,27 @@ scenario.set_orders = {
     },
     {
       id: uuid(),
-      description: "Orders cannot be set",
+      description: 'Orders cannot be set',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         orders: setup.instance.orders.map(order => order.id)
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Quote is not found' && is_mocked) {
-      return jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'Quote was trying to be found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk')
-        .mockImplementation(async (id, options) => {
-          throw new Error('Quote.findByPk error mocked');
-        });
+        .mockResolvedValue(null);
     }
-    if (stage === 'Orders cannot be set') {
+    if (description === 'Quote was trying to be found') {
+      return jest.spyOn(Quote, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'Orders cannot be set') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-        addOrders: payload => Promise.reject(new Error('Mock Error'))
+        addOrders: payload => {
+          throw new Error('error mocked.');
+        }
       });
     }
     if (!fail && is_mocked) {
@@ -1025,7 +1025,7 @@ scenario.get_order = {
   pass: [
     {
       id: uuid(),
-      description: "Order is found",
+      description: 'Order is found',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         order_id: setup.instance.orders[0].id
@@ -1035,7 +1035,7 @@ scenario.get_order = {
   fail: [
     {
       id: uuid(),
-      description: 'Quote id param is invalid',
+      description: 'Quote id param is malformed',
       input: async () => ({
         quote_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
         order_id: setup.instance.orders[0].id
@@ -1043,7 +1043,7 @@ scenario.get_order = {
     },
     {
       id: uuid(),
-      description: 'Order id param is invalid',
+      description: 'Order id param is malformed',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
         order_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa'
@@ -1053,7 +1053,7 @@ scenario.get_order = {
       id: uuid(),
       description: 'Quote is not found',
       input: async () => ({
-        quote_id: setup.instance.quotes[0].id,
+        quote_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d',
         order_id: setup.instance.orders[0].id
       })
     },
@@ -1062,7 +1062,7 @@ scenario.get_order = {
       description: 'Order is not found',
       input: async () => ({
         quote_id: setup.instance.quotes[0].id,
-        order_id: setup.instance.orders[0].id
+        order_id: 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d'
       })
     },
     {
@@ -1080,25 +1080,26 @@ scenario.get_order = {
         quote_id: setup.instance.quotes[0].id,
         order_id: setup.instance.orders[0].id
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Quote is not found' && is_mocked) {
-      return jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Order is not found' && is_mocked) {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Quote is not found' && is_mocked) {
+      return jest.spyOn(Quote, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Order is not found' && is_mocked) {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-        getOrders: payload => Promise.resolve(null)
+        getOrders: async payload => null
       });
     }
-    if (stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Quote, 'findByPk')
-        .mockRejectedValue(new Error('Quote.findByPk error mocked'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Order was trying to be found') {
+    if (description === 'Order was trying to be found') {
       return jest.spyOn(Quote, 'findByPk').mockResolvedValue({
         getOrders: async payload => {
-          throw new Error('Quote.findByPk error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -1109,8 +1110,6 @@ scenario.get_order = {
     }
   }
 };
-
-// ----------------------------------------------------------------------------
 
 module.exports.scenario = scenario;
 

@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Order';
+import { schema, validate } from 'src/validations/Order';
 
 const { Order, OrderItems } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getOrders = [
-  validate(validations.getOrders),
+  validate(schema.getOrders),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getOrders = [
 ];
 
 export const createOrders = [
-  validate(validations.createOrders),
+  validate(schema.createOrders),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createOrders = [
 ];
 
 export const getOrder = [
-  validate(validations.getOrder),
+  validate(schema.getOrder),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -75,7 +74,7 @@ export const getOrder = [
 ];
 
 export const updateOrder = [
-  validate(validations.updateOrder),
+  validate(schema.updateOrder),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -102,7 +101,7 @@ export const updateOrder = [
 ];
 
 export const deleteOrder = [
-  validate(validations.deleteOrder),
+  validate(schema.deleteOrder),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -138,7 +137,7 @@ export const deleteOrder = [
 ];
 
 export const getItems = [
-  validate(validations.getItems),
+  validate(schema.getItems),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -185,7 +184,7 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(validations.setItems),
+  validate(schema.setItems),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -212,7 +211,7 @@ export const setItems = [
 ]
 
 export const getItem = [
-  validate(validations.getItem),
+  validate(schema.getItem),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -248,7 +247,7 @@ export const getItem = [
 ];
 
 export const updateItem = [
-  validate(validations.updateItem),
+  validate(schema.updateItem),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -293,7 +292,7 @@ export const updateItem = [
 ];
 
 export const removeItem = [
-  validate(validations.removeItem),
+  validate(schema.removeItem),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -336,7 +335,7 @@ export const removeItem = [
 ];
 
 export const getDepartments = [
-  validate(validations.getDepartments),
+  validate(schema.getDepartments),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -383,7 +382,7 @@ export const getDepartments = [
 ];
 
 export const setDepartments = [
-  validate(validations.setDepartments),
+  validate(schema.setDepartments),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -410,7 +409,7 @@ export const setDepartments = [
 ]
 
 export const getDepartment = [
-  validate(validations.getDepartment),
+  validate(schema.getDepartment),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -446,7 +445,7 @@ export const getDepartment = [
 ];
 
 export const updateDepartment = [
-  validate(validations.updateDepartment),
+  validate(schema.updateDepartment),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -491,7 +490,7 @@ export const updateDepartment = [
 ];
 
 export const removeDepartment = [
-  validate(validations.removeDepartment),
+  validate(schema.removeDepartment),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -534,7 +533,7 @@ export const removeDepartment = [
 ];
 
 export const getEmployees = [
-  validate(validations.getEmployees),
+  validate(schema.getEmployees),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -581,7 +580,7 @@ export const getEmployees = [
 ];
 
 export const setEmployees = [
-  validate(validations.setEmployees),
+  validate(schema.setEmployees),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -608,7 +607,7 @@ export const setEmployees = [
 ]
 
 export const getEmployee = [
-  validate(validations.getEmployee),
+  validate(schema.getEmployee),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -644,7 +643,7 @@ export const getEmployee = [
 ];
 
 export const updateEmployee = [
-  validate(validations.updateEmployee),
+  validate(schema.updateEmployee),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);
@@ -689,7 +688,7 @@ export const updateEmployee = [
 ];
 
 export const removeEmployee = [
-  validate(validations.removeEmployee),
+  validate(schema.removeEmployee),
   async function params(req, res, next) {
     try {
       req.order = await Order.findByPk(req.params.order);

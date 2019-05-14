@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getEmployees = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getEmployees = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -23,11 +25,12 @@ export const getEmployees = schema.request.keys({
       created_by: schema.look_up(schema.id),
       updated_by: schema.look_up(schema.id),
       deleted_by: schema.look_up(schema.id),
-    }).unknown(false)
+    }).unknown(false),
+    include: Joi.string().max(100)
   })
 });
 
-export const createEmployees = schema.request.keys({
+module.exports.schema.createEmployees = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(schema.values.keys({
@@ -48,12 +51,13 @@ export const createEmployees = schema.request.keys({
   })
 });
 
-export const getEmployee = schema.request.keys({
+module.exports.schema.getEmployee = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ employee: schema.id.required() }),
+  query: schema.query.keys({ include: Joi.string().max(100) })
 });
 
-export const updateEmployee = schema.request.keys({
+module.exports.schema.updateEmployee = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ employee: schema.id.required() }),
   body: schema.body.keys({
@@ -75,27 +79,29 @@ export const updateEmployee = schema.request.keys({
   })
 });
 
-export const deleteEmployee = schema.request.keys({
+module.exports.schema.deleteEmployee = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ employee: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const setUser = schema.request.keys({
+module.exports.schema.getUser = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ employee: schema.id.required() }),
-  body: schema.body.keys({ values: schema.id.required() })
 });
 
-export const getUser = schema.request.keys({
+module.exports.schema.setUser = schema.request.keys({
   headers: schema.headers,
-  params: schema.params.keys({
-    employee: schema.id.required(),
-    user: schema.id.required()
-  })
+  params: schema.params.keys({ employee: schema.id.required() }),
+  body: schema.body.keys({ user: schema.id.required() })
 });
 
-export const getQuotes = schema.request.keys({
+module.exports.schema.removeUser = schema.request.keys({
+  headers: schema.headers,
+  params: schema.params.keys({ employee: schema.id.required() })
+});
+
+module.exports.schema.getQuotes = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ employee: schema.id.required() }),
   query: schema.query.append({
@@ -127,17 +133,19 @@ export const getQuotes = schema.request.keys({
   })
 });
 
-export const setQuotes = schema.request.keys({
+module.exports.schema.setQuotes = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ employee: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getQuote = schema.request.keys({
+module.exports.schema.getQuote = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     employee: schema.id.required(),
     quote: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

@@ -6,13 +6,19 @@ const API_BASE = `/api/v1/quotes`;
 describe("Quote Service:", () => {
   beforeAll(setup.before_all);
   beforeEach(setup.before_each);
+  afterEach(setup.after_each);
+  afterAll(setup.after_all);
 
   describe("get quotes", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_quotes.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_quotes.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_quotes.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_quotes.mock) {
+            await scenario.get_quotes.mock({ fail: false, description });
+          }
 
           // Given:
           let querystring = await input();
@@ -21,17 +27,25 @@ describe("Quote Service:", () => {
           let res = await request("get", API_BASE).query(querystring);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_quotes.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_quotes.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_quotes.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_quotes.mock) {
+            await scenario.get_quotes.mock({ fail: true, description });
+          }
 
           // Given:
           let querystring = await input();
@@ -40,9 +54,13 @@ describe("Quote Service:", () => {
           let res = await request("get", API_BASE).query(querystring);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -50,34 +68,50 @@ describe("Quote Service:", () => {
 
   describe("create quotes:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.create_quotes.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.create_quotes.pass) {
+        it(`${id} - ${description}`, async () => {
           // Given:
-          await scenario.create_quotes.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.create_quotes.mock) {
+            await scenario.create_quotes.mock({ fail: false, description });
+          }
 
           // When:
           let res = await request("post", API_BASE).send(await input());
 
           // Then:
-          expect(res.statusCode).toEqual(201);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(201);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.create_quotes.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.create_quotes.fail) {
+        it(`${id} - ${description}`, async () => {
           // Given:
-          await scenario.create_quotes.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.create_quotes.mock) {
+            await scenario.create_quotes.mock({ fail: true, description });
+          }
 
           // When:
           let res = await request("post", API_BASE).send(await input());
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -85,10 +119,14 @@ describe("Quote Service:", () => {
 
   describe("get quote:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_quote.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_quote.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_quote.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_quote.mock) {
+            await scenario.get_quote.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id } = await input();
@@ -97,17 +135,25 @@ describe("Quote Service:", () => {
           let res = await request("get", `${API_BASE}/${quote_id}`);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_quote.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_quote.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_quote.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_quote.mock) {
+            await scenario.get_quote.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id } = await input();
@@ -116,9 +162,13 @@ describe("Quote Service:", () => {
           let res = await request("get", `${API_BASE}/${quote_id}`);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -126,10 +176,14 @@ describe("Quote Service:", () => {
 
   describe("update quote:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.update_quote.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_quote.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_quote.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_quote.mock) {
+            await scenario.update_quote.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, values } = await input();
@@ -139,17 +193,25 @@ describe("Quote Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.update_quote.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_quote.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_quote.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_quote.mock) {
+            await scenario.update_quote.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, values } = await input();
@@ -159,9 +221,13 @@ describe("Quote Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -169,10 +235,14 @@ describe("Quote Service:", () => {
 
   describe("delete quote:", () => {
     describe('should return data object empty when:', () => {
-      for (let { id, description, input } of scenario.delete_quote.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.delete_quote.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.delete_quote.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.delete_quote.mock) {
+            await scenario.delete_quote.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, query } = await input();
@@ -182,17 +252,25 @@ describe("Quote Service:", () => {
           let res = await request("delete", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.delete_quote.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.delete_quote.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.delete_quote.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.delete_quote.mock) {
+            await scenario.delete_quote.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, query } = await input();
@@ -202,9 +280,13 @@ describe("Quote Service:", () => {
           let res = await request("delete", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -212,10 +294,14 @@ describe("Quote Service:", () => {
 
   describe("get items:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_items.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_items.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_items.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_items.mock) {
+            await scenario.get_items.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, query } = await input();
@@ -225,17 +311,25 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_items.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_items.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_items.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_items.mock) {
+            await scenario.get_items.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, query } = await input();
@@ -245,9 +339,13 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -255,10 +353,14 @@ describe("Quote Service:", () => {
 
   describe("set items:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.set_items.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.set_items.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.set_items.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.set_items.mock) {
+            await scenario.set_items.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, items } = await input();
@@ -268,17 +370,25 @@ describe("Quote Service:", () => {
           let res = await request("post", endpoint).send({ values: items });
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.set_items.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.set_items.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.set_items.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.set_items.mock) {
+            await scenario.set_items.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, items } = await input();
@@ -288,9 +398,13 @@ describe("Quote Service:", () => {
           let res = await request("post", endpoint).send({ values: items });
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -298,10 +412,14 @@ describe("Quote Service:", () => {
 
   describe("get item:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_item.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_item.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_item.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_item.mock) {
+            await scenario.get_item.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, item_id } = await input();
@@ -311,17 +429,25 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_item.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_item.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_item.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_item.mock) {
+            await scenario.get_item.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, item_id } = await input();
@@ -331,9 +457,13 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -341,10 +471,14 @@ describe("Quote Service:", () => {
 
   describe("update item:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.update_item.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_item.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_item.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_item.mock) {
+            await scenario.update_item.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, item_id, values } = await input();
@@ -354,17 +488,25 @@ describe("Quote Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.update_item.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.update_item.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.update_item.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.update_item.mock) {
+            await scenario.update_item.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, item_id, values } = await input();
@@ -374,9 +516,13 @@ describe("Quote Service:", () => {
           let res = await request("put", endpoint).send({ values });
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -384,10 +530,14 @@ describe("Quote Service:", () => {
 
   describe("remove item:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.remove_item.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.remove_item.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.remove_item.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.remove_item.mock) {
+            await scenario.remove_item.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, item_id } = await input();
@@ -397,17 +547,25 @@ describe("Quote Service:", () => {
           let res = await request("delete", endpoint);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.remove_item.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.remove_item.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.remove_item.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.remove_item.mock) {
+            await scenario.remove_item.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, item_id } = await input();
@@ -417,9 +575,13 @@ describe("Quote Service:", () => {
           let res = await request("delete", endpoint);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -427,10 +589,14 @@ describe("Quote Service:", () => {
 
   describe("get orders:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_orders.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_orders.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_orders.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_orders.mock) {
+            await scenario.get_orders.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, query } = await input();
@@ -440,17 +606,25 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_orders.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_orders.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_orders.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_orders.mock) {
+            await scenario.get_orders.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, query } = await input();
@@ -460,9 +634,13 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint).query(query);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -470,10 +648,14 @@ describe("Quote Service:", () => {
 
   describe("set orders:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.set_orders.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.set_orders.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.set_orders.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.set_orders.mock) {
+            await scenario.set_orders.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, orders } = await input();
@@ -483,17 +665,25 @@ describe("Quote Service:", () => {
           let res = await request("post", endpoint).send({ values: orders });
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.set_orders.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.set_orders.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.set_orders.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.set_orders.mock) {
+            await scenario.set_orders.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, orders } = await input();
@@ -503,9 +693,13 @@ describe("Quote Service:", () => {
           let res = await request("post", endpoint).send({ values: orders });
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
@@ -513,10 +707,14 @@ describe("Quote Service:", () => {
 
   describe("get order:", () => {
     describe('should return data when:', () => {
-      for (let { id, description, input } of scenario.get_order.pass) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_order.pass) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_order.mock({ input, fail: false, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_order.mock) {
+            await scenario.get_order.mock({ fail: false, description });
+          }
 
           // Given:
           let { quote_id, order_id } = await input();
@@ -526,17 +724,25 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint);
 
           // Then:
-          expect(res.statusCode).toEqual(200);
-          expect(res.body.data).toBeDefined();
-          expect(res.body.error).toBe(null);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.data).toBeDefined();
+            expect(res.body.error).toBe(null);
+          }
         });
       }
     });
     describe('should return error when:', () => {
-      for (let { id, description, input } of scenario.get_order.fail) {
-        it(description, async () => {
+      for (let { id, description, mock, input, then } of scenario.get_order.fail) {
+        it(`${id} - ${description}`, async () => {
           // Setup:
-          await scenario.get_order.mock({ input, fail: true, stage: description });
+          if (mock) {
+            await mock(await input());
+          } else if (scenario.get_order.mock) {
+            await scenario.get_order.mock({ fail: true, description });
+          }
 
           // Given:
           let { quote_id, order_id } = await input();
@@ -546,14 +752,15 @@ describe("Quote Service:", () => {
           let res = await request("get", endpoint);
 
           // Then:
-          expect(res.statusCode).toBeWithin(400, 522);
-          expect(res.body.error).toBeDefined();
-          expect(res.body.data).toBeOneOf([ undefined, null ]);
+          if (then) {
+            await then(res);
+          } else {
+            expect(res.statusCode).toBeWithin(400, 522);
+            expect(res.body.error).toBeDefined();
+            expect(res.body.data).toBeOneOf([ undefined, null ]);
+          }
         });
       }
     });
   });
-
-  afterEach(setup.after_each);
-  afterAll(setup.after_all);
 });

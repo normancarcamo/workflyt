@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Department';
+import { schema, validate } from 'src/validations/Department';
 
 const { Department } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getDepartments = [
-  validate(validations.getDepartments),
+  validate(schema.getDepartments),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -39,7 +38,7 @@ export const getDepartments = [
 ];
 
 export const createDepartments = [
-  validate(validations.createDepartments),
+  validate(schema.createDepartments),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -53,7 +52,7 @@ export const createDepartments = [
 ];
 
 export const getDepartment = [
-  validate(validations.getDepartment),
+  validate(schema.getDepartment),
   async function params(req, res, next) {
     try {
       req.department = await Department.findByPk(req.params.department);
@@ -73,7 +72,7 @@ export const getDepartment = [
 ];
 
 export const updateDepartment = [
-  validate(validations.updateDepartment),
+  validate(schema.updateDepartment),
   async function params(req, res, next) {
     try {
       req.department = await Department.findByPk(req.params.department);
@@ -100,7 +99,7 @@ export const updateDepartment = [
 ];
 
 export const deleteDepartment = [
-  validate(validations.deleteDepartment),
+  validate(schema.deleteDepartment),
   async function params(req, res, next) {
     try {
       req.department = await Department.findByPk(req.params.department);
@@ -136,7 +135,7 @@ export const deleteDepartment = [
 ];
 
 export const getEmployees = [
-  validate(validations.getEmployees),
+  validate(schema.getEmployees),
   async function params(req, res, next) {
     try {
       req.department = await Department.findByPk(req.params.department);
@@ -183,7 +182,7 @@ export const getEmployees = [
 ];
 
 export const setEmployees = [
-  validate(validations.setEmployees),
+  validate(schema.setEmployees),
   async function params(req, res, next) {
     try {
       req.department = await Department.findByPk(req.params.department);
@@ -210,7 +209,7 @@ export const setEmployees = [
 ]
 
 export const getEmployee = [
-  validate(validations.getEmployee),
+  validate(schema.getEmployee),
   async function params(req, res, next) {
     try {
       req.department = await Department.findByPk(req.params.department);

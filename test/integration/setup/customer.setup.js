@@ -1,11 +1,9 @@
 import uuid from 'uuid/v4';
 import setup_factory from './index';
-import db from "src/db/models";
-import { is } from '@playscode/fns';
-import { stagement } from '@babel/template';
+import db from 'src/db/models';
 
 const is_mocked = JSON.parse(process.env.MOCK);
-const setup = setup_factory(db, is_mocked), scenario = {};
+const setup = setup_factory(db, is_mocked, 'Customer'), scenario = {};
 const { Customer } = db.sequelize.models;
 
 scenario.get_customers = {
@@ -34,25 +32,28 @@ scenario.get_customers = {
       id: uuid(),
       description: "query sent is: { search: { name: { like: '%vvvvv%' } } }",
       input: async () => ({ search: { name: { like: '%vvvvv%' } } })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Query search validation fail',
       input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'Department search action throws error',
+      description: 'Action throws error',
       input: async () => ({ search: { name: { eq: 'model' } } })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail) {
-      jest.spyOn(Customer, 'findAll').mockRejectedValue(new Error('Mocked'));
-    } else {
-      jest.spyOn(Customer, 'findAll').mockResolvedValue([]);
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throws error') {
+      return jest.spyOn(Customer, 'findAll')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Customer, 'findAll')
+        .mockResolvedValue([]);
     }
   }
 };
@@ -62,33 +63,51 @@ scenario.create_customers = {
     {
       id: uuid(),
       description: 'Values are sent as array',
-      input: async () => ({ values: [{ name: "sps" }] })
+      input: async () => ({ values: [{ name: 'sps' }] })
     },
     {
       id: uuid(),
       description: 'Values are sent as object',
-      input: async () => ({ values: { name: "tgu" } })
+      input: async () => ({ values: { name: 'tgu' } })
+    },
+    {
+      id: uuid(),
+      description: `is created by a specific user`,
+      input: async () => ({
+        values: {
+          name: 'demo',
+          created_by: setup.instance.users[0].id,
+          updated_by: setup.instance.users[0].id,
+        }
+      }),
+      then: async (res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
+        expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Values are sent as an array but validation fail',
-      input: async () => ({ values: [ { name: "" } ] })
+      description: 'Invalid values were sent using array',
+      input: async () => ({ values: [ { name: '' } ] })
     },
     {
       id: uuid(),
-      description: 'Values are sent as object but validation fail',
-      input: async () => ({ values: { name: "" } })
+      description: 'Invalid values were sent using object',
+      input: async () => ({ values: { name: '' } })
     },
     {
       id: uuid(),
-      description: 'Values are sent but action throws error',
-      input: async () => ({ values: { name: "elct" } })
+      description: 'Action throws error',
+      input: async () => ({ values: { name: 'elct' } })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Values are sent but action throws error' && is_mocked) {
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throws error') {
       return jest.spyOn(Customer, 'createMany')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -105,7 +124,7 @@ scenario.create_customers = {
         }
       });
     }
-  },
+  }
 };
 
 scenario.get_customer = {
@@ -129,7 +148,7 @@ scenario.get_customer = {
     },
     {
       id: uuid(),
-      description: 'Customer is not found',
+      description: 'Customer was not found',
       input: async () => ({
         customer_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
         values: { name: 'Customer A' }
@@ -137,18 +156,19 @@ scenario.get_customer = {
     },
     {
       id: uuid(),
-      description: 'Customer was trying to be retrieved',
+      description: 'Customer was trying to be found',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
         values: { name: 'Customer A' }
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Customer is not found' && is_mocked) {
-      return jest.spyOn(Customer, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Customer was trying to be retrieved') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Customer was not found' && is_mocked) {
+      return jest.spyOn(Customer, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Customer was trying to be found') {
       jest.spyOn(Customer, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
@@ -163,7 +183,7 @@ scenario.update_customer = {
   pass: [
     {
       id: uuid(),
-      description: 'Customer was updated',
+      description: 'Customer is updated',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
         values: { name: 'Customer A' }
@@ -173,7 +193,7 @@ scenario.update_customer = {
   fail: [
     {
       id: uuid(),
-      description: 'Customer id is malformed',
+      description: 'Customer id param is malformed',
       input: async () => ({
         customer_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         values: { name: 'Customer A' }
@@ -202,17 +222,18 @@ scenario.update_customer = {
         customer_id: setup.instance.customers[0].id,
         values: { name: 'Customer A' }
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Customer is not found' && is_mocked) {
-      return jest.spyOn(Customer, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Customer was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Customer is not found' && is_mocked) {
+      return jest.spyOn(Customer, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Customer was trying to be found') {
       return jest.spyOn(Customer, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Customer was trying to be updated') {
+    if (description === 'Customer was trying to be updated') {
       return jest.spyOn(Customer, 'findByPk').mockResolvedValue({
         update: async payload => {
           throw new Error('error mocked.');
@@ -256,7 +277,7 @@ scenario.delete_customer = {
         customer_id: setup.instance.customers[0].id,
         query: { force: false }
       })
-    },
+    }
   ],
   fail: [
     {
@@ -290,17 +311,18 @@ scenario.delete_customer = {
         customer_id: setup.instance.customers[0].id,
         query: {}
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Customer is not found' && is_mocked) {
-      return jest.spyOn(Customer, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Customer was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Customer is not found' && is_mocked) {
+      return jest.spyOn(Customer, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Customer was trying to be found') {
       return jest.spyOn(Customer, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Customer was trying to be deleted') {
+    if (description === 'Customer was trying to be deleted') {
       return jest.spyOn(Customer, 'findByPk').mockResolvedValue({
         destroy: async payload => {
           throw new Error('error mocked.');
@@ -328,17 +350,15 @@ scenario.get_quotes = {
   pass: [
     {
       id: uuid(),
-      description: "Query is: empty",
-      input: async () => {
-        return {
-          customer_id: setup.instance.customers[0].id,
-          query: {}
-        }
-      }
+      description: 'Query is: empty',
+      input: async () => ({
+        customer_id: setup.instance.customers[0].id,
+        query: {}
+      })
     },
     {
       id: uuid(),
-      description: "Query is: subject='dknd'",
+      description: 'Query is: subject=dknd',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
         query: { search: { subject: 'dknd' } }
@@ -346,7 +366,7 @@ scenario.get_quotes = {
     },
     {
       id: uuid(),
-      description: "Query is: subject like %disk%",
+      description: 'Query is: subject like %disk%',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
         query: { search: { subject: { like: '%disk%' } } }
@@ -387,15 +407,16 @@ scenario.get_quotes = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Customer is not found' && is_mocked) {
-      return jest.spyOn(Customer, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'Customer was trying to be found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Customer is not found' && is_mocked) {
       return jest.spyOn(Customer, 'findByPk')
-          .mockRejectedValue(new Error('error mocked.'));
+        .mockResolvedValue(null);
     }
-    if (stage === 'Quotes were trying to be found') {
+    if (description === 'Customer was trying to be found') {
+      return jest.spyOn(Customer, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'Quotes were trying to be found') {
       return jest.spyOn(Customer, 'findByPk').mockResolvedValue({
         getQuotes: async payload => {
           throw new Error('error mocked.');
@@ -414,7 +435,7 @@ scenario.set_quotes = {
   pass: [
     {
       id: uuid(),
-      description: "Quotes are set",
+      description: 'Quotes are set',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
         quotes: setup.instance.quotes.map(quote => quote.id)
@@ -424,7 +445,7 @@ scenario.set_quotes = {
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Customer id param is malformed',
       input: async () => ({
         customer_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         quotes: setup.instance.quotes.map(quote => quote.id)
@@ -448,22 +469,23 @@ scenario.set_quotes = {
     },
     {
       id: uuid(),
-      description: "Quotes cannot be set",
+      description: 'Quotes cannot be set',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
         quotes: setup.instance.quotes.map(quote => quote.id)
       })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Customer is not found' && is_mocked) {
-      return jest.spyOn(Customer, 'findByPk').mockResolvedValue(null);
     }
-    if (stage === 'Customer was trying to be found') {
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Customer is not found' && is_mocked) {
+      return jest.spyOn(Customer, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Customer was trying to be found') {
       return jest.spyOn(Customer, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Quotes cannot be set') {
+    if (description === 'Quotes cannot be set') {
       return jest.spyOn(Customer, 'findByPk').mockResolvedValue({
         addQuotes: async payload => {
           throw new Error('error mocked.');
@@ -472,7 +494,7 @@ scenario.set_quotes = {
     }
     if (!fail && is_mocked) {
       jest.spyOn(Customer, 'findByPk').mockResolvedValue({
-        addQuotes: payload => Promise.resolve(payload)
+        addQuotes: async payload => payload
       });
     }
   }
@@ -482,7 +504,7 @@ scenario.get_quote = {
   pass: [
     {
       id: uuid(),
-      description: "Category is found",
+      description: 'Category is found',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
         quote_id: setup.instance.quotes[0].id
@@ -510,7 +532,7 @@ scenario.get_quote = {
       id: uuid(),
       description: 'Customer is not found',
       input: async () => ({
-        customer_id: setup.instance.customers[0].id,
+        customer_id: '19734cd8-cbb9-4017-a6df-33a97872959a',
         quote_id: setup.instance.quotes[0].id
       })
     },
@@ -519,44 +541,41 @@ scenario.get_quote = {
       description: 'Quote is not found',
       input: async () => ({
         customer_id: setup.instance.customers[0].id,
-        quote_id: setup.instance.quotes[0].id
+        quote_id: '19734cd8-cbb9-4017-a6df-33a97872959a'
       })
     },
     {
       id: uuid(),
       description: 'Customer was trying to be found',
-      input: async () => {
-        return {
-          customer_id: setup.instance.customers[0].id,
-          quote_id: setup.instance.quotes[0].id
-        }
-      }
+      input: async () => ({
+        customer_id: setup.instance.customers[0].id,
+        quote_id: setup.instance.quotes[0].id
+      })
     },
     {
       id: uuid(),
       description: 'Quote was trying to be found',
-      input: async () => {
-        return {
-          customer_id: setup.instance.customers[0].id,
-          quote_id: setup.instance.quotes[0].id
-        }
-      }
+      input: async () => ({
+        customer_id: setup.instance.customers[0].id,
+        quote_id: setup.instance.quotes[0].id
+      })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Customer is not found' && is_mocked) {
-      return jest.spyOn(Customer, 'findByPk').mockResolvedValue(null);
+  mock: async ({ fail, description }) => {
+    if (description === 'Customer is not found' && is_mocked) {
+      return jest.spyOn(Customer, 'findByPk')
+        .mockResolvedValue(null);
     }
-    if (stage === 'Quote is not found' && is_mocked) {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Customer, 'findByPk').mockResolvedValue({
         getQuotes: async (options) => null
       });
     }
-    if (stage === "Customer was trying to be found") {
+    if (description === 'Customer was trying to be found') {
       return jest.spyOn(Customer, 'findByPk')
         .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Customer, 'findByPk').mockResolvedValue({
         getQuotes: async (options) => {
           throw new Error('error mocked.');
@@ -565,8 +584,8 @@ scenario.get_quote = {
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Customer, 'findByPk').mockResolvedValue({
-        getQuotes: payload => {
-          return Promise.resolve(setup.instance.quotes[0])
+        getQuotes: async payload => {
+          return setup.instance.quotes[0];
         }
       });
     }

@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getWarehouses = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getWarehouses = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -23,7 +25,7 @@ export const getWarehouses = schema.request.keys({
   })
 });
 
-export const createWarehouses = schema.request.keys({
+module.exports.schema.createWarehouses = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -43,12 +45,12 @@ export const createWarehouses = schema.request.keys({
   })
 });
 
-export const getWarehouse = schema.request.keys({
+module.exports.schema.getWarehouse = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ warehouse: schema.id.required() })
 });
 
-export const updateWarehouse = schema.request.keys({
+module.exports.schema.updateWarehouse = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ warehouse: schema.id.required() }),
   body: schema.body.keys({
@@ -67,13 +69,13 @@ export const updateWarehouse = schema.request.keys({
   })
 });
 
-export const deleteWarehouse = schema.request.keys({
+module.exports.schema.deleteWarehouse = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ warehouse: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const getItems = schema.request.keys({
+module.exports.schema.getItems = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ warehouse: schema.id.required() }),
   query: schema.query.append({
@@ -102,14 +104,14 @@ export const getItems = schema.request.keys({
   })
 });
 
-export const setItems = schema.request.keys({
+module.exports.schema.setItems = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ warehouse: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getItem = schema.request.keys({
+module.exports.schema.getItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     warehouse: schema.id.required(),
@@ -117,7 +119,7 @@ export const getItem = schema.request.keys({
   })
 });
 
-export const updateItem = schema.request.keys({
+module.exports.schema.updateItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     warehouse: schema.id.required(),
@@ -138,10 +140,12 @@ export const updateItem = schema.request.keys({
   })
 });
 
-export const removeItem = schema.request.keys({
+module.exports.schema.removeItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     warehouse: schema.id.required(),
     item: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

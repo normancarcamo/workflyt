@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getOrders = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getOrders = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -27,7 +29,7 @@ export const getOrders = schema.request.keys({
   })
 });
 
-export const createOrders = schema.request.keys({
+module.exports.schema.createOrders = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -51,12 +53,12 @@ export const createOrders = schema.request.keys({
   })
 });
 
-export const getOrder = schema.request.keys({
+module.exports.schema.getOrder = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ order: schema.id.required() }),
 });
 
-export const updateOrder = schema.request.keys({
+module.exports.schema.updateOrder = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ order: schema.id.required() }),
   body: schema.body.keys({
@@ -79,13 +81,13 @@ export const updateOrder = schema.request.keys({
   })
 });
 
-export const deleteOrder = schema.request.keys({
+module.exports.schema.deleteOrder = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ order: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const getItems = schema.request.keys({
+module.exports.schema.getItems = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ order: schema.id.required() }),
   query: schema.query.append({
@@ -114,14 +116,14 @@ export const getItems = schema.request.keys({
   })
 });
 
-export const setItems = schema.request.keys({
+module.exports.schema.setItems = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ order: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getItem = schema.request.keys({
+module.exports.schema.getItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -129,7 +131,7 @@ export const getItem = schema.request.keys({
   })
 });
 
-export const updateItem = schema.request.keys({
+module.exports.schema.updateItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -150,7 +152,7 @@ export const updateItem = schema.request.keys({
   })
 });
 
-export const removeItem = schema.request.keys({
+module.exports.schema.removeItem = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -158,7 +160,7 @@ export const removeItem = schema.request.keys({
   })
 });
 
-export const getDepartments = schema.request.keys({
+module.exports.schema.getDepartments = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ order: schema.id.required() }),
   query: schema.query.append({
@@ -182,14 +184,14 @@ export const getDepartments = schema.request.keys({
   })
 });
 
-export const setDepartments = schema.request.keys({
+module.exports.schema.setDepartments = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ order: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getDepartment = schema.request.keys({
+module.exports.schema.getDepartment = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -197,7 +199,7 @@ export const getDepartment = schema.request.keys({
   })
 });
 
-export const updateDepartment = schema.request.keys({
+module.exports.schema.updateDepartment = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -218,7 +220,7 @@ export const updateDepartment = schema.request.keys({
   })
 });
 
-export const removeDepartment = schema.request.keys({
+module.exports.schema.removeDepartment = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -226,7 +228,7 @@ export const removeDepartment = schema.request.keys({
   })
 });
 
-export const getEmployees = schema.request.keys({
+module.exports.schema.getEmployees = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ order: schema.id.required() }),
   query: schema.query.append({
@@ -253,14 +255,14 @@ export const getEmployees = schema.request.keys({
   })
 });
 
-export const setEmployees = schema.request.keys({
+module.exports.schema.setEmployees = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ order: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getEmployee = schema.request.keys({
+module.exports.schema.getEmployee = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -268,7 +270,7 @@ export const getEmployee = schema.request.keys({
   })
 });
 
-export const updateEmployee = schema.request.keys({
+module.exports.schema.updateEmployee = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
@@ -289,10 +291,12 @@ export const updateEmployee = schema.request.keys({
   })
 });
 
-export const removeEmployee = schema.request.keys({
+module.exports.schema.removeEmployee = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     order: schema.id.required(),
     employee: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

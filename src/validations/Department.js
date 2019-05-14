@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getDepartments = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getDepartments = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -23,7 +25,7 @@ export const getDepartments = schema.request.keys({
   })
 });
 
-export const createDepartments = schema.request.keys({
+module.exports.schema.createDepartments = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -43,12 +45,12 @@ export const createDepartments = schema.request.keys({
   })
 });
 
-export const getDepartment = schema.request.keys({
+module.exports.schema.getDepartment = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ department: schema.id.required() }),
 });
 
-export const updateDepartment = schema.request.keys({
+module.exports.schema.updateDepartment = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ department: schema.id.required() }),
   body: schema.body.keys({
@@ -67,13 +69,13 @@ export const updateDepartment = schema.request.keys({
   })
 });
 
-export const deleteDepartment = schema.request.keys({
+module.exports.schema.deleteDepartment = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ department: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const getEmployees = schema.request.keys({
+module.exports.schema.getEmployees = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ department: schema.id.required() }),
   query: schema.query.append({
@@ -101,17 +103,19 @@ export const getEmployees = schema.request.keys({
   })
 });
 
-export const setEmployees = schema.request.keys({
+module.exports.schema.setEmployees = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ department: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id.required() })
 });
 
-export const getEmployee = schema.request.keys({
+module.exports.schema.getEmployee = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     department: schema.id.required(),
     employee: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

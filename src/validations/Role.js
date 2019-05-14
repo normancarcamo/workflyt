@@ -1,6 +1,8 @@
-import { Joi, schema } from "src/utils/validator";
+import { Joi, schema, validate } from "./index";
 
-export const getRoles = schema.request.keys({
+module.exports.schema = {};
+
+module.exports.schema.getRoles = schema.request.keys({
   headers: schema.headers,
   query: schema.query.append({
     fields: Joi.array().items(Joi.string().valid(
@@ -23,7 +25,7 @@ export const getRoles = schema.request.keys({
   })
 });
 
-export const createRoles = schema.request.keys({
+module.exports.schema.createRoles = schema.request.keys({
   headers: schema.headers,
   body: schema.body.keys({
     values: schema.bulk.values.items(
@@ -43,12 +45,12 @@ export const createRoles = schema.request.keys({
   })
 });
 
-export const getRole = schema.request.keys({
+module.exports.schema.getRole = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ role: schema.id.required() })
 });
 
-export const updateRole = schema.request.keys({
+module.exports.schema.updateRole = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ role: schema.id.required() }),
   body: schema.body.keys({
@@ -67,13 +69,13 @@ export const updateRole = schema.request.keys({
   })
 });
 
-export const deleteRole = schema.request.keys({
+module.exports.schema.deleteRole = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ role: schema.id.required() }),
   query: schema.query.keys({ force: schema.force })
 });
 
-export const getPermissions = schema.request.keys({
+module.exports.schema.getPermissions = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({ role: schema.id.required() }),
   query: schema.query.append({
@@ -97,14 +99,14 @@ export const getPermissions = schema.request.keys({
   })
 });
 
-export const setPermissions = schema.request.keys({
+module.exports.schema.setPermissions = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ role: schema.id.required() }),
   body: schema.body.keys({ values: schema.bulk.id })
 });
 
-export const getPermission = schema.request.keys({
+module.exports.schema.getPermission = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     role: schema.id.required(),
@@ -112,7 +114,7 @@ export const getPermission = schema.request.keys({
   })
 });
 
-export const updatePermission = schema.request.keys({
+module.exports.schema.updatePermission = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     role: schema.id.required(),
@@ -133,10 +135,12 @@ export const updatePermission = schema.request.keys({
   })
 });
 
-export const removePermission = schema.request.keys({
+module.exports.schema.removePermission = schema.request.keys({
   headers: schema.headers,
   params: schema.params.keys({
     role: schema.id.required(),
     permission: schema.id.required()
   })
 });
+
+module.exports.validate = validate;

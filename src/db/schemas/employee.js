@@ -9,7 +9,8 @@ module.exports = function(DataTypes) {
         primaryKey: true,
         allowNull: false,
         unique: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: DataTypes.UUIDV4,
+        validate: { isUUID: 4 }
       },
       supervisor_id: {
         type: DataTypes.UUID,
@@ -36,21 +37,25 @@ module.exports = function(DataTypes) {
           key: "id"
         },
         onUpdate: "CASCADE",
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        validate: { isUUID: 4 }
       },
       code: {
         type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
-        defaultValue: 'unset'
+        defaultValue: 'unset',
+        validate: { notEmpty: true }
       },
       firstname: {
         type: DataTypes.STRING(30),
-        allowNull: false
+        allowNull: false,
+        validate: { len: [2, 30], notEmpty: true }
       },
       lastname: {
         type: DataTypes.STRING(30),
-        allowNull: false
+        allowNull: false,
+        validate: { len: [2, 30], notEmpty: true }
       },
       extra: {
         type: DataTypes.JSONB,
@@ -59,12 +64,14 @@ module.exports = function(DataTypes) {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       deleted_at: {
         type: DataTypes.DATE,

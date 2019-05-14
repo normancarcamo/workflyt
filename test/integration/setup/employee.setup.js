@@ -1,13 +1,11 @@
 import uuid from 'uuid/v4';
 import setup_factory from './index';
-import db from "src/db/models";
-import { is } from '@playscode/fns';
+import db from 'src/db/models';
 
 const is_mocked = JSON.parse(process.env.MOCK);
-const setup = setup_factory(db, is_mocked), scenario = {};
+const setup = setup_factory(db, is_mocked, 'Employee'), scenario = {};
 const { Employee } = db.sequelize.models;
 
-// /api/v1/employees?role=salesman
 scenario.get_employees = {
   pass: [
     {
@@ -33,26 +31,63 @@ scenario.get_employees = {
     {
       id: uuid(),
       description: "query is: { search: { firstname: { like: '%vvv%' } } }",
-      input: async () => ({ search: { demo: { like: '%vvv%' } } })
+      input: async () => ({ search: { firstname: { like: '%vvv%' } } })
+    },
+    {
+      id: uuid(),
+      description: 'include user association',
+      input: async () => ({ include: 'user' }),
+      mock: async input => {
+        if (is_mocked) {
+          const result = [];
+
+          for (const employee of setup.instance.employees) {
+            const data = employee.dataValues;
+            if (employee.getUser) {
+              const user = await employee.getUser();
+              if (user) {
+                data.user = user.dataValues;
+              }
+            }
+            result.push(data);
+          }
+
+          jest.spyOn(Employee, 'findAll').mockResolvedValue(result);
+        }
+      },
+      then: async res => {
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.data).toBeDefined().toBeArray();
+        expect(res.body.data[0]).toBeObject().toContainKey('user');
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Query validation fail',
+      description: 'Query search validation fail',
       input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'Query search throws error',
+      description: 'Action throw error',
       input: async () => ({ search: { firstname: { like: '%vvvvv%' } } })
     },
+    {
+      id: uuid(),
+      description: 'include a non existent association',
+      input: async () => ({ include: 'ddddd' })
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail) {
-      jest.spyOn(Employee, 'findAll').mockRejectedValue(new Error('Mocked'));
-    } else {
-      jest.spyOn(Employee, 'findAll').mockResolvedValue([]);
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throw error') {
+      return jest.spyOn(Employee, 'findAll')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Employee, 'findAll')
+        .mockResolvedValue([]);
     }
   }
 };
@@ -64,7 +99,7 @@ scenario.create_employees = {
       description: 'Values are sent as array',
       input: async () => ({
         values: [{
-          firstname: "Norman",
+          firstname: 'Norman',
           lastname: 'Carcamo',
           department_id:  setup.instance.departments[0].id
         }]
@@ -75,11 +110,31 @@ scenario.create_employees = {
       description: 'Values are sent as object',
       input: async () => ({
         values: {
-          firstname: "Norman",
+          firstname: 'Norman',
           lastname: 'Carcamo',
           department_id:  setup.instance.departments[0].id
         }
       })
+    },
+    {
+      id: uuid(),
+      description: `is created by a specific user`,
+      input: async () => ({
+        values: {
+          department_id:  setup.instance.departments[0].id,
+          firstname: 'kanem1',
+          lastname: 'dkanem',
+          created_by: setup.instance.users[0].id,
+          updated_by: setup.instance.users[0].id,
+        }
+      }),
+      then: async (res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
+        expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
+      }
     }
   ],
   fail: [
@@ -88,7 +143,7 @@ scenario.create_employees = {
       description: 'Values are sent as an array but validation fail',
       input: async () => ({
         values: [{
-          firstname: "Norman",
+          firstname: 'Norman',
           lastname: '',
           department_id:  setup.instance.departments[0].id
         }]
@@ -99,7 +154,7 @@ scenario.create_employees = {
       description: 'Values are sent as object but validation fail',
       input: async () => ({
         values: {
-          firstname: "",
+          firstname: '',
           lastname: 'Carcamo',
           department_id:  setup.instance.departments[0].id
         }
@@ -110,17 +165,17 @@ scenario.create_employees = {
       description: 'Values are sent but action create fail',
       input: async () => ({
         values: {
-          firstname: "Norman",
-          lastname: "Carcamo",
+          firstname: 'Norman',
+          lastname: 'Carcamo',
           department_id:  setup.instance.departments[0].id
         }
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Values are sent but action create fail') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Values are sent but action create fail') {
       return jest.spyOn(Employee, 'createMany')
-        .mockRejectedValue(new Error('Employee.create error mocked.'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Employee, 'createMany')
@@ -143,45 +198,91 @@ scenario.get_employee = {
     {
       id: uuid(),
       description: 'Employee is found',
-      input: async () => ({ employee_id: setup.instance.employees[0].id })
+      input: async () => ({ employee_id: setup.instance.employees[0].id }),
+      mock: async () => {
+        if (is_mocked) {
+          jest.spyOn(Employee, 'findByPk').mockResolvedValue(
+            setup.instance.employees[0]
+          );
+        }
+      }
+    },
+    {
+      id: uuid(),
+      description: 'Employee is found and include user',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        options: { include: 'user' }
+      }),
+      mock: async (input) => {
+        const employee = setup.instance.employees[0].dataValues;
+        const user = await setup.instance.employees[0].getUser();
+        employee.user = user.dataValues;
+        jest.spyOn(Employee, 'findByPk').mockResolvedValue(employee);
+      },
+      then: async (res) => {
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.data.user).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+      },
+    },
+    {
+      id: uuid(),
+      description: 'Employee is found and include user + quotes',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        options: { include: 'user,quotes' }
+      }),
+      mock: async () => {
+        if (is_mocked) {
+          jest.spyOn(Employee, 'findByPk')
+            .mockResolvedValue(setup.instance.employees[0]);
+        }
+      }
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Employee id param is invalid',
+      description: 'Employee id param is malformed',
       input: async () => ({
-        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s'
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        options: {}
       })
     },
     {
       id: uuid(),
       description: 'Employee is not found',
       input: async () => ({
-        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111'
-      })
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc119',
+        options: {}
+      }),
+      mock: async () => {
+        jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
+      }
     },
     {
       id: uuid(),
       description: 'Employee was trying to be found',
       input: async () => ({
-        employee_id: setup.instance.employees[0].id
-      })
+        employee_id: setup.instance.employees[0].id,
+        options: {}
+      }),
+      mock: async () => {
+        jest.spyOn(Employee, 'findByPk')
+          .mockRejectedValue(new Error('error mocked.'));
+      }
     },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
+    {
+      id: uuid(),
+      description: 'Include a non existent association',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        options: { include: 'demo' }
+      })
     }
-    if (stage === 'Employee was trying to be found') {
-      return jest.spyOn(Employee, 'findByPk')
-        .mockRejectedValue(new Error('Employee.findByPk error mocked.'));
-    }
-    if (!fail && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk')
-        .mockResolvedValue(setup.instance.employees[0]);
-    }
-  }
+  ]
 };
 
 scenario.update_employee = {
@@ -198,7 +299,7 @@ scenario.update_employee = {
   fail: [
     {
       id: uuid(),
-      description: 'Employee id param is invalid',
+      description: 'Employee id param is malformed',
       input: async () => ({
         employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         values: { firstname: 'Enmanuel' }
@@ -207,46 +308,41 @@ scenario.update_employee = {
     {
       id: uuid(),
       description: 'Employee is not found',
-      input: async () => {
-        return {
-          employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
-          values: { firstname: 'Enmanuel' }
-        }
-      }
+      input: async () => ({
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        values: { firstname: 'Enmanuel' }
+      })
     },
     {
       id: uuid(),
       description: 'Employee was trying to be found',
-      input: async () => {
-        return {
-          employee_id: setup.instance.employees[0].id,
-          values: { firstname: 'Enmanuel' }
-        }
-      }
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        values: { firstname: 'Enmanuel' }
+      })
     },
     {
       id: uuid(),
       description: 'Employee was trying to be updated',
-      input: async () => {
-        return {
-          employee_id: setup.instance.employees[0].id,
-          values: { firstname: 'Enmanuel' }
-        }
-      }
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        values: { firstname: 'Enmanuel' }
+      })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'Employee was trying to be found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
       return jest.spyOn(Employee, 'findByPk')
-        .mockRejectedValue(new Error('Employee.findByPk error mocked'));
+        .mockResolvedValue(null);
     }
-    if (stage === 'Employee was trying to be updated') {
+    if (description === 'Employee was trying to be found') {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'Employee was trying to be updated') {
       return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
         update: async payload => {
-          throw new Error('Employee.findByPk error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -287,12 +383,12 @@ scenario.delete_employee = {
         employee_id: setup.instance.employees[0].id,
         query: { force: true }
       })
-    },
+    }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Employee id param is invalid',
+      description: 'Employee id param is malformed',
       input: async () => ({
         employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: {}
@@ -321,50 +417,21 @@ scenario.delete_employee = {
         employee_id: setup.instance.employees[0].id,
         query: {}
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail) {
-      if (stage === 'employee is not found') {
-        jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
-      } else if (stage === 'employee was trying to be retrieved') {
-        jest.spyOn(Employee, 'findByPk').mockRejectedValue(new Error('Mock Error'));
-      } else if (stage === 'employee was trying to be deleted') {
-        jest.spyOn(Employee, 'findByPk').mockResolvedValue({
-          destroy: payload => Promise.reject(new Error('Mock Error'))
-        });
-      }
-    } else {
-      if (is_mocked) {
-        jest.spyOn(Employee, 'findByPk').mockImplementation(id => {
-          return Promise.resolve({
-            destroy: async payload => {
-              if (payload.force) {
-                return [];
-              } else {
-                return Employee.build({
-                  ...setup.instance.employees[0].dataValues,
-                  deleted_at: new Date().toISOString()
-                });
-              }
-            }
-          });
-        });
-      }
-    }
-  },
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'Employee was trying to be found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
       return jest.spyOn(Employee, 'findByPk')
-        .mockRejectedValue(new Error('Employee.findByPk error mocked'));
+        .mockResolvedValue(null);
     }
-    if (stage === 'Employee was trying to be deleted') {
+    if (description === 'Employee was trying to be found') {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'Employee was trying to be deleted') {
       return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
         destroy: async payload => {
-          throw new Error('Employee.findByPk error mocked');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -381,150 +448,59 @@ scenario.delete_employee = {
   }
 };
 
-scenario.set_user = {
-  pass: [
-    {
-      id: uuid(),
-      description: "User are set",
-      input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        values: setup.instance.users[0].id
-      })
-    }
-  ],
-  fail: [
-    {
-      id: uuid(),
-      description: 'Employee id param is invalid',
-      input: async () => ({
-        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
-        values: setup.instance.users[0].id
-      })
-    },
-    {
-      id: uuid(),
-      description: 'Employee is not found',
-      input: async () => ({
-        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
-        values: setup.instance.users[0].id
-      })
-    },
-    {
-      id: uuid(),
-      description: 'Employee was trying to be found',
-      input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        values: setup.instance.users[0].id
-      })
-    },
-    {
-      id: uuid(),
-      description: "User cannot be set",
-      input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        values: setup.instance.users[0].id
-      })
-    },
-  ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'Employee was trying to be found') {
-      return jest.spyOn(Employee, 'findByPk')
-        .mockRejectedValue(new Error('findByPk error mocked.'));
-    }
-    if (stage === 'User cannot be set') {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
-        setUser: payload => Promise.reject(new Error('setUser error mocked.'))
-      });
-    }
-    if (!fail && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
-        setUser: async (payload, options) => setup.instance.users[0]
-      });
-    }
-  }
-};
-
 scenario.get_user = {
   pass: [
     {
       id: uuid(),
-      description: "User is found",
+      description: 'User is found',
       input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        user_id: setup.instance.users[0].id
+        employee_id: setup.instance.employees[0].id
       })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Employee id param is invalid',
+      description: 'Employee id param is malformed',
       input: async () => ({
-        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll',
-        user_id: setup.instance.users[0].id
-      })
-    },
-    {
-      id: uuid(),
-      description: 'User id param is invalid',
-      input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        user_id: '11bf5b37-e0b8-42e0-8dcf-dc8c4aefcaaaaaa'
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aeflllllll'
       })
     },
     {
       id: uuid(),
       description: 'Employee is not found',
       input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        user_id: setup.instance.users[0].id
+        employee_id: '19734cd8-cbb9-4017-a6df-33a97872959a'
       })
     },
     {
       id: uuid(),
-      description: 'User is not found',
+      description: 'Employee is trying to be found',
       input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        user_id: setup.instance.users[0].id
+        employee_id: setup.instance.employees[0].id
       })
     },
     {
       id: uuid(),
-      description: 'Employee was trying to be found',
+      description: 'User is trying to be found',
       input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        user_id: setup.instance.users[0].id
-      })
-    },
-    {
-      id: uuid(),
-      description: 'User was trying to be found',
-      input: async () => ({
-        employee_id: setup.instance.employees[0].id,
-        user_id: setup.instance.users[0].id
+        employee_id: setup.instance.employees[0].id
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'User is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
-        getUser: async payload => null
-      });
-    }
-    if (stage === 'Employee was trying to be found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
       return jest.spyOn(Employee, 'findByPk')
-        .mockRejectedValue(new Error('findByPk error mocked.'));
+        .mockResolvedValue(null);
     }
-    if (stage === 'User was trying to be found') {
+    if (description === 'Employee is trying to be found') {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'User is trying to be found') {
       return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
         getUser: async payload => {
-          throw new Error('findByPk error mocked.');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -536,43 +512,170 @@ scenario.get_user = {
   }
 };
 
-scenario.get_quotes = {
+scenario.set_user = {
   pass: [
     {
       id: uuid(),
-      description: "Query is: empty",
-      input: async () => {
-        return {
-          employee_id: setup.instance.employees[0].id,
-          query: {}
-        }
-      }
-    },
-    {
-      id: uuid(),
-      description: "Query is: subject='dknd'",
-      input: async () => {
-        return {
-          employee_id: setup.instance.employees[0].id,
-          query: { search: { subject: 'dknd' } }
-        }
-      }
-    },
-    {
-      id: uuid(),
-      description: "Query is: subject like %disk%",
-      input: async () => {
-        return {
-          employee_id: setup.instance.employees[0].id,
-          query: { search: { subject: { like: '%disk%' } } }
-        }
-      }
+      description: 'User are set',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        user: setup.instance.users[0].id
+      })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Employee id param is invalid',
+      description: 'Employee id param is malformed',
+      input: async () => ({
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
+        user: setup.instance.users[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Employee is not found',
+      input: async () => ({
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111',
+        user: setup.instance.users[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Employee was trying to be found',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        user: setup.instance.users[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'User cannot be set',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        user: setup.instance.users[0].id
+      })
+    }
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Employee was trying to be found') {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'User cannot be set') {
+      return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
+        setUser: async payload => {
+          throw new Error('error mocked.');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
+        setUser: async (payload, options) => setup.instance.users[0]
+      });
+    }
+  }
+};
+
+scenario.remove_user = {
+  pass: [
+    {
+      id: uuid(),
+      description: 'User is removed',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id
+      })
+    }
+  ],
+  fail: [
+    {
+      id: uuid(),
+      description: 'Employee id param is malformed',
+      input: async () => ({
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Employee is not found',
+      input: async () => ({
+        employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111'
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Employee was trying to be found',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id
+      })
+    },
+    {
+      id: uuid(),
+      description: 'User cannot be removed',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id
+      })
+    }
+  ],
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockResolvedValue(null);
+    }
+    if (description === 'Employee was trying to be found') {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'User cannot be removed') {
+      return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
+        setUser: async payload => {
+          throw new Error('error mocked.');
+        }
+      });
+    }
+    if (!fail && is_mocked) {
+      return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
+        setUser: async (payload, options) => setup.instance.users[0]
+      });
+    }
+  }
+};
+
+scenario.get_quotes = {
+  pass: [
+    {
+      id: uuid(),
+      description: 'Query is: empty',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        query: {}
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Query is: subject=dknd',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        query: { search: { subject: 'dknd' } }
+      })
+    },
+    {
+      id: uuid(),
+      description: 'Query is: subject like %disk%',
+      input: async () => ({
+        employee_id: setup.instance.employees[0].id,
+        query: { search: { subject: { like: '%disk%' } } }
+      })
+    }
+  ],
+  fail: [
+    {
+      id: uuid(),
+      description: 'Employee id param is malformed',
       input: async () => ({
         employee_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: { search: { subject: 'dknd' } }
@@ -603,18 +706,19 @@ scenario.get_quotes = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
-    }
-    if (stage === 'Employee was trying to be found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
       return jest.spyOn(Employee, 'findByPk')
-        .mockRejectedValue(new Error('findByPk error mocked.'));
+        .mockResolvedValue(null);
     }
-    if (stage === 'Quotes were trying to be retrieved') {
+    if (description === 'Employee was trying to be found') {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (description === 'Quotes were trying to be retrieved') {
       return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
         getQuotes: async payload => {
-          throw new Error('findByPk error mocked.');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -630,7 +734,7 @@ scenario.set_quotes = {
   pass: [
     {
       id: uuid(),
-      description: "Quotes are set",
+      description: 'Quotes are set',
       input: async () => ({
         employee_id: setup.instance.employees[0].id,
         quotes: setup.instance.quotes.map(quote => quote.id)
@@ -664,26 +768,26 @@ scenario.set_quotes = {
     },
     {
       id: uuid(),
-      description: "Quotes cannot be set",
+      description: 'Quotes cannot be set',
       input: async () => ({
         employee_id: setup.instance.employees[0].id,
         quotes: setup.instance.quotes.map(quote => quote.id)
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockResolvedValue(null);
     }
-    if (stage === 'Employee was trying to be found') {
-      return jest.spyOn(Employee, 'findByPk').mockRejectedValue(
-        new Error('Employee was trying to be found, error mocked.')
-      );
+    if (description === 'Employee was trying to be found') {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Quotes cannot be set') {
+    if (description === 'Quotes cannot be set') {
       return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
         addQuotes: async payload => {
-          throw new Error('Quotes cannot be set, error mocked.');
+          throw new Error('error mocked.');
         }
       });
     }
@@ -699,7 +803,7 @@ scenario.get_quote = {
   pass: [
     {
       id: uuid(),
-      description: "Quote is found",
+      description: 'Quote is found',
       input: async () => ({
         employee_id: setup.instance.employees[0].id,
         quote_id: setup.instance.quotes[0].id
@@ -727,7 +831,7 @@ scenario.get_quote = {
       id: uuid(),
       description: 'Employee is not found',
       input: async () => ({
-        employee_id: setup.instance.employees[0].id,
+        employee_id: '19734cd8-cbb9-4017-a6df-33a97872959a',
         quote_id: setup.instance.quotes[0].id
       })
     },
@@ -736,7 +840,7 @@ scenario.get_quote = {
       description: 'Quote is not found',
       input: async () => ({
         employee_id: setup.instance.employees[0].id,
-        quote_id: setup.instance.quotes[0].id
+        quote_id: '19734cd8-cbb9-4017-a6df-33a97872959a'
       })
     },
     {
@@ -756,23 +860,24 @@ scenario.get_quote = {
       })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (stage === 'Employee is not found' && is_mocked) {
-      return jest.spyOn(Employee, 'findByPk').mockResolvedValue(null);
+  mock: async ({ fail, description }) => {
+    if (description === 'Employee is not found' && is_mocked) {
+      return jest.spyOn(Employee, 'findByPk')
+        .mockResolvedValue(null);
     }
-    if (stage === 'Quote is not found' && is_mocked) {
+    if (description === 'Quote is not found' && is_mocked) {
       return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
         getQuotes: async payload => null
       });
     }
-    if (stage === 'Employee was trying to be found') {
+    if (description === 'Employee was trying to be found') {
       return jest.spyOn(Employee, 'findByPk')
-        .mockRejectedValue(new Error('findByPk error mocked.'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (stage === 'Quote was trying to be found') {
+    if (description === 'Quote was trying to be found') {
       return jest.spyOn(Employee, 'findByPk').mockResolvedValue({
         getQuotes: async options => {
-          throw new Error('findByPk error mocked.');
+          throw new Error('error mocked.');
         }
       });
     }

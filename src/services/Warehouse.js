@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Warehouse';
+import { schema, validate } from 'src/validations/Warehouse';
 
 const { Warehouse } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getWarehouses = [
-  validate(validations.getWarehouses),
+  validate(schema.getWarehouses),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getWarehouses = [
 ];
 
 export const createWarehouses = [
-  validate(validations.createWarehouses),
+  validate(schema.createWarehouses),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createWarehouses = [
 ];
 
 export const getWarehouse = [
-  validate(validations.getWarehouse),
+  validate(schema.getWarehouse),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);
@@ -75,7 +74,7 @@ export const getWarehouse = [
 ];
 
 export const updateWarehouse = [
-  validate(validations.updateWarehouse),
+  validate(schema.updateWarehouse),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);
@@ -102,7 +101,7 @@ export const updateWarehouse = [
 ];
 
 export const deleteWarehouse = [
-  validate(validations.deleteWarehouse),
+  validate(schema.deleteWarehouse),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);
@@ -138,7 +137,7 @@ export const deleteWarehouse = [
 ];
 
 export const getItems = [
-  validate(validations.getItems),
+  validate(schema.getItems),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);
@@ -185,7 +184,7 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(validations.setItems),
+  validate(schema.setItems),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);
@@ -212,7 +211,7 @@ export const setItems = [
 ]
 
 export const getItem = [
-  validate(validations.getItem),
+  validate(schema.getItem),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);
@@ -248,7 +247,7 @@ export const getItem = [
 ];
 
 export const updateItem = [
-  validate(validations.updateItem),
+  validate(schema.updateItem),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);
@@ -293,7 +292,7 @@ export const updateItem = [
 ];
 
 export const removeItem = [
-  validate(validations.removeItem),
+  validate(schema.removeItem),
   async function params(req, res, next) {
     try {
       req.warehouse = await Warehouse.findByPk(req.params.warehouse);

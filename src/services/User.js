@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/User';
+import { schema, validate } from 'src/validations/User';
 
 const { User, UserRoles } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getUsers = [
-  validate(validations.getUsers),
+  validate(schema.getUsers),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -41,7 +40,7 @@ export const getUsers = [
 ];
 
 export const createUsers = [
-  validate(validations.createUsers),
+  validate(schema.createUsers),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -55,7 +54,7 @@ export const createUsers = [
 ];
 
 export const getUser = [
-  validate(validations.getUser),
+  validate(schema.getUser),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);
@@ -75,7 +74,7 @@ export const getUser = [
 ];
 
 export const updateUser = [
-  validate(validations.updateUser),
+  validate(schema.updateUser),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);
@@ -102,7 +101,7 @@ export const updateUser = [
 ];
 
 export const deleteUser = [
-  validate(validations.deleteUser),
+  validate(schema.deleteUser),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);
@@ -138,7 +137,7 @@ export const deleteUser = [
 ];
 
 export const getRoles = [
-  validate(validations.getRoles),
+  validate(schema.getRoles),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);
@@ -185,7 +184,7 @@ export const getRoles = [
 ];
 
 export const setRoles = [
-  validate(validations.setRoles),
+  validate(schema.setRoles),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);
@@ -200,10 +199,9 @@ export const setRoles = [
     }
   },
   async function handler(req, res, next) {
-    let transaction;
     try {
       res.json({
-        data: await req.user.addRoles(req.body.roles),
+        data: await req.user.addRoles(req.body.values),
         error: null
       });
     } catch (error) {
@@ -213,7 +211,7 @@ export const setRoles = [
 ]
 
 export const getRole = [
-  validate(validations.getRole),
+  validate(schema.getRole),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);
@@ -249,7 +247,7 @@ export const getRole = [
 ];
 
 export const updateRole = [
-  validate(validations.updateRole),
+  validate(schema.updateRole),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);
@@ -292,7 +290,7 @@ export const updateRole = [
 ];
 
 export const removeRole = [
-  validate(validations.removeRole),
+  validate(schema.removeRole),
   async function params(req, res, next) {
     try {
       req.user = await User.findByPk(req.params.user);

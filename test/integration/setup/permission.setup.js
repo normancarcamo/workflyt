@@ -1,10 +1,9 @@
 import uuid from 'uuid/v4';
 import setup_factory from './index';
-import db from "src/db/models";
-import { is } from '@playscode/fns';
+import db from 'src/db/models';
 
 const is_mocked = JSON.parse(process.env.MOCK);
-const setup = setup_factory(db, is_mocked), scenario = {};
+const setup = setup_factory(db, is_mocked, 'Permission'), scenario = {};
 const { Permission } = db.sequelize.models;
 
 scenario.get_permissions = {
@@ -38,20 +37,21 @@ scenario.get_permissions = {
   fail: [
     {
       id: uuid(),
-      description: 'Query fails',
+      description: 'Query search validation fail',
       input: async () => ({ search: null })
     },
     {
       id: uuid(),
-      description: 'Search error',
+      description: 'Action throw error',
       input: async () => ({ search: { name: { eq: 'model' } } })
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail) {
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throw error') {
       return jest.spyOn(Permission, 'findAll')
-        .mockRejectedValue(new Error('Permission find mocked error'));
-    } else {
+        .mockRejectedValue(new Error('error mocked.'));
+    }
+    if (!fail && is_mocked){
       return jest.spyOn(Permission, 'findAll')
         .mockResolvedValue([]);
     }
@@ -89,14 +89,32 @@ scenario.create_permissions = {
     },
     {
       id: uuid(),
-      description: 'Permission create throws error',
+      description: 'Action throws error',
       input: async () => ({ values: { name: 'nenene' } })
+    },
+    {
+      id: uuid(),
+      description: `Permission is created by a specific user`,
+      input: async () => ({
+        values: {
+          name: 'demo',
+          created_by: setup.instance.users[0].id,
+          updated_by: setup.instance.users[0].id,
+        }
+      }),
+      then: async (res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
+        expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
+      }
     }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Permission create throws error') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Action throws error') {
       return jest.spyOn(Permission, 'createMany')
-        .mockRejectedValue(new Error('Permission create mocked error'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Permission, 'createMany')
@@ -127,7 +145,7 @@ scenario.get_permission = {
   fail: [
     {
       id: uuid(),
-      description: 'Permission param fail',
+      description: 'Permission param id is malformed',
       input: async () => ({
         permission_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s'
       })
@@ -145,16 +163,16 @@ scenario.get_permission = {
       input: async () => ({
         permission_id: setup.instance.permissions[0].id
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Permission was not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Permission was not found' && is_mocked) {
       return jest.spyOn(Permission, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Permission find throws error') {
+    if (description === 'Permission find throws error') {
       return jest.spyOn(Permission, 'findByPk')
-        .mockRejectedValue(new Error('Not found mock error'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
     if (!fail && is_mocked) {
       return jest.spyOn(Permission, 'findByPk')
@@ -177,7 +195,7 @@ scenario.update_permission = {
   fail: [
     {
       id: uuid(),
-      description: 'Permission param fail',
+      description: 'Permission param id is malformed',
       input: async () => ({
         permission_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         values: { name: 'new name' }
@@ -206,20 +224,22 @@ scenario.update_permission = {
         permission_id: setup.instance.permissions[0].id,
         values: { name: 'new name' }
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Permission was not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Permission was not found' && is_mocked) {
       return jest.spyOn(Permission, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Permission find throws error') {
+    if (description === 'Permission find throws error') {
       return jest.spyOn(Permission, 'findByPk')
-        .mockRejectedValue(new Error('Not found mock error'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Permission update throws error') {
+    if (description === 'Permission update throws error') {
       return jest.spyOn(Permission, 'findByPk').mockResolvedValue({
-        update: payload => Promise.reject(new Error('Update mock error'))
+        update: async payload => {
+          throw new Error('error mocked.');
+        }
       });
     }
     if (!fail && is_mocked) {
@@ -240,6 +260,13 @@ scenario.delete_permission = {
   pass: [
     {
       id: uuid(),
+      description: 'Permission is deleted without options',
+      input: async () => ({
+        permission_id: setup.instance.permissions[0].id
+      })
+    },
+    {
+      id: uuid(),
       description: 'Permission is deleted with force option as false',
       input: async () => ({
         permission_id: setup.instance.permissions[0].id,
@@ -253,19 +280,12 @@ scenario.delete_permission = {
         permission_id: setup.instance.permissions[0].id,
         query: { force: true }
       })
-    },
-    {
-      id: uuid(),
-      description: 'Permission is deleted without options',
-      input: async () => ({
-        permission_id: setup.instance.permissions[0].id
-      })
     }
   ],
   fail: [
     {
       id: uuid(),
-      description: 'Permission param fail',
+      description: 'Permission param id is malformed',
       input: async () => ({
         permission_id: '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s',
         query: { force: true }
@@ -291,20 +311,22 @@ scenario.delete_permission = {
       input: async () => ({
         permission_id: setup.instance.permissions[0].id
       })
-    },
+    }
   ],
-  mock: async ({ input, fail, stage }) => {
-    if (fail && stage === 'Permission was not found') {
+  mock: async ({ fail, description }) => {
+    if (description === 'Permission was not found' && is_mocked) {
       return jest.spyOn(Permission, 'findByPk')
         .mockResolvedValue(null);
     }
-    if (fail && stage === 'Permission find throws error') {
+    if (description === 'Permission find throws error') {
       return jest.spyOn(Permission, 'findByPk')
-        .mockRejectedValue(new Error('Mock Error'));
+        .mockRejectedValue(new Error('error mocked.'));
     }
-    if (fail && stage === 'Permission delete throws error') {
+    if (description === 'Permission delete throws error') {
       return jest.spyOn(Permission, 'findByPk').mockResolvedValue({
-        destroy: payload => Promise.reject(new Error('Mock Error'))
+        destroy: payload => {
+          throw new Error('error mocked.');
+        }
       });
     }
     if (!fail && is_mocked) {

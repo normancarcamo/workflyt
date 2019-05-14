@@ -4,13 +4,15 @@ drop table if exists category;
 create table if not exists category (
   id uuid not null primary key default uuid_generate_v4(),
   parent_id uuid,
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
   deleted_at timestamp,
-  version
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- company
@@ -18,12 +20,15 @@ create table if not exists category (
 drop table if exists company;
 create table if not exists company (
   id uuid not null primary key default uuid_generate_v4(),
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- customer
@@ -31,12 +36,15 @@ create table if not exists company (
 drop table if exists customer;
 create table if not exists customer (
   id uuid not null primary key default uuid_generate_v4(),
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- department
@@ -44,12 +52,15 @@ create table if not exists customer (
 drop table if exists department;
 create table if not exists department (
   id uuid not null primary key default uuid_generate_v4(),
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- employee
@@ -59,13 +70,16 @@ create table if not exists employee (
   id uuid not null primary key default uuid_generate_v4(),
   supervisor_id uuid,
   department_id uuid,
-  code varchar(20) not null unique default 'unset',
-  firstname varchar(40) not null,
-  lastname varchar(40) not null,
+  code varchar(30) not null unique default 'unset',
+  firstname varchar(50) not null,
+  lastname varchar(50) not null,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- item
@@ -81,15 +95,18 @@ drop table if exists item;
 create table if not exists item (
   id uuid not null primary key default uuid_generate_v4(),
   category_id uuid,
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(100) not null unique,
   type enum_item_type default 'service',
   stock integer not null default 0,
   price integer not null default 0,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- order_department
@@ -101,7 +118,10 @@ create table if not exists order_department (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- order_item
@@ -113,7 +133,10 @@ create table if not exists order_item (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- order_employee
@@ -125,7 +148,10 @@ create table if not exists order_employee (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- orders
@@ -142,13 +168,16 @@ drop table if exists orders;
 create table if not exists orders (
   id uuid not null primary key default uuid_generate_v4(),
   quote_id uuid,
-  code varchar(20) not null unique default 'unset',
+  code varchar(30) not null unique default 'unset',
   type enum_item_type default 'service',
   status enum_orders_status default 'awaiting',
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- permission
@@ -156,12 +185,15 @@ create table if not exists orders (
 drop table if exists permission;
 create table if not exists permission (
   id uuid not null primary key default uuid_generate_v4(),
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- quote
@@ -191,7 +223,10 @@ create table if not exists quote (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- quote_item
@@ -203,7 +238,10 @@ create table if not exists quote_item (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- role
@@ -211,12 +249,15 @@ create table if not exists quote_item (
 drop table if exists role;
 create table if not exists role (
   id uuid not null primary key default uuid_generate_v4(),
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- role_permission
@@ -228,7 +269,10 @@ create table if not exists role_permission (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- stock
@@ -243,7 +287,10 @@ create table if not exists stock (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- supplier
@@ -251,12 +298,15 @@ create table if not exists stock (
 drop table if exists supplier;
 create table if not exists supplier (
   id uuid not null primary key default uuid_generate_v4(),
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- supplier_item
@@ -268,7 +318,10 @@ create table if not exists supplier_item (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- user_role
@@ -280,7 +333,10 @@ create table if not exists user_role (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- users
@@ -289,13 +345,16 @@ drop table if exists users;
 create table if not exists users (
   id uuid not null primary key default uuid_generate_v4(),
   employee_id uuid,
-  code varchar(20) not null unique default 'unset',
-  username varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  username varchar(50) not null unique,
   password varchar(40) not null,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- warehouse
@@ -303,12 +362,15 @@ create table if not exists users (
 drop table if exists warehouse;
 create table if not exists warehouse (
   id uuid not null primary key default uuid_generate_v4(),
-  code varchar(20) not null unique default 'unset',
-  name varchar(40) not null unique,
+  code varchar(30) not null unique default 'unset',
+  name varchar(50) not null unique,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );
 
 -- warehouse_item
@@ -320,5 +382,8 @@ create table if not exists warehouse_item (
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
-  deleted_at timestamp
+  deleted_at timestamp,
+  created_by uuid,
+  updated_by uuid,
+  deleted_by uuid
 );

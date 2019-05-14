@@ -1,13 +1,12 @@
-import { validate } from "src/utils/validator";
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import * as validations from 'src/validations/Customer'
+import { schema, validate } from 'src/validations/Customer'
 
 const { Customer } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getCustomers = [
-  validate(validations.getCustomers),
+  validate(schema.getCustomers),
   async function query(req, res, next) {
     req.options = { where: {}, include: [] };
 
@@ -39,7 +38,7 @@ export const getCustomers = [
 ];
 
 export const createCustomers = [
-  validate(validations.createCustomer),
+  validate(schema.createCustomer),
   async function handler(req, res, next) {
     try {
       res.status(201).json({
@@ -53,7 +52,7 @@ export const createCustomers = [
 ];
 
 export const getCustomer = [
-  validate(validations.getCustomer),
+  validate(schema.getCustomer),
   async function params(req, res, next) {
     try {
       req.customer = await Customer.findByPk(req.params.customer);
@@ -73,7 +72,7 @@ export const getCustomer = [
 ];
 
 export const updateCustomer = [
-  validate(validations.updateCustomer),
+  validate(schema.updateCustomer),
   async function params(req, res, next) {
     try {
       req.customer = await Customer.findByPk(req.params.customer);
@@ -100,7 +99,7 @@ export const updateCustomer = [
 ];
 
 export const deleteCustomer = [
-  validate(validations.deleteCustomer),
+  validate(schema.deleteCustomer),
   async function params(req, res, next) {
     try {
       req.customer = await Customer.findByPk(req.params.customer);
@@ -136,7 +135,7 @@ export const deleteCustomer = [
 ];
 
 export const getQuotes = [
-  validate(validations.getQuotes),
+  validate(schema.getQuotes),
   async function params(req, res, next) {
     try {
       req.customer = await Customer.findByPk(req.params.customer);
@@ -183,7 +182,7 @@ export const getQuotes = [
 ];
 
 export const setQuotes = [
-  validate(validations.setQuotes),
+  validate(schema.setQuotes),
   async function params(req, res, next) {
     try {
       req.customer = await Customer.findByPk(req.params.customer);
@@ -210,7 +209,7 @@ export const setQuotes = [
 ];
 
 export const getQuote = [
-  validate(validations.getQuote),
+  validate(schema.getQuote),
   async function params(req, res, next) {
     try {
       req.customer = await Customer.findByPk(req.params.customer);

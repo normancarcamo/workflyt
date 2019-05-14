@@ -60,6 +60,7 @@ export default function setupFactory(db, mockService = is_mocked, suite_name) {
 
   setup.insert = async () => {
     if (mockService) {
+      // Build:
       setup.instance.categories = Category.build(json_category);
       setup.instance.companies = Company.build(json_company);
       setup.instance.customers = Customer.build(json_customer);
@@ -75,11 +76,7 @@ export default function setupFactory(db, mockService = is_mocked, suite_name) {
       setup.instance.stocks = Stock.build(json_stock);
       setup.instance.orders = Order.build(json_order);
 
-      // mock functions needed:
-      setup.instance.employees = setup.instance.employees.map(employee => {
-        employee.setDepartment = async () => employee;
-        return employee;
-      });
+      // Associate:
       setup.instance.departments[0].getEmployees = async () => setup.instance.employees;
       setup.instance.categories[0].getItems = async () => setup.instance.items;
       setup.instance.suppliers[0].getItems = async () => setup.instance.items;
@@ -101,7 +98,7 @@ export default function setupFactory(db, mockService = is_mocked, suite_name) {
         transaction = await db.sequelize.transaction();
         const options = { individualHooks: true, transaction };
 
-        // 1:1 or 1:N
+        // Build:
         setup.instance.categories = await Category.bulkCreate(json_category, options);
         setup.instance.companies = await Company.bulkCreate(json_company, options);
         setup.instance.departments = await Department.bulkCreate(json_department, options);
@@ -117,17 +114,17 @@ export default function setupFactory(db, mockService = is_mocked, suite_name) {
         setup.instance.warehouses = await Warehouse.bulkCreate(json_warehouse, options);
         setup.instance.orders = await Order.bulkCreate(json_order, options);
 
-        // N:M
-        setup.instance.quoteItems = await QuoteItems.bulkCreate(json_quote_item, options);
-        setup.instance.warehouseItems = await WarehouseItems.bulkCreate(json_warehouse_item, options);
-        setup.instance.supplierItems = await SupplierItems.bulkCreate(json_supplier_item, options);
-        setup.instance.userRoles = await UserRoles.bulkCreate(json_user_role, options);
-        setup.instance.rolePermissions = await RolePermissions.bulkCreate(json_role_permission, options);
-        setup.instance.orderDepartments = await OrderDepartments.bulkCreate(json_order_department, options);
-        setup.instance.orderItems = await OrderItems.bulkCreate(json_order_item, options);
-        setup.instance.orderEmployees = await OrderEmployees.bulkCreate(json_order_employee, options);
-
         // Associate:
+        // N:M
+        // setup.instance.quoteItems = await QuoteItems.bulkCreate(json_quote_item, options);
+        // setup.instance.warehouseItems = await WarehouseItems.bulkCreate(json_warehouse_item, options);
+        // setup.instance.supplierItems = await SupplierItems.bulkCreate(json_supplier_item, options);
+        // setup.instance.userRoles = await UserRoles.bulkCreate(json_user_role, options);
+        // setup.instance.rolePermissions = await RolePermissions.bulkCreate(json_role_permission, options);
+        // setup.instance.orderDepartments = await OrderDepartments.bulkCreate(json_order_department, options);
+        // setup.instance.orderItems = await OrderItems.bulkCreate(json_order_item, options);
+        // setup.instance.orderEmployees = await OrderEmployees.bulkCreate(json_order_employee, options);
+
         await setup.instance.categories[0].setItems(setup.instance.items, options);
         await setup.instance.warehouses[0].setItems(setup.instance.items, options);
         await setup.instance.suppliers[0].setItems(setup.instance.items, options);

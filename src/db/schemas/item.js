@@ -9,7 +9,8 @@ module.exports = function(DataTypes) {
         primaryKey: true,
         allowNull: false,
         unique: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: DataTypes.UUIDV4,
+        validate: { isUUID: 4 }
       },
       category_id: {
         type: DataTypes.UUID,
@@ -29,27 +30,35 @@ module.exports = function(DataTypes) {
         type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
-        defaultValue: 'unset'
+        defaultValue: 'unset',
+        validate: { notEmpty: true }
       },
       name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: { len: [2, 200], notEmpty: true }
       },
       type: {
         type: DataTypes.ENUM([ "service", "product", "material" ]),
         allowNull: false,
-        defaultValue: "service"
+        defaultValue: "service",
+        validate: {
+          isIn: [[ "service", "product", "material" ]],
+          notEmpty: true
+        }
       },
       stock: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
+        validate: { min: 0, len: [1, 15], isInt: true, notEmpty: true }
       },
       price: {
         type: DataTypes.NUMERIC(10,2),
         allowNull: false,
-        defaultValue: 0.0
+        defaultValue: 0.0,
+        validate: { isDecimal: true, min: 0, len: [1, 15], notEmpty: true }
       },
       extra: {
         type: DataTypes.JSONB,
@@ -58,12 +67,14 @@ module.exports = function(DataTypes) {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: { isDate: true }
       },
       deleted_at: {
         type: DataTypes.DATE,
