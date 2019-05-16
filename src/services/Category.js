@@ -1,6 +1,6 @@
 import db from "src/db/models";
 import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Category'
+import { schema, validate } from 'src/validations/Category';
 
 const { Category } = db.sequelize.models;
 const { NotFoundError } = errors;
@@ -15,7 +15,9 @@ export const getCategories = [
         if (is.object(req.query.search[key])) {
           req.options.where[key] = {};
           for (let operator in req.query.search[key]) {
-            req.options.where[key][db.Sequelize.Op[operator]] = req.query.search[key][operator];
+            req.options.where[key][
+              db.Sequelize.Op[operator]
+            ] = req.query.search[key][operator];
           }
         } else {
           req.options.where[key] = req.query.search[key];
@@ -157,7 +159,9 @@ export const getItems = [
         if (is.object(req.query.search[key])) {
           req.options.where[key] = {};
           for (let operator in req.query.search[key]) {
-            req.options.where[key][db.Sequelize.Op[operator]] = req.query.search[key][operator];
+            req.options.where[key][
+              db.Sequelize.Op[operator]
+            ] = req.query.search[key][operator];
           }
         } else {
           req.options.where[key] = req.query.search[key];

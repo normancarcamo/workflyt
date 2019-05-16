@@ -103,7 +103,7 @@ module.exports.schema.setPermissions = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ role: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id })
+  body: schema.body.keys({ permissions: schema.bulk.id.required() })
 });
 
 module.exports.schema.getPermission = schema.request.keys({

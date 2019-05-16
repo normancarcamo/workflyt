@@ -201,7 +201,7 @@ export const setItems = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.addItems(req.body.values),
+        data: await req.quote.addItems(req.body.items),
         error: null
       });
     } catch (error) {
@@ -399,7 +399,7 @@ export const setOrders = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.addOrders(req.body.values),
+        data: await req.quote.addOrders(req.body.orders),
         error: null
       });
     } catch (error) {

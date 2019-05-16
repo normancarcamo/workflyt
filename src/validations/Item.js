@@ -118,7 +118,7 @@ module.exports.schema.setStocks = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ item: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ stocks: schema.bulk.id.required() })
 });
 
 module.exports.schema.getStock = schema.request.keys({

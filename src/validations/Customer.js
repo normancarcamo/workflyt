@@ -107,7 +107,7 @@ module.exports.schema.setQuotes = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ customer: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ quotes: schema.bulk.id.required() })
 });
 
 module.exports.schema.getQuote = schema.request.keys({

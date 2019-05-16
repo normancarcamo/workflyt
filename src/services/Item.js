@@ -201,7 +201,7 @@ export const setStocks = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.item.addStocks(req.body.values),
+        data: await req.item.addStocks(req.body.stocks),
         error: null
       });
     } catch (error) {

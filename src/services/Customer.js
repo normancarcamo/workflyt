@@ -199,7 +199,7 @@ export const setQuotes = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.customer.addQuotes(req.body.values),
+        data: await req.customer.addQuotes(req.body.quotes),
         error: null
       });
     } catch (error) {

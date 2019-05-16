@@ -201,7 +201,7 @@ export const setPermissions = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.role.addPermissions(req.body.values),
+        data: await req.role.addPermissions(req.body.permissions),
         error: null
       });
     } catch (error) {

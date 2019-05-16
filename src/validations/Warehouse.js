@@ -108,7 +108,7 @@ module.exports.schema.setItems = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ warehouse: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ items: schema.bulk.id.required() })
 });
 
 module.exports.schema.getItem = schema.request.keys({

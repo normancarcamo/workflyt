@@ -130,7 +130,7 @@ module.exports.schema.setItems = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ quote: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ items: schema.bulk.id.required() })
 });
 
 module.exports.schema.getItem = schema.request.keys({
@@ -202,7 +202,7 @@ module.exports.schema.setOrders = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ quote: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ orders: schema.bulk.id.required() })
 });
 
 module.exports.schema.getOrder = schema.request.keys({

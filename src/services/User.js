@@ -201,7 +201,7 @@ export const setRoles = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.user.addRoles(req.body.values),
+        data: await req.user.addRoles(req.body.roles),
         error: null
       });
     } catch (error) {

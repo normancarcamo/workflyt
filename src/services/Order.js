@@ -201,7 +201,7 @@ export const setItems = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addItems(req.body.values),
+        data: await req.order.addItems(req.body.items),
         error: null
       });
     } catch (error) {
@@ -399,7 +399,7 @@ export const setDepartments = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addDepartments(req.body.values),
+        data: await req.order.addDepartments(req.body.departments),
         error: null
       });
     } catch (error) {
@@ -597,7 +597,7 @@ export const setEmployees = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addEmployees(req.body.values),
+        data: await req.order.addEmployees(req.body.employees),
         error: null
       });
     } catch (error) {

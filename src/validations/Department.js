@@ -107,7 +107,7 @@ module.exports.schema.setEmployees = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ department: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ employees: schema.bulk.id.required() })
 });
 
 module.exports.schema.getEmployee = schema.request.keys({

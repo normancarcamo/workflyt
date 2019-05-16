@@ -199,7 +199,7 @@ export const setEmployees = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.department.addEmployees(req.body.values),
+        data: await req.department.addEmployees(req.body.employees),
         error: null
       });
     } catch (error) {

@@ -120,7 +120,7 @@ module.exports.schema.setItems = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ order: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ items: schema.bulk.id.required() })
 });
 
 module.exports.schema.getItem = schema.request.keys({
@@ -188,7 +188,7 @@ module.exports.schema.setDepartments = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ order: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ departments: schema.bulk.id.required() })
 });
 
 module.exports.schema.getDepartment = schema.request.keys({
@@ -259,7 +259,7 @@ module.exports.schema.setEmployees = schema.request.keys({
   headers: schema.headers,
   query: schema.query,
   params: schema.params.keys({ order: schema.id.required() }),
-  body: schema.body.keys({ values: schema.bulk.id.required() })
+  body: schema.body.keys({ employees: schema.bulk.id.required() })
 });
 
 module.exports.schema.getEmployee = schema.request.keys({
