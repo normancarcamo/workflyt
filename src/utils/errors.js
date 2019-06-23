@@ -11,6 +11,6 @@ export class HttpError extends Error {
         this[key] = opts[key];
       };
     };
-    Error.captureStackTrace(this, BaseError);
+    Error.captureStackTrace(this, HttpError);
   }
 }
