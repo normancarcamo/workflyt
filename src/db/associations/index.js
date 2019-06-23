@@ -63,7 +63,7 @@ export function Employee(Employee) {
       as: "department",
       foreignKey: "department_id"
     });
-    Employee.User = Employee.hasOne(models.User, {
+    Employee.hasOne(models.User, {
       as: "user",
       foreignKey: "employee_id",
       onUpdate: 'CASCADE',

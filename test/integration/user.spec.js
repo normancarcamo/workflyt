@@ -9,7 +9,7 @@ const API_BASE = '/api/v1/users';
 const setup = setup_factory(db, IS_INTEGRATION_MOCK);
 const { User } = db.sequelize.models;
 
-describe("User Service:", () => {
+describe.skip("User Service:", () => {
   beforeAll(setup.before_all);
   beforeEach(setup.before_each);
 
@@ -17,7 +17,7 @@ describe("User Service:", () => {
 
   describe("get users:", () => {
     describe('should return data when:', () => {
-      it(`${uuid()} - query is: {}`, async () => {
+      it(`${uuid()} - query is empty`, async () => {
         // Given:
         let options = {};
 
@@ -27,11 +27,11 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - query is: { search: {} }`, async () => {
+      it(`${uuid()} - query is: { username: 'ccccc' }`, async () => {
         // Given:
-        let options = { search: {} };
+        let options = { username: 'ccccc' };
 
         // When:
         let res = await request("get", API_BASE).query(options);
@@ -39,11 +39,11 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - query is: undefined`, async () => {
+      it(`${uuid()} - query is: { username: { like: 'vvv' } }`, async () => {
         // Given:
-        let options = { search: undefined };
+        let options = { username: { like: 'vvv' } };
 
         // When:
         let res = await request("get", API_BASE).query(options);
@@ -51,31 +51,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
-      });
-      it(`${uuid()} - query is: { search: { username: 'ccccc' } }`, async () => {
-        // Given:
-        let options = { search: { username: 'ccccc' } };
-
-        // When:
-        let res = await request("get", API_BASE).query(options);
-
-        // Then:
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
-      });
-      it(`${uuid()} - query is: { search: { username: { like: '%vvv%' } } }`, async () => {
-        // Given:
-        let options = { search: { username: { like: '%vvv%' } } };
-
-        // When:
-        let res = await request("get", API_BASE).query(options);
-
-        // Then:
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -89,14 +65,14 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - action throw error`, async () => {
         // Setup:
         jest.spyOn(User, 'findAll').mockRejectedValue(ERROR_MOCK);
 
         // Given:
-        let options = { search: { username: { eq: 'user a' } } };
+        let options = { username: 'bngsssss' };
 
         // When:
         let res = await request("get", API_BASE).query(options);
@@ -104,7 +80,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -114,7 +90,9 @@ describe("User Service:", () => {
       it(`${uuid()} - values are valid`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
-          jest.spyOn(User, 'create').mockResolvedValue(setup.instance.users[0]);
+          jest.spyOn(User, 'create').mockResolvedValue(
+            setup.instance.users[0]
+          );
         }
 
         // Given:
@@ -125,14 +103,14 @@ describe("User Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(201);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - is created by a specific user`, async () => {
+      it(`${uuid()} - is created by a specific employee`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(User, 'create').mockResolvedValue(User.build({
@@ -152,12 +130,12 @@ describe("User Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(201);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
         expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
         expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
       });
@@ -168,12 +146,12 @@ describe("User Service:", () => {
         let values = null;
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - value "username" is not valid`, async () => {
         // Given:
@@ -184,12 +162,12 @@ describe("User Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - value "password" is not valid`, async () => {
         // Given:
@@ -200,12 +178,24 @@ describe("User Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
+      });
+      it(`${uuid()} - user is already taken`, async () => {
+        // Given:
+        let values = { username: 'normancarcamo', password: 'bingo' };
+
+        // When:
+        let res = await request("post", API_BASE).send(values);
+
+        // Then:
+        expect(res.statusCode).toBeWithin(400, 522);
+        expect(res.body.error).toBeDefined();
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - action throw error`, async () => {
         // Setup:
@@ -219,12 +209,12 @@ describe("User Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -234,7 +224,9 @@ describe("User Service:", () => {
       it(`${uuid()} - user is found`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
-          jest.spyOn(User, 'findByPk').mockResolvedValue(setup.instance.users[0]);
+          jest.spyOn(User, 'findByPk').mockResolvedValue(
+            setup.instance.users[0]
+          );
         }
 
         // Given:
@@ -246,7 +238,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -260,7 +252,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Setup:
@@ -277,7 +269,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -297,16 +289,16 @@ describe("User Service:", () => {
 
         // Given:
         let user_id = setup.instance.users[0].id;
-        let values = { name: 'user a' };
+        let values = { username: 'user a' };
         let endpoint = `${API_BASE}/${user_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -317,12 +309,12 @@ describe("User Service:", () => {
         let endpoint = `${API_BASE}/${user_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Setup:
@@ -330,16 +322,16 @@ describe("User Service:", () => {
 
         // Given:
         let user_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111';
-        let values = { name: 'user a' };
+        let values = { username: 'user a' };
         let endpoint = `${API_BASE}/${user_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be found`, async () => {
         // Setup:
@@ -347,16 +339,16 @@ describe("User Service:", () => {
 
         // Given:
         let user_id = setup.instance.users[0].id;
-        let values = { name: 'user a' };
+        let values = { username: 'user a' };
         let endpoint = `${API_BASE}/${user_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be updated`, async () => {
         // Setup:
@@ -368,23 +360,23 @@ describe("User Service:", () => {
 
         // Given:
         let user_id = setup.instance.users[0].id;
-        let values = { name: 'user a' };
+        let values = { username: 'user a' };
         let endpoint = `${API_BASE}/${user_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
 
   describe("delete user:", () => {
     describe('should return data when:', () => {
-      it(`${uuid()} - user is deleted without options`, async () => {
+      it(`${uuid()} - is deleted without options`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(User, 'findByPk').mockResolvedValue({
@@ -407,9 +399,9 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - user is deleted with the force option as true`, async () => {
+      it(`${uuid()} - is deleted with the force option as true`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(User, 'findByPk').mockResolvedValue({
@@ -432,9 +424,9 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - user is deleted with the force option as false`, async () => {
+      it(`${uuid()} - is deleted with the force option as false`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(User, 'findByPk').mockResolvedValue({
@@ -457,7 +449,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -473,7 +465,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Setup:
@@ -492,7 +484,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be found`, async () => {
         // Setup:
@@ -509,7 +501,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be deleted`, async () => {
         // Setup:
@@ -530,7 +522,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -558,7 +550,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - query is: name=dknd`, async () => {
         // Mock:
@@ -571,7 +563,7 @@ describe("User Service:", () => {
         // Given:
         let user_id = setup.instance.users[0].id;
         let endpoint = `${API_BASE}/${user_id}/roles`;
-        let options = { search: { name: 'dknd' } };
+        let options = { name: 'dknd' };
 
         // When:
         let res = await request("get", endpoint).query(options);
@@ -579,9 +571,9 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - query is: name like %disk%`, async () => {
+      it(`${uuid()} - query is: name like disk`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(User, 'findByPk').mockResolvedValue({
@@ -592,7 +584,7 @@ describe("User Service:", () => {
         // Given:
         let user_id = setup.instance.users[0].id;
         let endpoint = `${API_BASE}/${user_id}/roles`;
-        let options = { search: { name: { like: '%disk%' } } };
+        let options = { name: { like: 'disk' } };
 
         // When:
         let res = await request("get", endpoint).query(options);
@@ -600,7 +592,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -616,7 +608,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Mock:
@@ -635,11 +627,13 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be found`, async () => {
         // Mock:
-        jest.spyOn(User, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(User, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let user_id = setup.instance.users[0].id;
@@ -652,7 +646,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - roles were trying to be found`, async () => {
         // Setup:
@@ -673,7 +667,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -699,7 +693,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -715,7 +709,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - roles id are malformed`, async () => {
         // Given:
@@ -732,7 +726,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Mock:
@@ -751,11 +745,13 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be found`, async () => {
         // Mock:
-        jest.spyOn(User, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(User, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let user_id = setup.instance.users[0].id;
@@ -768,7 +764,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - roles were trying to be set`, async () => {
         // Setup:
@@ -789,7 +785,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -815,7 +811,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -831,7 +827,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role param id is malformed`, async () => {
         // Given:
@@ -845,7 +841,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Setup:
@@ -864,7 +860,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role is not found`, async () => {
         // Setup:
@@ -885,11 +881,13 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be found`, async () => {
         // Setup:
-        jest.spyOn(User, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(User, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let user_id = setup.instance.users[0].id;
@@ -902,7 +900,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role was trying to be found`, async () => {
         // Setup:
@@ -923,14 +921,14 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
 
   describe('update role', () => {
     describe('should return data when:', () => {
-      it(`${uuid()} - role is found and values are valid`, async () => {
+      it(`${uuid()} - is found and values are valid`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(User, 'findByPk').mockResolvedValue({
@@ -951,12 +949,12 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -968,12 +966,12 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role param id is malformed`, async () => {
         // Given:
@@ -983,12 +981,12 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Setup:
@@ -1003,12 +1001,12 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role is not found`, async () => {
         // Setup:
@@ -1025,16 +1023,18 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be found`, async () => {
         // Setup:
-        jest.spyOn(User, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(User, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let user_id = setup.instance.users[0].id;
@@ -1043,12 +1043,12 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role was trying to be found`, async () => {
         // Setup:
@@ -1065,12 +1065,12 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role was trying to be updated`, async () => {
         // Setup:
@@ -1091,24 +1091,26 @@ describe("User Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
 
   describe('remove role', () => {
     describe('should return data when:', () => {
-      it(`${uuid()} - role is found and values are valid`, async () => {
+      it(`${uuid()} - is found and values are valid`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(User, 'findByPk').mockResolvedValue({
             getRoles: async (payload, options) => ({}),
-            removeRole: async (payload, options) => setup.instance.roles[0]
+            removeRole: async (payload, options) => {
+              return setup.instance.roles[0];
+            }
           });
         }
 
@@ -1124,7 +1126,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -1141,7 +1143,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role param id is malformed`, async () => {
         // Given:
@@ -1156,7 +1158,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user is not found`, async () => {
         // Setup:
@@ -1176,7 +1178,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role is not found`, async () => {
         // Setup:
@@ -1198,11 +1200,13 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - user was trying to be found`, async () => {
         // Setup:
-        jest.spyOn(User, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(User, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let user_id = setup.instance.users[0].id;
@@ -1216,7 +1220,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role was trying to be found`, async () => {
         // Setup:
@@ -1238,7 +1242,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - role was trying to be removed`, async () => {
         // Setup:
@@ -1261,7 +1265,7 @@ describe("User Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });

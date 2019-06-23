@@ -1,132 +1,185 @@
-import { Joi, schema, validate } from "./index";
+import db from 'src/db/models';
+import Datalizer from "@ncardez/datalizer";
+import * as shared from './index';
 
-module.exports.schema = {};
+const itemAssociations = Object.keys(db.sequelize.models.Item.associations);
+const itemAttributes = Object.keys(db.sequelize.models.Item.attributes);
+const stockAssociations = Object.keys(db.sequelize.models.Stock.associations);
+const stockAttributes = Object.keys(db.sequelize.models.Stock.attributes);
 
-module.exports.schema.getItems = schema.request.keys({
-  headers: schema.headers,
-  query: schema.query.append({
-    fields: Joi.array().items(Joi.string().valid(
-      "id", "category_id", "code", "name",
-      "type", "stock", "price", "extra",
-      "created_at", "updated_at", "deleted_at",
-      "created_by", "updated_by", "deleted_by",
-    ), Joi.any().strip()).max(14),
-    search: Joi.object({
-      id: schema.id.forbidden(),
-      category_id: schema.id,
-      code: schema.code,
-      name: schema.look_up(Joi.string().max(100)),
-      type: schema.look_up(Joi.string().valid(
-        "service", "product", "material"
-      )),
-      stock: schema.look_up(Joi.number().integer().positive().default(0)),
-      price: schema.look_up(Joi.number().precision(2).positive().default(0.0)),
-      extra: schema.extra,
-      created_at: schema.date_try,
-      updated_at: schema.date_try,
-      deleted_at: schema.date_try,
-      created_by: schema.look_up(schema.id),
-      updated_by: schema.look_up(schema.id),
-      deleted_by: schema.look_up(schema.id)
-    }).unknown(false)
-  })
+const getItems = new Datalizer({
+  query: shared.QUERY({
+    id: shared.UUID({ $optional: true, $forbidden: true }),
+    parent_id: shared.UUID({ $optional: true }),
+    code: shared.CODE({ $optional: true }),
+    name: shared.TEXT_FILTER({ $optional: true }),
+    type: shared.ENUM([ 'service', 'product', 'material' ]),
+    stock: shared.NUMBER_FILTER({ $optional: true }),
+    price: shared.PRICE_FILTER({ $optional: true }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE_FILTER({ $optional: true }),
+    updated_at: shared.DATE_FILTER({ $optional: true }),
+    deleted_at: shared.DATE_FILTER({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true }),
+    limit: shared.LIMIT({ $optional: true }),
+    offset: shared.OFFSET({ $optional: true }),
+    attributes: shared.ATTRIBUTES(itemAttributes),
+    include: shared.INCLUDE(itemAssociations),
+    sort_by: shared.ENUM(itemAttributes),
+    order_by: shared.ORDER_BY({ $optional: true })
+  }, { $max: 30 })
 });
 
-module.exports.schema.createItems = schema.request.keys({
-  headers: schema.headers,
-  body: schema.body.keys({
-    values: schema.bulk.values.items(schema.values.keys({
-      id: schema.id.allow(null),
-      category_id: schema.id.allow(null),
-      code: schema.code,
-      name: schema.name.required(),
-      type: Joi.string().valid("service", "product", "material")
-        .default("service"),
-      stock: Joi.number().integer().positive().default(0),
-      price: Joi.number().precision(2).positive().default(0.0),
-      extra: schema.extra,
-      created_at: schema.created_at,
-      updated_at: schema.updated_at,
-      deleted_at: schema.deleted_at,
-      created_by: schema.created_by,
-      updated_by: schema.updated_by,
-      deleted_by: schema.deleted_by,
-    }).unknown(false))
-  })
+const createItems = new Datalizer({
+  body: shared.BODY({
+    id: shared.UUID({ $optional: true, $null: true }),
+    category_id: shared.UUID({ $optional: true, $null: true }),
+    code: shared.CODE({ $optional: true }),
+    name: shared.TEXT({ $empty: false, $min: 2 }),
+    type: shared.ENUM(
+      ['service', 'product', 'material' ],
+      { $default: 'service' }
+    ),
+    stock: shared.NUMBER({
+      $integer: true,
+      $positive: true,
+      $optional: true,
+      $default: 0,
+      $zero: true
+    }),
+    price: shared.PRICE({ $optional: true }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE({ $optional: true }),
+    updated_at: shared.DATE({ $optional: true }),
+    deleted_at: shared.DATE({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true })
+  }, { $empty: false, $max: 14 })
 });
 
-module.exports.schema.getItem = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ item: schema.id.required() })
+const getItem = new Datalizer({
+  params: shared.PARAMS({
+    item: shared.UUID()
+  }, { $length: 1 }),
+  query: shared.QUERY({
+    attributes: shared.ATTRIBUTES(itemAttributes),
+    include: shared.INCLUDE(itemAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true })
+  }, { $max: 3 })
 });
 
-module.exports.schema.updateItem = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ item: schema.id.required() }),
-  body: schema.body.keys({
-    values: schema.values.keys({
-      id: schema.id.forbidden(),
-      category_id: schema.id.allow(null),
-      code: schema.code,
-      name: schema.name,
-      type: Joi.string().valid("service", "product", "material"),
-      stock: Joi.number().integer().positive().default(0),
-      price: Joi.number().precision(2).positive().default(0.0),
-      extra: schema.extra,
-      created_at: schema.created_at,
-      updated_at: schema.updated_at,
-      deleted_at: schema.deleted_at,
-      created_by: schema.created_by,
-      updated_by: schema.updated_by,
-      deleted_by: schema.deleted_by
-    }).unknown(false)
-  })
+const updateItem = new Datalizer({
+  params: shared.PARAMS({
+    item: shared.UUID()
+  }, { $length: 1 }),
+  body: shared.BODY({
+    id: shared.UUID({ $optional: true, $deny: true }),
+    category_id: shared.UUID({ $optional: true, $null: true }),
+    code: shared.CODE({ $optional: true }),
+    name: shared.TEXT({ $optional: true, $empty: false, $min: 2 }),
+    type: shared.ENUM(
+      ['service', 'product', 'material'],
+      { $default: 'service' }
+    ),
+    stock: shared.NUMBER({
+      $integer: true,
+      $positive: true,
+      $optional: true,
+      $default: 0,
+      $zero: true
+    }),
+    price: shared.PRICE({ $optional: true }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE({ $optional: true }),
+    updated_at: shared.DATE({ $optional: true }),
+    deleted_at: shared.DATE({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true })
+  }, { $max: 14, $empty: true })
 });
 
-module.exports.schema.deleteItem = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ item: schema.id.required() }),
-  query: schema.query.keys({ force: schema.force })
+const deleteItem = new Datalizer({
+  params: shared.PARAMS({
+    item: shared.UUID()
+  }, { $length: 1 }),
+  query: shared.QUERY({
+    force: shared.BOOLEAN({ $optional: true }),
+    paranoid: shared.BOOLEAN({ $optional: true }),
+  }, { $max: 2 })
 });
 
-module.exports.schema.getStocks = schema.request.keys({
-  headers: schema.headers,
-  query: schema.query.append({
-    fields: Joi.array().items(Joi.string().valid(
-      "id", "item_id", "entries", "exits", "stock", "extra",
-      "created_at", "updated_at", "deleted_at",
-      "created_by", "updated_by", "deleted_by"
-    ), Joi.any().strip()).max(12),
-    search: Joi.object({
-      id: schema.id.forbidden(),
-      item_id: schema.id,
-      entries: schema.look_up(Joi.number().integer().positive().default(0)),
-      exits: schema.look_up(Joi.number().integer().positive().default(0)),
-      stock: schema.look_up(Joi.number().integer().positive().default(0)),
-      extra: schema.extra,
-      created_at: schema.date_try,
-      updated_at: schema.date_try,
-      deleted_at: schema.date_try,
-      created_by: schema.look_up(schema.id),
-      updated_by: schema.look_up(schema.id),
-      deleted_by: schema.look_up(schema.id),
-    }).unknown(false)
-  })
+const getStocks = new Datalizer({
+  query: shared.QUERY({
+    id: shared.UUID({ $optional: true, $deny: true }),
+    item_id: shared.UUID({ $optional: true }),
+    entries: shared.NUMBER_FILTER({
+      $optional: true,
+      $integer: true,
+      $positive: true,
+      $zero: true
+    }),
+    exits: shared.NUMBER_FILTER({
+      $optional: true,
+      $integer: true,
+      $positive: true,
+      $zero: true
+    }),
+    stock: shared.NUMBER_FILTER({
+      $optional: true,
+      $integer: true,
+      $positive: true,
+      $zero: true
+    }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE_FILTER({ $optional: true }),
+    updated_at: shared.DATE_FILTER({ $optional: true }),
+    deleted_at: shared.DATE_FILTER({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true }),
+    limit: shared.LIMIT({ $optional: true }),
+    offset: shared.OFFSET({ $optional: true }),
+    attributes: shared.ATTRIBUTES(stockAttributes),
+    include: shared.INCLUDE(stockAssociations),
+    sort_by: shared.ENUM(stockAttributes),
+    order_by: shared.ORDER_BY({ $optional: true })
+  }, { $max: 30 })
 });
 
-module.exports.schema.setStocks = schema.request.keys({
-  headers: schema.headers,
-  query: schema.query,
-  params: schema.params.keys({ item: schema.id.required() }),
-  body: schema.body.keys({ stocks: schema.bulk.id.required() })
+const setStocks = new Datalizer({
+  params: shared.PARAMS(
+    { item: shared.UUID() },
+    { $length: 1 }
+  ),
+  body: shared.BODY(
+    { stocks: shared.UUID_ARRAY() },
+    { $length: 1 }
+  )
 });
 
-module.exports.schema.getStock = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({
-    item: schema.id.required(),
-    stock: schema.id.required()
-  })
+const getStock = new Datalizer({
+  params: shared.PARAMS(
+    { item: shared.UUID(), stock: shared.UUID() },
+    { $length: 2 }
+  ),
+  query: shared.QUERY({
+    attributes: shared.ATTRIBUTES(stockAttributes),
+    include: shared.INCLUDE(stockAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true })
+  }, { $max: 3 })
 });
 
-module.exports.validate = validate;
+export default {
+  getItems: shared.validate(getItems),
+  createItems: shared.validate(createItems),
+  getItem: shared.validate(getItem),
+  updateItem: shared.validate(updateItem),
+  deleteItem: shared.validate(deleteItem),
+  getStocks: shared.validate(getStocks),
+  setStocks: shared.validate(setStocks),
+  getStock: shared.validate(getStock)
+};

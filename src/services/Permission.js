@@ -1,37 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Permission';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Permission';
 
 const { Permission } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getPermissions = [
-  validate(schema.getPermissions),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getPermissions,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Permission.findAll(req.options),
-        error: null
+        data: await Permission.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -40,12 +20,12 @@ export const getPermissions = [
 ];
 
 export const createPermissions = [
-  validate(schema.createPermissions),
+  validate.createPermissions,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Permission.createMany(req.body.values),
-        error: null
+        data: await Permission.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,36 +34,36 @@ export const createPermissions = [
 ];
 
 export const getPermission = [
-  validate(schema.getPermission),
+  validate.getPermission,
   async function params(req, res, next) {
     try {
-      req.permission = await Permission.findByPk(req.params.permission);
+      req.permission = await Permission.findByPk(req.values.params.permission);
 
-      if (req.permission) {
-        next();
-      } else {
+      if (!req.permission) {
         throw new NotFoundError('Permission not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.permission, error: null });
+    res.json({ data: req.permission, error: false });
   }
 ];
 
 export const updatePermission = [
-  validate(schema.updatePermission),
+  validate.updatePermission,
   async function params(req, res, next) {
     try {
-      req.permission = await Permission.findByPk(req.params.permission);
+      req.permission = await Permission.findByPk(req.values.params.permission);
 
-      if (req.permission) {
-        next();
-      } else {
+      if (!req.permission) {
         throw new NotFoundError('Permission not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -91,8 +71,8 @@ export const updatePermission = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.permission.update(req.body.values),
-        error: null
+        data: await req.permission.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -101,34 +81,25 @@ export const updatePermission = [
 ];
 
 export const deletePermission = [
-  validate(schema.deletePermission),
+  validate.deletePermission,
   async function params(req, res, next) {
     try {
-      req.permission = await Permission.findByPk(req.params.permission);
+      req.permission = await Permission.findByPk(req.values.params.permission);
 
-      if (req.permission) {
-        next();
-      } else {
+      if (!req.permission) {
         throw new NotFoundError('Permission not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force)
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.permission.destroy(req.options),
-        error: null
+        data: await req.permission.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);

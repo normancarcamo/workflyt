@@ -1,5 +1,3 @@
-import uuid from 'uuid/v4';
-
 import json_category from 'src/db/fixtures/category.json';
 import json_company from 'src/db/fixtures/company.json';
 import json_item from 'src/db/fixtures/item.json';
@@ -115,16 +113,6 @@ export default function setupFactory(db, mockService = is_mocked, suite_name) {
         setup.instance.orders = await Order.bulkCreate(json_order, options);
 
         // Associate:
-        // N:M
-        // setup.instance.quoteItems = await QuoteItems.bulkCreate(json_quote_item, options);
-        // setup.instance.warehouseItems = await WarehouseItems.bulkCreate(json_warehouse_item, options);
-        // setup.instance.supplierItems = await SupplierItems.bulkCreate(json_supplier_item, options);
-        // setup.instance.userRoles = await UserRoles.bulkCreate(json_user_role, options);
-        // setup.instance.rolePermissions = await RolePermissions.bulkCreate(json_role_permission, options);
-        // setup.instance.orderDepartments = await OrderDepartments.bulkCreate(json_order_department, options);
-        // setup.instance.orderItems = await OrderItems.bulkCreate(json_order_item, options);
-        // setup.instance.orderEmployees = await OrderEmployees.bulkCreate(json_order_employee, options);
-
         await setup.instance.categories[0].setItems(setup.instance.items, options);
         await setup.instance.warehouses[0].setItems(setup.instance.items, options);
         await setup.instance.suppliers[0].setItems(setup.instance.items, options);
@@ -140,7 +128,6 @@ export default function setupFactory(db, mockService = is_mocked, suite_name) {
         await setup.instance.orders[0].setEmployees(setup.instance.employees, options);
         await setup.instance.quotes[0].setItems(setup.instance.items, options);
         await setup.instance.quotes[0].setOrders(setup.instance.orders, options);
-
         await transaction.commit();
       } catch (error) {
         console.error('Error when trying to insert:', error);
@@ -156,6 +143,7 @@ export default function setupFactory(db, mockService = is_mocked, suite_name) {
 
     [
       'findAll',
+      'findOne',
       'create',
       'bulkCreate',
       'update',

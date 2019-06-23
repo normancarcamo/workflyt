@@ -1,37 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Quote';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Quote';
 
-const { Quote, QuoteItems } = db.sequelize.models;
+const { Quote } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getQuotes = [
-  validate(schema.getQuotes),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getQuotes,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Quote.findAll(req.options),
-        error: null
+        data: await Quote.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -40,12 +20,12 @@ export const getQuotes = [
 ];
 
 export const createQuotes = [
-  validate(schema.createQuotes),
+  validate.createQuotes,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Quote.createMany(req.body.values),
-        error: null
+        data: await Quote.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,36 +34,36 @@ export const createQuotes = [
 ];
 
 export const getQuote = [
-  validate(schema.getQuote),
+  validate.getQuote,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.quote, error: null });
+    res.json({ data: req.quote, error: false });
   }
 ];
 
 export const updateQuote = [
-  validate(schema.updateQuote),
+  validate.updateQuote,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -91,8 +71,8 @@ export const updateQuote = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.update(req.body.values),
-        error: null
+        data: await req.quote.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -101,34 +81,25 @@ export const updateQuote = [
 ];
 
 export const deleteQuote = [
-  validate(schema.deleteQuote),
+  validate.deleteQuote,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.destroy(req.options),
-        error: null
+        data: await req.quote.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -137,45 +108,25 @@ export const deleteQuote = [
 ];
 
 export const getItems = [
-  validate(schema.getItems),
+  validate.getItems,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.getItems(req.options),
-        error: null
+        data: await req.quote.getItems(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -184,16 +135,16 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(schema.setItems),
+  validate.setItems,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -201,8 +152,8 @@ export const setItems = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.addItems(req.body.items),
-        error: null
+        data: await req.quote.addItems(req.values.body.items),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -211,16 +162,16 @@ export const setItems = [
 ]
 
 export const getItem = [
-  validate(schema.getItem),
+  validate.getItem,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -228,35 +179,35 @@ export const getItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.quote.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.item, error: null });
+    res.json({ data: req.item, error: false });
   }
 ];
 
 export const updateItem = [
-  validate(schema.updateItem),
+  validate.updateItem,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -264,15 +215,15 @@ export const updateItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.quote.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -280,10 +231,10 @@ export const updateItem = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.addItem(req.params.item, {
-          through: req.body.values
+        data: await req.quote.addItem(req.values.params.item, {
+          through: req.values.body
         }),
-        error: null
+        error: false
       });
     } catch (error) {
       next(error);
@@ -292,16 +243,16 @@ export const updateItem = [
 ];
 
 export const removeItem = [
-  validate(schema.removeItem),
+  validate.removeItem,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -309,15 +260,15 @@ export const removeItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.quote.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -325,8 +276,8 @@ export const removeItem = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.removeItem(req.params.item),
-        error: null
+        data: await req.quote.removeItem(req.values.params.item),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -335,45 +286,25 @@ export const removeItem = [
 ];
 
 export const getOrders = [
-  validate(schema.getOrders),
+  validate.getOrders,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.getOrders(req.options),
-        error: null
+        data: await req.quote.getOrders(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -382,16 +313,16 @@ export const getOrders = [
 ];
 
 export const setOrders = [
-  validate(schema.setOrders),
+  validate.setOrders,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -399,8 +330,8 @@ export const setOrders = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.quote.addOrders(req.body.orders),
-        error: null
+        data: await req.quote.addOrders(req.values.body.orders),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -409,16 +340,16 @@ export const setOrders = [
 ];
 
 export const getOrder = [
-  validate(schema.getOrder),
+  validate.getOrder,
   async function params(req, res, next) {
     try {
-      req.quote = await Quote.findByPk(req.params.quote);
+      req.quote = await Quote.findByPk(req.values.params.quote);
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -426,20 +357,20 @@ export const getOrder = [
   async function params(req, res, next) {
     try {
       req.order = await req.quote.getOrders({
-        where: { id: req.params.order },
+        where: { id: req.values.params.order },
         plain: true
       });
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.order, error: null });
+    res.json({ data: req.order, error: false });
   }
 ];

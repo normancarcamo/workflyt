@@ -4,7 +4,7 @@ const { default: app } = require("src/app");
 
 module.exports.request = function(method, url) {
   if (app) {
-    return supertest(app)[method](url)
+    return supertest(app)[method](`${url}`)
     .set("Content-Type", "application/json")
     .set("Accept", "application/json");
   } else {

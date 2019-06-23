@@ -1,35 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Department';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Department';
 
 const { Department } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getDepartments = [
-  validate(schema.getDepartments),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][db.Sequelize.Op[operator]] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getDepartments,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Department.findAll(req.options),
-        error: null
+        data: await Department.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -38,12 +20,12 @@ export const getDepartments = [
 ];
 
 export const createDepartments = [
-  validate(schema.createDepartments),
+  validate.createDepartments,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Department.createMany(req.body.values),
-        error: null
+        data: await Department.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -52,36 +34,40 @@ export const createDepartments = [
 ];
 
 export const getDepartment = [
-  validate(schema.getDepartment),
+  validate.getDepartment,
   async function params(req, res, next) {
     try {
-      req.department = await Department.findByPk(req.params.department);
+      req.department = await Department.findByPk(
+        req.values.params.department
+      );
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.department, error: null });
+    res.json({ data: req.department, error: false });
   }
 ];
 
 export const updateDepartment = [
-  validate(schema.updateDepartment),
+  validate.updateDepartment,
   async function params(req, res, next) {
     try {
-      req.department = await Department.findByPk(req.params.department);
+      req.department = await Department.findByPk(
+        req.values.params.department
+      );
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -89,8 +75,8 @@ export const updateDepartment = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.department.update(req.body.values),
-        error: null
+        data: await req.department.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -99,34 +85,27 @@ export const updateDepartment = [
 ];
 
 export const deleteDepartment = [
-  validate(schema.deleteDepartment),
+  validate.deleteDepartment,
   async function params(req, res, next) {
     try {
-      req.department = await Department.findByPk(req.params.department);
+      req.department = await Department.findByPk(
+        req.values.params.department
+      );
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.department.destroy(req.options),
-        error: null
+        data: await req.department.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -135,45 +114,27 @@ export const deleteDepartment = [
 ];
 
 export const getEmployees = [
-  validate(schema.getEmployees),
+  validate.getEmployees,
   async function params(req, res, next) {
     try {
-      req.department = await Department.findByPk(req.params.department);
+      req.department = await Department.findByPk(
+        req.values.params.department
+      );
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.department.getEmployees(req.options),
-        error: null
+        data: await req.department.getEmployees(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -182,16 +143,18 @@ export const getEmployees = [
 ];
 
 export const setEmployees = [
-  validate(schema.setEmployees),
+  validate.setEmployees,
   async function params(req, res, next) {
     try {
-      req.department = await Department.findByPk(req.params.department);
+      req.department = await Department.findByPk(
+        req.values.params.department
+      );
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -199,26 +162,30 @@ export const setEmployees = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.department.addEmployees(req.body.employees),
-        error: null
+        data: await req.department.addEmployees(
+          req.values.body.employees
+        ),
+        error: false
       });
     } catch (error) {
       next(error);
     }
   }
-]
+];
 
 export const getEmployee = [
-  validate(schema.getEmployee),
+  validate.getEmployee,
   async function params(req, res, next) {
     try {
-      req.department = await Department.findByPk(req.params.department);
+      req.department = await Department.findByPk(
+        req.values.params.department
+      );
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -226,20 +193,20 @@ export const getEmployee = [
   async function params(req, res, next) {
     try {
       req.employee = await req.department.getEmployees({
-        where: { id: req.params.employee },
+        where: { id: req.values.params.employee },
         plain: true
       });
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.employee, error: null });
+    res.json({ data: req.employee, error: false });
   }
 ];

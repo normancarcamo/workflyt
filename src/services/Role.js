@@ -1,37 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Role';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Role';
 
-const { Role, RolePermissions } = db.sequelize.models;
+const { Role } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getRoles = [
-  validate(schema.getRoles),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getRoles,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Role.findAll(req.options),
-        error: null
+        data: await Role.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -40,12 +20,12 @@ export const getRoles = [
 ];
 
 export const createRoles = [
-  validate(schema.createRoles),
+  validate.createRoles,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Role.createMany(req.body.values),
-        error: null
+        data: await Role.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,36 +34,36 @@ export const createRoles = [
 ];
 
 export const getRole = [
-  validate(schema.getRole),
+  validate.getRole,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.role, error: null });
+    res.json({ data: req.role, error: false });
   }
 ];
 
 export const updateRole = [
-  validate(schema.updateRole),
+  validate.updateRole,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -91,8 +71,8 @@ export const updateRole = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.role.update(req.body.values),
-        error: null
+        data: await req.role.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -101,34 +81,25 @@ export const updateRole = [
 ];
 
 export const deleteRole = [
-  validate(schema.deleteRole),
+  validate.deleteRole,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.role.destroy(req.options),
-        error: null
+        data: await req.role.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -137,45 +108,25 @@ export const deleteRole = [
 ];
 
 export const getPermissions = [
-  validate(schema.getPermissions),
+  validate.getPermissions,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.role.getPermissions(req.options),
-        error: null
+        data: await req.role.getPermissions(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -184,16 +135,16 @@ export const getPermissions = [
 ];
 
 export const setPermissions = [
-  validate(schema.setPermissions),
+  validate.setPermissions,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -201,8 +152,8 @@ export const setPermissions = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.role.addPermissions(req.body.permissions),
-        error: null
+        data: await req.role.addPermissions(req.values.body.permissions),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -211,16 +162,16 @@ export const setPermissions = [
 ]
 
 export const getPermission = [
-  validate(schema.getPermission),
+  validate.getPermission,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -228,35 +179,35 @@ export const getPermission = [
   async function params(req, res, next) {
     try {
       req.permission = await req.role.getPermissions({
-        where: { id: req.params.permission },
+        where: { id: req.values.params.permission },
         plain: true
       });
 
-      if (req.permission) {
-        next();
-      } else {
+      if (!req.permission) {
         throw new NotFoundError('Permission not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.permission, error: null });
+    res.json({ data: req.permission, error: false });
   }
 ];
 
 export const updatePermission = [
-  validate(schema.updatePermission),
+  validate.updatePermission,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -264,15 +215,15 @@ export const updatePermission = [
   async function params(req, res, next) {
     try {
       req.permission = await req.role.getPermissions({
-        where: { id: req.params.permission },
+        where: { id: req.values.params.permission },
         plain: true
       });
 
-      if (req.permission) {
-        next();
-      } else {
+      if (!req.permission) {
         throw new NotFoundError('Permission not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -280,8 +231,8 @@ export const updatePermission = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.permission.RolePermissions.update(req.body.values),
-        error: null
+        data: await req.permission.RolePermissions.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -290,16 +241,16 @@ export const updatePermission = [
 ];
 
 export const removePermission = [
-  validate(schema.removePermission),
+  validate.removePermission,
   async function params(req, res, next) {
     try {
-      req.role = await Role.findByPk(req.params.role);
+      req.role = await Role.findByPk(req.values.params.role);
 
-      if (req.role) {
-        next();
-      } else {
+      if (!req.role) {
         throw new NotFoundError('Role not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -307,15 +258,15 @@ export const removePermission = [
   async function params(req, res, next) {
     try {
       req.permission = await req.role.getPermissions({
-        where: { id: req.params.permission },
+        where: { id: req.values.params.permission },
         plain: true
       });
 
-      if (req.permission) {
-        next();
-      } else {
+      if (!req.permission) {
         throw new NotFoundError('Permission not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -323,8 +274,8 @@ export const removePermission = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.role.removePermission(req.params.permission),
-        error: null
+        data: await req.role.removePermission(req.values.params.permission),
+        error: false
       });
     } catch (error) {
       next(error);

@@ -1,51 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Employee';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Employee';
 
-const { Employee, User, Quote } = db.sequelize.models;
+const { Employee } = db.sequelize.models;
 const { NotFoundError } = errors;
-const associations = Object.keys(Employee.associations);
 
 export const getEmployees = [
-  validate(schema.getEmployees),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    if (req.query.include) {
-      const include = req.query.include.trim().split(',');
-      const notFound = include.find(
-        model => model && associations.indexOf(model) < 0
-      );
-
-      if (notFound) {
-        return next(new Error(`Association "${notFound}" not found.`));
-      } else {
-        req.options.include = include.filter(model => model && model);
-      }
-    }
-
-    next();
-  },
+  validate.getEmployees,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Employee.findAll(req.options),
-        error: null
+        data: await Employee.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,12 +20,12 @@ export const getEmployees = [
 ];
 
 export const createEmployees = [
-  validate(schema.createEmployees),
+  validate.createEmployees,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Employee.createMany(req.body.values),
-        error: null
+        data: await Employee.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -68,53 +34,41 @@ export const createEmployees = [
 ];
 
 export const getEmployee = [
-  validate(schema.getEmployee),
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.include) {
-      const include = req.query.include.trim().split(',');
-      const notFound = include.find(
-        model => model && associations.indexOf(model) < 0
-      );
-
-      if (notFound) {
-        return next(new Error(`Association "${notFound}" not found.`));
-      } else {
-        req.options.include = include.filter(model => model && model);
-      }
-    }
-
-    next();
-  },
+  validate.getEmployee,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee, req.options);
-      if (req.employee) {
-        next();
-      } else {
+      req.employee = await Employee.findByPk(
+        req.values.params.employee,
+        req.values.query
+      );
+
+      if (!req.employee) {
         throw new Error('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.employee, error: null });
+    res.json({ data: req.employee, error: false });
   }
 ];
 
 export const updateEmployee = [
-  validate(schema.updateEmployee),
+  validate.updateEmployee,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee);
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -122,8 +76,8 @@ export const updateEmployee = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.employee.update(req.body.values),
-        error: null
+        data: await req.employee.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -132,34 +86,27 @@ export const updateEmployee = [
 ];
 
 export const deleteEmployee = [
-  validate(schema.deleteEmployee),
+  validate.deleteEmployee,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee);
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.employee.destroy(req.options),
-        error: null
+        data: await req.employee.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -168,40 +115,18 @@ export const deleteEmployee = [
 ];
 
 export const getUser = [
-  validate(schema.getUser),
+  validate.getUser,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee);
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
-    } catch (error) {
-      next(error);
-    }
-  },
-  async function handler(req, res, next) {
-    try {
-      res.json({ data: await req.employee.getUser(), error: null });
-    } catch (error) {
-      next(error);
-    }
-  }
-];
 
-export const setUser = [
-  validate(schema.setUser),
-  async function params(req, res, next) {
-    try {
-      req.employee = await Employee.findByPk(req.params.employee);
-
-      if (req.employee) {
-        next();
-      } else {
-        throw new NotFoundError('Employee not found.');
-      }
+      next();
     } catch (error) {
       next(error);
     }
@@ -209,8 +134,37 @@ export const setUser = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.employee.setUser(req.body.values),
-        error: null
+        data: await req.employee.getUser(),
+        error: false
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+];
+
+export const setUser = [
+  validate.setUser,
+  async function params(req, res, next) {
+    try {
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
+
+      if (!req.employee) {
+        throw new NotFoundError('Employee not found.');
+      }
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+  async function handler(req, res, next) {
+    try {
+      res.json({
+        data: await req.employee.setUser(req.values.body.user),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -219,16 +173,18 @@ export const setUser = [
 ]
 
 export const removeUser = [
-  validate(schema.removeUser),
+  validate.removeUser,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee);
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -237,7 +193,7 @@ export const removeUser = [
     try {
       res.json({
         data: await req.employee.setUser(null),
-        error: null
+        error: false
       });
     } catch (error) {
       next(error);
@@ -246,45 +202,27 @@ export const removeUser = [
 ];
 
 export const getQuotes = [
-  validate(schema.getQuotes),
+  validate.getQuotes,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee);
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.employee.getQuotes(req.options),
-        error: null
+        data: await req.employee.getQuotes(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -293,16 +231,18 @@ export const getQuotes = [
 ];
 
 export const setQuotes = [
-  validate(schema.setQuotes),
+  validate.setQuotes,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee);
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -310,8 +250,8 @@ export const setQuotes = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.employee.addQuotes(req.body.quotes),
-        error: null
+        data: await req.employee.addQuotes(req.values.body.quotes),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -320,16 +260,18 @@ export const setQuotes = [
 ]
 
 export const getQuote = [
-  validate(schema.getQuote),
+  validate.getQuote,
   async function params(req, res, next) {
     try {
-      req.employee = await Employee.findByPk(req.params.employee);
+      req.employee = await Employee.findByPk(
+        req.values.params.employee
+      );
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -337,20 +279,20 @@ export const getQuote = [
   async function params(req, res, next) {
     try {
       req.quote = await req.employee.getQuotes({
-        where: { id: req.params.quote },
+        where: { id: req.values.params.quote },
         plain: true
       });
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.quote, error: null });
+    res.json({ data: req.quote, error: false });
   }
 ];

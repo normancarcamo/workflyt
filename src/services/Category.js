@@ -1,37 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Category';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Category';
 
 const { Category } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getCategories = [
-  validate(schema.getCategories),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getCategories,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Category.findAll(req.options),
-        error: null
+        data: await Category.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -40,12 +20,12 @@ export const getCategories = [
 ];
 
 export const createCategories = [
-  validate(schema.createCategories),
+  validate.createCategories,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Category.create(req.body.values),
-        error: null
+        data: await Category.create(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,36 +34,36 @@ export const createCategories = [
 ];
 
 export const getCategory = [
-  validate(schema.getCategory),
+  validate.getCategory,
   async function params(req, res, next) {
     try {
-      req.category = await Category.findByPk(req.params.category);
+      req.category = await Category.findByPk(req.values.params.category);
 
-      if (req.category) {
-        next();
-      } else {
+      if (!req.category) {
         throw new NotFoundError('Category not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.status(200).json({ data: req.category, error: null });
+    res.status(200).json({ data: req.category, error: false });
   }
 ];
 
 export const updateCategory = [
-  validate(schema.updateCategory),
+  validate.updateCategory,
   async function params(req, res, next) {
     try {
-      req.category = await Category.findByPk(req.params.category);
+      req.category = await Category.findByPk(req.values.params.category);
 
-      if (req.category) {
-        next();
-      } else {
+      if (!req.category) {
         throw new NotFoundError('Category not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -91,8 +71,8 @@ export const updateCategory = [
   async function handler(req, res, next) {
     try {
       res.status(200).json({
-        data: await req.category.update(req.body.values),
-        error: null
+        data: await req.category.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -101,34 +81,25 @@ export const updateCategory = [
 ];
 
 export const deleteCategory = [
-  validate(schema.deleteCategory),
+  validate.deleteCategory,
   async function params(req, res, next) {
     try {
-      req.category = await Category.findByPk(req.params.category);
+      req.category = await Category.findByPk(req.values.params.category);
 
-      if (req.category) {
-        next();
-      } else {
+      if (!req.category) {
         throw new NotFoundError('Category not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.status(200).json({
-        data: await req.category.destroy(req.options),
-        error: null
+        data: await req.category.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -137,44 +108,24 @@ export const deleteCategory = [
 ];
 
 export const getItems = [
-  validate(schema.getItems),
+  validate.getItems,
   async function params(req, res, next) {
     try {
-      req.category = await Category.findByPk(req.params.category);
+      req.category = await Category.findByPk(req.values.params.category);
 
-      if (req.category) {
-        next();
-      } else {
+      if (!req.category) {
         throw new NotFoundError('Category not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
-      let result = await req.category.getItems(req.options);
-      res.json({ data: result, error: null });
+      let result = await req.category.getItems(req.values.query);
+      res.json({ data: result, error: false });
     } catch (error) {
       next(error);
     }
@@ -182,16 +133,16 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(schema.setItems),
+  validate.setItems,
   async function params(req, res, next) {
     try {
-      req.category = await Category.findByPk(req.params.category);
+      req.category = await Category.findByPk(req.values.params.category);
 
-      if (req.category) {
-        next();
-      } else {
+      if (!req.category) {
         throw new NotFoundError('Category not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -199,8 +150,8 @@ export const setItems = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.category.addItems(req.body.items),
-        error: null
+        data: await req.category.addItems(req.values.body.items),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -209,16 +160,16 @@ export const setItems = [
 ];
 
 export const getItem = [
-  validate(schema.getItem),
+  validate.getItem,
   async function params(req, res, next) {
     try {
-      req.category = await Category.findByPk(req.params.category);
+      req.category = await Category.findByPk(req.values.params.category);
 
-      if (req.category) {
-        next();
-      } else {
+      if (!req.category) {
         throw new NotFoundError('Category not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -226,35 +177,35 @@ export const getItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.category.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.item, error: null });
+    res.json({ data: req.item, error: false });
   }
 ];
 
 export const removeItem = [
-  validate(schema.removeItem),
+  validate.removeItem,
   async function params(req, res, next) {
     try {
-      req.category = await Category.findByPk(req.params.category);
+      req.category = await Category.findByPk(req.values.params.category);
 
-      if (req.category) {
-        next();
-      } else {
+      if (!req.category) {
         throw new NotFoundError('Category not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -262,15 +213,15 @@ export const removeItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.category.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -279,7 +230,7 @@ export const removeItem = [
     try {
       res.json({
         data: await req.item.setCategory(null),
-        error: null
+        error: false
       });
     } catch (error) {
       next(error);

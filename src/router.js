@@ -1,33 +1,32 @@
+import express from 'express';
 import { methodNotAllowed } from '@playscode/fns/lib/middlewares';
-import { Router } from "express";
+import * as DepartmentService from 'src/services/Department';
+import * as PermissionService from 'src/services/Permission';
+import * as WarehouseService from 'src/services/Warehouse';
+import * as EmployeeService from 'src/services/Employee';
+import * as SupplierService from 'src/services/Supplier';
+import * as CategoryService from 'src/services/Category';
+import * as CustomerService from 'src/services/Customer';
+import * as CompanyService from 'src/services/Company';
+import * as StockService from 'src/services/Stock';
+import * as OrderService from 'src/services/Order';
+import * as QuoteService from 'src/services/Quote';
+import * as ItemService from 'src/services/Item';
+import * as UserService from 'src/services/User';
+import * as RoleService from 'src/services/Role';
+import * as AuthService from 'src/services/auth';
 
-import * as CategoryService from "src/services/Category";
-import * as CompanyService from "src/services/Company";
-import * as CustomerService from "src/services/Customer";
-import * as DepartmentService from "src/services/Department";
-import * as WarehouseService from "src/services/Warehouse";
-import * as SupplierService from "src/services/Supplier";
-import * as ItemService from "src/services/Item";
-import * as EmployeeService from "src/services/Employee";
-import * as UserService from "src/services/User";
-import * as RoleService from "src/services/Role";
-import * as PermissionService from "src/services/Permission";
-import * as StockService from "src/services/Stock";
-import * as OrderService from "src/services/Order";
-import * as QuoteService from "src/services/Quote";
-// import * as AuthService from 'src/services/auth';
-
-const router = Router();
+const router = express.Router();
 
 // AUTH:
-// router
-//   .route("/auth/signup")
-//   .post(AuthService.signUp)
-//   .all(methodNotAllowed);
-// router
-//   .route("/auth/signin")
-//   .post(AuthService.signIn)
-//   .all(methodNotAllowed);
+router
+  .route('/auth/signin')
+  .post(AuthService.signIn)
+  .all(methodNotAllowed);
+router
+  .route('/auth/signup')
+  .post(AuthService.signUp)
+  .all(methodNotAllowed);
 
 // CATEGORIES:
 router
@@ -218,7 +217,7 @@ router
   .delete(PermissionService.deletePermission)
   .all(methodNotAllowed);
 
-// QUOTES
+// QUOTES:
 router
   .route('/quotes')
   .get(QuoteService.getQuotes)

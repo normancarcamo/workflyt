@@ -1,37 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Item';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Item';
 
 const { Item } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getItems = [
-  validate(schema.getItems),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getItems,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Item.findAll(req.options),
-        error: null
+        data: await Item.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -40,12 +20,12 @@ export const getItems = [
 ];
 
 export const createItems = [
-  validate(schema.createItems),
+  validate.createItems,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Item.createMany(req.body.values),
-        error: null
+        data: await Item.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,36 +34,36 @@ export const createItems = [
 ];
 
 export const getItem = [
-  validate(schema.getItem),
+  validate.getItem,
   async function params(req, res, next) {
     try {
-      req.item = await Item.findByPk(req.params.item);
+      req.item = await Item.findByPk(req.values.params.item);
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.item, error: null });
+    res.json({ data: req.item, error: false });
   }
 ];
 
 export const updateItem = [
-  validate(schema.updateItem),
+  validate.updateItem,
   async function params(req, res, next) {
     try {
-      req.item = await Item.findByPk(req.params.item);
+      req.item = await Item.findByPk(req.values.params.item);
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -91,8 +71,8 @@ export const updateItem = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.item.update(req.body.values),
-        error: null
+        data: await req.item.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -101,34 +81,25 @@ export const updateItem = [
 ];
 
 export const deleteItem = [
-  validate(schema.deleteItem),
+  validate.deleteItem,
   async function params(req, res, next) {
     try {
-      req.item = await Item.findByPk(req.params.item);
+      req.item = await Item.findByPk(req.values.params.item);
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.item.destroy(req.options),
-        error: null
+        data: await req.item.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -137,45 +108,25 @@ export const deleteItem = [
 ];
 
 export const getStocks = [
-  validate(schema.getStocks),
+  validate.getStocks,
   async function params(req, res, next) {
     try {
-      req.item = await Item.findByPk(req.params.item);
+      req.item = await Item.findByPk(req.values.params.item);
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.item.getStocks(req.options),
-        error: null
+        data: await req.item.getStocks(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -184,16 +135,16 @@ export const getStocks = [
 ];
 
 export const setStocks = [
-  validate(schema.setStocks),
+  validate.setStocks,
   async function params(req, res, next) {
     try {
-      req.item = await Item.findByPk(req.params.item);
+      req.item = await Item.findByPk(req.values.params.item);
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -201,8 +152,8 @@ export const setStocks = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.item.addStocks(req.body.stocks),
-        error: null
+        data: await req.item.addStocks(req.values.body.stocks),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -211,16 +162,16 @@ export const setStocks = [
 ];
 
 export const getStock = [
-  validate(schema.getStock),
+  validate.getStock,
   async function params(req, res, next) {
     try {
-      req.item = await Item.findByPk(req.params.item);
+      req.item = await Item.findByPk(req.values.params.item);
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -228,20 +179,20 @@ export const getStock = [
   async function params(req, res, next) {
     try {
       req.stock = await req.item.getStocks({
-        where: { id: req.params.stock },
+        where: { id: req.values.params.stock },
         plain: true
       });
 
-      if (req.stock) {
-        next();
-      } else {
+      if (!req.stock) {
         throw new NotFoundError('Stock not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.stock, error: null });
+    res.json({ data: req.stock, error: false });
   }
 ];

@@ -10,16 +10,16 @@ db.sync().then(() => {
   const server = http.createServer(require('./app').default);
 
   server.listen(process.env.SERVER_PORT, () => {
-    log.info("Server running and database synced.");
+    console.log("Server running and database synced.");
     process.on("SIGTERM", closeServerGracefully(server));
     process.on("SIGINT", closeServerGracefully(server));
   });
 
   server.on('error', err => {
     if (err.code === 'EADDRINUSE') exec(`sh nodemon.sh`);
-    else log.error({ error: err }, err.message);
+    else console.error({ error: err }, err.message);
   });
-}).catch(err => log.error({ error: err }, err.message));
+}).catch(err => console.error({ error: err }, err.message));
 
 // STOP:
 function closeServerGracefully(server) {
@@ -27,15 +27,15 @@ function closeServerGracefully(server) {
     if (!server.isClosed) {
       server.close(function(err) {
         if (err) {
-          log.error({ error: err }, err.message);
+          console.error({ error: err }, err.message);
           process.exit(1);
         } else {
           server.isClosed = true;
-          log.info('Server stopped.');
+          console.info('Server stopped.');
           db.sequelize.close().then(() => {
-            log.info('Database closed.');
+            console.info('Database closed.');
           }).catch(err => {
-            log.error({ error: err }, err.message);
+            console.error({ error: err }, err.message);
             process.exit(1);
           });
         }
@@ -45,9 +45,9 @@ function closeServerGracefully(server) {
 }
 
 process.on("unhandledRejection", error => {
-  log.error({ error }, `unhandledRejection -> ${error.message}`);
+  console.error({ error }, `unhandledRejection -> ${error.message}`);
 });
 
 process.on("uncaughtException", error => {
-  log.error({ error }, `uncaughtException -> ${error.message}`);
+  console.error({ error }, `uncaughtException -> ${error.message}`);
 });

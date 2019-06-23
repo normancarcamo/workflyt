@@ -9,7 +9,7 @@ const API_BASE = '/api/v1/quotes';
 const setup = setup_factory(db, IS_INTEGRATION_MOCK);
 const { Quote } = db.sequelize.models;
 
-describe("Quote Service:", () => {
+describe.skip("Quote Service:", () => {
   beforeAll(setup.before_all);
   beforeEach(setup.before_each);
 
@@ -17,7 +17,7 @@ describe("Quote Service:", () => {
 
   describe("get quotes:", () => {
     describe('should return data when:', () => {
-      it(`${uuid()} - query is: {}`, async () => {
+      it(`${uuid()} - query is empty`, async () => {
         // Given:
         let querystring = {};
 
@@ -27,11 +27,11 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - query is: { search: {} }`, async () => {
+      it(`${uuid()} - query is: { subject: 'ccccc' }`, async () => {
         // Given:
-        let querystring = { search: {} };
+        let querystring = { subject: 'ccccc' };
 
         // When:
         let res = await request("get", API_BASE).query(querystring);
@@ -39,11 +39,11 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - query is: undefined`, async () => {
+      it(`${uuid()} - query is: { subject: { like: 'vvvvv' } }`, async () => {
         // Given:
-        let querystring = { search: undefined };
+        let querystring = { subject: { like: 'vvvvv' } };
 
         // When:
         let res = await request("get", API_BASE).query(querystring);
@@ -51,31 +51,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
-      });
-      it(`${uuid()} - query is: { search: { subject: 'ccccc' } }`, async () => {
-        // Given:
-        let querystring = { search: { subject: 'ccccc' } };
-
-        // When:
-        let res = await request("get", API_BASE).query(querystring);
-
-        // Then:
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
-      });
-      it(`${uuid()} - query is: { search: { subject: { like: '%vvvvv%' } } }`, async () => {
-        // Given:
-        let querystring = { search: { subject: { like: '%vvvvv%' } } };
-
-        // When:
-        let res = await request("get", API_BASE).query(querystring);
-
-        // Then:
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -89,14 +65,14 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - action throw error`, async () => {
         // Mock:
         jest.spyOn(Quote, 'findAll').mockRejectedValue(ERROR_MOCK);
 
         // Given:
-        let querystring = { search: { subject: 'bbbbb' } };
+        let querystring = { subject: 'bbbbb' };
 
         // When:
         let res = await request("get", API_BASE).query(querystring);
@@ -104,7 +80,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -114,7 +90,9 @@ describe("Quote Service:", () => {
       it(`${uuid()} - values are valid`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
-          jest.spyOn(Quote, 'create').mockResolvedValue(setup.instance.quotes[0]);
+          jest.spyOn(Quote, 'create').mockResolvedValue(
+            setup.instance.quotes[0]
+          );
         }
 
         // Given:
@@ -125,12 +103,12 @@ describe("Quote Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(201);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - is created by a specific user`, async () => {
         // Mock:
@@ -152,12 +130,12 @@ describe("Quote Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(201);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
         expect(res.body.data.created_by).toEqual(setup.instance.users[0].id);
         expect(res.body.data.updated_by).toEqual(setup.instance.users[0].id);
       });
@@ -168,12 +146,12 @@ describe("Quote Service:", () => {
         let values = null;
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - value are not valid`, async () => {
         // Given:
@@ -184,12 +162,12 @@ describe("Quote Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - action throw error`, async () => {
         // Mock:
@@ -203,12 +181,12 @@ describe("Quote Service:", () => {
         };
 
         // When:
-        let res = await request("post", API_BASE).send({ values });
+        let res = await request("post", API_BASE).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -218,20 +196,21 @@ describe("Quote Service:", () => {
       it(`${uuid()} - quote is found`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
-          jest.spyOn(Quote, 'findByPk').mockResolvedValue(setup.instance.quotes[0]);
+          jest.spyOn(Quote, 'findByPk').mockResolvedValue(
+            setup.instance.quotes[0]
+          );
         }
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
-        let options = {};
 
         // When:
-        let res = await request("get", `${API_BASE}/${quote_id}`).query(options);
+        let res = await request("get", `${API_BASE}/${quote_id}`);
 
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -245,7 +224,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Mock:
@@ -262,7 +241,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is trying to be found`, async () => {
         // Mock:
@@ -279,7 +258,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -304,30 +283,30 @@ describe("Quote Service:", () => {
         let endpoint = `${API_BASE}/${quote_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
-      it(`${uuid()} - quote id param is malformed`, async () => {
+      it(`${uuid()} - id param is malformed`, async () => {
         // Given:
         let quote_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s';
         let values = null;
         let endpoint = `${API_BASE}/${quote_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote is not found`, async () => {
+      it(`${uuid()} - is not found`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
@@ -339,14 +318,14 @@ describe("Quote Service:", () => {
         let endpoint = `${API_BASE}/${quote_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote was trying to be found`, async () => {
+      it(`${uuid()} - was trying to be found`, async () => {
         // Mock:
         jest.spyOn(Quote, 'findByPk').mockRejectedValue(ERROR_MOCK);
 
@@ -356,14 +335,14 @@ describe("Quote Service:", () => {
         let endpoint = `${API_BASE}/${quote_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote was trying to be updated`, async () => {
+      it(`${uuid()} - was trying to be updated`, async () => {
         // Mock:
         jest.spyOn(Quote, 'findByPk').mockResolvedValue({
           update: async (payload, options) => {
@@ -377,19 +356,19 @@ describe("Quote Service:", () => {
         let endpoint = `${API_BASE}/${quote_id}`;
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
 
   describe("delete quote:", () => {
     describe('should return data when:', () => {
-      it(`${uuid()} - quote is deleted without options`, async () => {
+      it(`${uuid()} - is deleted without options`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -404,17 +383,16 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}`;
-        let options = {}
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote is deleted with the force option as true`, async () => {
+      it(`${uuid()} - is deleted with the force option as true`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -437,9 +415,9 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote is deleted with the force option as false`, async () => {
+      it(`${uuid()} - is deleted with the force option as false`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -462,25 +440,24 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
-      it(`${uuid()} - quote id param is malformed`, async () => {
+      it(`${uuid()} - id param is malformed`, async () => {
         // Given:
         let quote_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s';
         let endpoint = `${API_BASE}/${quote_id}`;
-        let options = {}
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote is not found`, async () => {
+      it(`${uuid()} - is not found`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue(null);
@@ -489,34 +466,32 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111';
         let endpoint = `${API_BASE}/${quote_id}`;
-        let options = {}
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote was trying to be found`, async () => {
+      it(`${uuid()} - was trying to be found`, async () => {
         // Mock:
         jest.spyOn(Quote, 'findByPk').mockRejectedValue(ERROR_MOCK);
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}`;
-        let options = {}
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - quote was trying to be deleted`, async () => {
+      it(`${uuid()} - was trying to be deleted`, async () => {
         // Mock:
         jest.spyOn(Quote, 'findByPk').mockResolvedValue({
           destroy: async (options) => {
@@ -527,15 +502,14 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}`;
-        let options = {}
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -563,7 +537,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - query is: name=dknd`, async () => {
         // Mock:
@@ -576,7 +550,7 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items`;
-        let options = { search: { name: 'dknd' } };
+        let options = { name: 'dknd' };
 
         // When:
         let res = await request("get", endpoint).query(options);
@@ -584,9 +558,9 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - query is: name like %disk%`, async () => {
+      it(`${uuid()} - query is: name like disk`, async () => {
         // Mock:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -597,7 +571,7 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items`;
-        let options = { search: { name: { like: '%disk%' } } };
+        let options = { name: { like: 'disk' } };
 
         // When:
         let res = await request("get", endpoint).query(options);
@@ -605,7 +579,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -621,7 +595,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Mock:
@@ -640,24 +614,25 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote was trying to be found`, async () => {
         // Mock:
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items`;
-        let options = {};
 
         // When:
-        let res = await request("get", endpoint).query(options);
+        let res = await request("get", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - items were trying to be found`, async () => {
         // Setup:
@@ -670,15 +645,14 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items`;
-        let options = {};
 
         // When:
-        let res = await request("get", endpoint).query(options);
+        let res = await request("get", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -704,7 +678,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -720,7 +694,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - items id are malformed`, async () => {
         // Given:
@@ -737,7 +711,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Mock:
@@ -756,11 +730,13 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote was trying to be found`, async () => {
         // Mock:
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
@@ -773,7 +749,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - items were trying to be set`, async () => {
         // Setup:
@@ -794,7 +770,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -805,7 +781,9 @@ describe("Quote Service:", () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-            getItems: async (options) => setup.instance.items[0]
+            getItems: async (options) => {
+              return setup.instance.items[0];
+            }
           });
         }
 
@@ -820,7 +798,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -836,7 +814,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item param id is malformed`, async () => {
         // Given:
@@ -850,7 +828,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Setup:
@@ -869,7 +847,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item is not found`, async () => {
         // Setup:
@@ -890,11 +868,13 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote was trying to be found`, async () => {
         // Setup:
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
@@ -907,7 +887,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item was trying to be found`, async () => {
         // Setup:
@@ -928,7 +908,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -940,7 +920,9 @@ describe("Quote Service:", () => {
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
             getItems: async (options) => ({ mocked: 'yes' }),
-            addItem: async (values, options) => setup.instance.items[0]
+            addItem: async (values, options) => {
+              return setup.instance.items[0];
+            }
           });
         }
 
@@ -951,12 +933,12 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -968,12 +950,12 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item param id is malformed`, async () => {
         // Given:
@@ -983,12 +965,12 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Setup:
@@ -1003,12 +985,12 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item is not found`, async () => {
         // Setup:
@@ -1025,16 +1007,18 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote was trying to be found`, async () => {
         // Setup:
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
@@ -1043,12 +1027,12 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item was trying to be found`, async () => {
         // Setup:
@@ -1065,12 +1049,12 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item was trying to be updated`, async () => {
         // Setup:
@@ -1088,12 +1072,12 @@ describe("Quote Service:", () => {
         let values = { extra: { units: 20 } };
 
         // When:
-        let res = await request("put", endpoint).send({ values });
+        let res = await request("put", endpoint).send(values);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -1105,7 +1089,9 @@ describe("Quote Service:", () => {
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
             getItems: async (payload, options) => ({}),
-            removeItem: async (payload, options) => setup.instance.items[0]
+            removeItem: async (payload, options) => {
+              return setup.instance.items[0];
+            }
           });
         }
 
@@ -1113,15 +1099,14 @@ describe("Quote Service:", () => {
         let quote_id = setup.instance.quotes[0].id;
         let item_id = setup.instance.items[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBe(null);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -1130,30 +1115,28 @@ describe("Quote Service:", () => {
         let quote_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s';
         let item_id = setup.instance.items[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item param id is malformed`, async () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let item_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s';
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Setup:
@@ -1165,15 +1148,14 @@ describe("Quote Service:", () => {
         let quote_id = 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d';
         let item_id = setup.instance.items[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item is not found`, async () => {
         // Setup:
@@ -1187,33 +1169,33 @@ describe("Quote Service:", () => {
         let quote_id = setup.instance.quotes[0].id;
         let item_id = 'f5eacdd2-95e8-4fa9-a19a-7f581a5ee67d';
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote was trying to be found`, async () => {
         // Setup:
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let item_id = setup.instance.items[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item was trying to be found`, async () => {
         // Setup:
@@ -1227,15 +1209,14 @@ describe("Quote Service:", () => {
         let quote_id = setup.instance.quotes[0].id;
         let item_id = setup.instance.items[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - item was trying to be removed`, async () => {
         // Setup:
@@ -1250,15 +1231,14 @@ describe("Quote Service:", () => {
         let quote_id = setup.instance.quotes[0].id;
         let item_id = setup.instance.items[0].id;
         let endpoint = `${API_BASE}/${quote_id}/items/${item_id}`;
-        let options = {};
 
         // When:
-        let res = await request("delete", endpoint).query(options);
+        let res = await request("delete", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -1267,7 +1247,7 @@ describe("Quote Service:", () => {
 
   describe("get orders:", () => {
     describe('should return data when:', () => {
-      it(`${uuid()} - query is: {}`, async () => {
+      it(`${uuid()} - query is empty`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -1286,9 +1266,9 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
-      it(`${uuid()} - query is: { search: {} }`, async () => {
+      it(`${uuid()} - query is: { code: 'ccccc' }`, async () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -1299,7 +1279,7 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = { search: {} };
+        let options = { code: 'ORD/0001' };
 
         // When:
         let res = await request("get", endpoint).query(options);
@@ -1307,70 +1287,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
-      });
-      it(`${uuid()} - query is: undefined`, async () => {
-        // Setup:
-        if (IS_INTEGRATION_MOCK) {
-          jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-            getOrders: async payload => ({ success : 'mocked' })
-          });
-        }
-
-        // Given:
-        let quote_id = setup.instance.quotes[0].id;
-        let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = { search: undefined };
-
-        // When:
-        let res = await request("get", endpoint).query(options);
-
-        // Then:
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
-      });
-      it(`${uuid()} - query is: { search: { code: 'ccccc' } }`, async () => {
-        // Setup:
-        if (IS_INTEGRATION_MOCK) {
-          jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-            getOrders: async payload => ({ success : 'mocked' })
-          });
-        }
-
-        // Given:
-        let quote_id = setup.instance.quotes[0].id;
-        let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = { search: { code: 'ccccc' } };
-
-        // When:
-        let res = await request("get", endpoint).query(options);
-
-        // Then:
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
-      });
-      it(`${uuid()} - query is: { search: { code: { like: '%vvvvv%' } } }`, async () => {
-        // Setup:
-        if (IS_INTEGRATION_MOCK) {
-          jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-            getOrders: async payload => ({ success : 'mocked' })
-          });
-        }
-
-        // Given:
-        let quote_id = setup.instance.quotes[0].id;
-        let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = { search: { code: { like: '%vvvvv%' } } };
-
-        // When:
-        let res = await request("get", endpoint).query(options);
-
-        // Then:
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -1378,15 +1295,14 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111s';
         let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = {};
 
         // When:
-        let res = await request("get", endpoint).query(options);
+        let res = await request("get", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         if (IS_INTEGRATION_MOCK) {
@@ -1396,31 +1312,31 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = '11bf5b37-e0b1-42e0-8dcf-dc8c4aefc111';
         let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = {};
 
         // When:
-        let res = await request("get", endpoint).query(options);
+        let res = await request("get", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is trying to be found`, async () => {
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = {};
 
         // When:
-        let res = await request("get", endpoint).query(options);
+        let res = await request("get", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is trying to be found`, async () => {
         jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -1432,15 +1348,14 @@ describe("Quote Service:", () => {
         // Given:
         let quote_id = setup.instance.quotes[0].id;
         let endpoint = `${API_BASE}/${quote_id}/orders`;
-        let options = {};
 
         // When:
-        let res = await request("get", endpoint).query(options);
+        let res = await request("get", endpoint);
 
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -1466,7 +1381,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -1482,7 +1397,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Setup:
@@ -1501,11 +1416,13 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is trying to be found`, async () => {
         // Setup:
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
@@ -1518,7 +1435,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is trying to be set`, async () => {
         jest.spyOn(Quote, 'findByPk').mockResolvedValue({
@@ -1538,7 +1455,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });
@@ -1549,7 +1466,9 @@ describe("Quote Service:", () => {
         // Setup:
         if (IS_INTEGRATION_MOCK) {
           jest.spyOn(Quote, 'findByPk').mockResolvedValue({
-            getOrders: async payload => setup.instance.orders[0]
+            getOrders: async payload => {
+              return setup.instance.orders[0];
+            }
           });
         }
 
@@ -1564,7 +1483,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toBeDefined();
-        expect(res.body.error).toBeOneOf([ undefined, null ]);
+        expect(res.body.error).toBeOneOf([ undefined, null, false ]);
       });
     });
     describe('should return error when:', () => {
@@ -1580,7 +1499,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - order id param is malformed`, async () => {
         // Given:
@@ -1594,7 +1513,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote is not found`, async () => {
         // Setup:
@@ -1613,7 +1532,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - order is not found`, async () => {
         // Setup:
@@ -1634,11 +1553,13 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - quote was trying to be found`, async () => {
         // Setup:
-        jest.spyOn(Quote, 'findByPk').mockRejectedValue(new Error('error mocked.'));
+        jest.spyOn(Quote, 'findByPk').mockRejectedValue(
+          new Error('error mocked.')
+        );
 
         // Given:
         let quote_id = setup.instance.quotes[0].id;
@@ -1651,7 +1572,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
       it(`${uuid()} - order was trying to be found`, async () => {
         // Setup:
@@ -1672,7 +1593,7 @@ describe("Quote Service:", () => {
         // Then:
         expect(res.statusCode).toBeWithin(400, 522);
         expect(res.body.error).toBeDefined();
-        expect(res.body.data).toBeOneOf([ undefined, null ]);
+        expect(res.body.data).toBeOneOf([ undefined, null, false ]);
       });
     });
   });

@@ -1,35 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Customer'
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Customer';
 
 const { Customer } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getCustomers = [
-  validate(schema.getCustomers),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][db.Sequelize.Op[operator]] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getCustomers,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Customer.findAll(req.options),
-        error: null
+        data: await Customer.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -38,12 +20,12 @@ export const getCustomers = [
 ];
 
 export const createCustomers = [
-  validate(schema.createCustomer),
+  validate.createCustomer,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Customer.createMany(req.body.values),
-        error: null
+        data: await Customer.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -52,36 +34,36 @@ export const createCustomers = [
 ];
 
 export const getCustomer = [
-  validate(schema.getCustomer),
+  validate.getCustomer,
   async function params(req, res, next) {
     try {
-      req.customer = await Customer.findByPk(req.params.customer);
+      req.customer = await Customer.findByPk(req.values.params.customer);
 
-      if (req.customer) {
-        next();
-      } else {
+      if (!req.customer) {
         throw new NotFoundError('Customer not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.customer, error: null });
+    res.json({ data: req.customer, error: false });
   }
 ];
 
 export const updateCustomer = [
-  validate(schema.updateCustomer),
+  validate.updateCustomer,
   async function params(req, res, next) {
     try {
-      req.customer = await Customer.findByPk(req.params.customer);
+      req.customer = await Customer.findByPk(req.values.params.customer);
 
-      if (req.customer) {
-        next();
-      } else {
+      if (!req.customer) {
         throw new NotFoundError('Customer not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -89,8 +71,8 @@ export const updateCustomer = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.customer.update(req.body.values),
-        error: null
+        data: await req.customer.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -99,34 +81,25 @@ export const updateCustomer = [
 ];
 
 export const deleteCustomer = [
-  validate(schema.deleteCustomer),
+  validate.deleteCustomer,
   async function params(req, res, next) {
     try {
-      req.customer = await Customer.findByPk(req.params.customer);
+      req.customer = await Customer.findByPk(req.values.params.customer);
 
-      if (req.customer) {
-        next();
-      } else {
+      if (!req.customer) {
         throw new NotFoundError('Customer not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.customer.destroy(req.options),
-        error: null
+        data: await req.customer.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -135,45 +108,25 @@ export const deleteCustomer = [
 ];
 
 export const getQuotes = [
-  validate(schema.getQuotes),
+  validate.getQuotes,
   async function params(req, res, next) {
     try {
-      req.customer = await Customer.findByPk(req.params.customer);
+      req.customer = await Customer.findByPk(req.values.params.customer);
 
-      if (req.customer) {
-        next();
-      } else {
+      if (!req.customer) {
         throw new NotFoundError('Customer not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.customer.getQuotes(req.options),
-        error: null
+        data: await req.customer.getQuotes(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -182,16 +135,16 @@ export const getQuotes = [
 ];
 
 export const setQuotes = [
-  validate(schema.setQuotes),
+  validate.setQuotes,
   async function params(req, res, next) {
     try {
-      req.customer = await Customer.findByPk(req.params.customer);
+      req.customer = await Customer.findByPk(req.values.params.customer);
 
-      if (req.customer) {
-        next();
-      } else {
+      if (!req.customer) {
         throw new NotFoundError('Customer not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -199,8 +152,8 @@ export const setQuotes = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.customer.addQuotes(req.body.quotes),
-        error: null
+        data: await req.customer.addQuotes(req.values.body.quotes),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -209,16 +162,16 @@ export const setQuotes = [
 ];
 
 export const getQuote = [
-  validate(schema.getQuote),
+  validate.getQuote,
   async function params(req, res, next) {
     try {
-      req.customer = await Customer.findByPk(req.params.customer);
+      req.customer = await Customer.findByPk(req.values.params.customer);
 
-      if (req.customer) {
-        next();
-      } else {
+      if (!req.customer) {
         throw new NotFoundError('Customer not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -226,23 +179,20 @@ export const getQuote = [
   async function params(req, res, next) {
     try {
       req.quote = await req.customer.getQuotes({
-        where: { id: req.params.quote },
+        where: { id: req.values.params.quote },
         plain: true
       });
 
-      if (req.quote) {
-        next();
-      } else {
+      if (!req.quote) {
         throw new NotFoundError('Quote not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({
-      data: req.quote,
-      error: null
-    });
+    res.json({ data: req.quote, error: false });
   }
 ];

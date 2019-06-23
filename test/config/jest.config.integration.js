@@ -21,6 +21,8 @@ module.exports = {
   ],
   "collectCoverageFrom": [
     "src/services/*.js",
+    "src/validation(s|s2)/*.js",
+    // "src/validations2/*.js",
   ],
   "testMatch": [
     "<rootDir>/test/integration/**/*.(spec|test).js?(x)"

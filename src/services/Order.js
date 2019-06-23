@@ -1,37 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Order';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Order';
 
-const { Order, OrderItems } = db.sequelize.models;
+const { Order } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getOrders = [
-  validate(schema.getOrders),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getOrders,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Order.findAll(req.options),
-        error: null
+        data: await Order.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -40,12 +20,12 @@ export const getOrders = [
 ];
 
 export const createOrders = [
-  validate(schema.createOrders),
+  validate.createOrders,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Order.createMany(req.body.values),
-        error: null
+        data: await Order.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,36 +34,36 @@ export const createOrders = [
 ];
 
 export const getOrder = [
-  validate(schema.getOrder),
+  validate.getOrder,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.order, error: null });
+    res.json({ data: req.order, error: false });
   }
 ];
 
 export const updateOrder = [
-  validate(schema.updateOrder),
+  validate.updateOrder,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -91,8 +71,8 @@ export const updateOrder = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.update(req.body.values),
-        error: null
+        data: await req.order.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -101,34 +81,25 @@ export const updateOrder = [
 ];
 
 export const deleteOrder = [
-  validate(schema.deleteOrder),
+  validate.deleteOrder,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.destroy(req.options),
-        error: null
+        data: await req.order.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -137,45 +108,25 @@ export const deleteOrder = [
 ];
 
 export const getItems = [
-  validate(schema.getItems),
+  validate.getItems,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.getItems(req.options),
-        error: null
+        data: await req.order.getItems(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -184,16 +135,16 @@ export const getItems = [
 ];
 
 export const setItems = [
-  validate(schema.setItems),
+  validate.setItems,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -201,8 +152,8 @@ export const setItems = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addItems(req.body.items),
-        error: null
+        data: await req.order.addItems(req.values.body.items),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -211,16 +162,16 @@ export const setItems = [
 ]
 
 export const getItem = [
-  validate(schema.getItem),
+  validate.getItem,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -228,35 +179,35 @@ export const getItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.order.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.item, error: null });
+    res.json({ data: req.item, error: false });
   }
 ];
 
 export const updateItem = [
-  validate(schema.updateItem),
+  validate.updateItem,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -264,15 +215,15 @@ export const updateItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.order.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -280,10 +231,10 @@ export const updateItem = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addItem(req.params.item, {
-          through: req.body.values
+        data: await req.order.addItem(req.values.params.item, {
+          through: req.values.body.values
         }),
-        error: null
+        error: false
       });
     } catch (error) {
       next(error);
@@ -292,16 +243,16 @@ export const updateItem = [
 ];
 
 export const removeItem = [
-  validate(schema.removeItem),
+  validate.removeItem,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -309,15 +260,15 @@ export const removeItem = [
   async function params(req, res, next) {
     try {
       req.item = await req.order.getItems({
-        where: { id: req.params.item },
+        where: { id: req.values.params.item },
         plain: true
       });
 
-      if (req.item) {
-        next();
-      } else {
+      if (!req.item) {
         throw new NotFoundError('Item not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -325,8 +276,8 @@ export const removeItem = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.removeItem(req.params.item),
-        error: null
+        data: await req.order.removeItem(req.values.params.item),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -335,45 +286,25 @@ export const removeItem = [
 ];
 
 export const getDepartments = [
-  validate(schema.getDepartments),
+  validate.getDepartments,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.getDepartments(req.options),
-        error: null
+        data: await req.order.getDepartments(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -382,16 +313,16 @@ export const getDepartments = [
 ];
 
 export const setDepartments = [
-  validate(schema.setDepartments),
+  validate.setDepartments,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -399,8 +330,8 @@ export const setDepartments = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addDepartments(req.body.departments),
-        error: null
+        data: await req.order.addDepartments(req.values.body.departments),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -409,16 +340,16 @@ export const setDepartments = [
 ]
 
 export const getDepartment = [
-  validate(schema.getDepartment),
+  validate.getDepartment,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -426,35 +357,35 @@ export const getDepartment = [
   async function params(req, res, next) {
     try {
       req.department = await req.order.getDepartments({
-        where: { id: req.params.department },
+        where: { id: req.values.params.department },
         plain: true
       });
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.department, error: null });
+    res.json({ data: req.department, error: false });
   }
 ];
 
 export const updateDepartment = [
-  validate(schema.updateDepartment),
+  validate.updateDepartment,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -462,15 +393,15 @@ export const updateDepartment = [
   async function params(req, res, next) {
     try {
       req.department = await req.order.getDepartments({
-        where: { id: req.params.department },
+        where: { id: req.values.params.department },
         plain: true
       });
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -478,10 +409,10 @@ export const updateDepartment = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addDepartment(req.params.department, {
-          through: req.body.values
+        data: await req.order.addDepartment(req.values.params.department, {
+          through: req.values.body
         }),
-        error: null
+        error: false
       });
     } catch (error) {
       next(error);
@@ -490,16 +421,16 @@ export const updateDepartment = [
 ];
 
 export const removeDepartment = [
-  validate(schema.removeDepartment),
+  validate.removeDepartment,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -507,15 +438,15 @@ export const removeDepartment = [
   async function params(req, res, next) {
     try {
       req.department = await req.order.getDepartments({
-        where: { id: req.params.department },
+        where: { id: req.values.params.department },
         plain: true
       });
 
-      if (req.department) {
-        next();
-      } else {
+      if (!req.department) {
         throw new NotFoundError('Department not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -523,8 +454,8 @@ export const removeDepartment = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.removeDepartment(req.params.department),
-        error: null
+        data: await req.order.removeDepartment(req.values.params.department),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -533,45 +464,25 @@ export const removeDepartment = [
 ];
 
 export const getEmployees = [
-  validate(schema.getEmployees),
+  validate.getEmployees,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.getEmployees(req.options),
-        error: null
+        data: await req.order.getEmployees(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -580,16 +491,16 @@ export const getEmployees = [
 ];
 
 export const setEmployees = [
-  validate(schema.setEmployees),
+  validate.setEmployees,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -597,8 +508,8 @@ export const setEmployees = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addEmployees(req.body.employees),
-        error: null
+        data: await req.order.addEmployees(req.values.body.employees),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -607,16 +518,16 @@ export const setEmployees = [
 ]
 
 export const getEmployee = [
-  validate(schema.getEmployee),
+  validate.getEmployee,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -624,35 +535,35 @@ export const getEmployee = [
   async function params(req, res, next) {
     try {
       req.employee = await req.order.getEmployees({
-        where: { id: req.params.employee },
+        where: { id: req.values.params.employee },
         plain: true
       });
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.employee, error: null });
+    res.json({ data: req.employee, error: false });
   }
 ];
 
 export const updateEmployee = [
-  validate(schema.updateEmployee),
+  validate.updateEmployee,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -660,15 +571,15 @@ export const updateEmployee = [
   async function params(req, res, next) {
     try {
       req.employee = await req.order.getEmployees({
-        where: { id: req.params.employee },
+        where: { id: req.values.params.employee },
         plain: true
       });
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -676,10 +587,10 @@ export const updateEmployee = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.addEmployee(req.params.employee, {
-          through: req.body.values
+        data: await req.order.addEmployee(req.values.params.employee, {
+          through: req.values.body
         }),
-        error: null
+        error: false
       });
     } catch (error) {
       next(error);
@@ -688,16 +599,16 @@ export const updateEmployee = [
 ];
 
 export const removeEmployee = [
-  validate(schema.removeEmployee),
+  validate.removeEmployee,
   async function params(req, res, next) {
     try {
-      req.order = await Order.findByPk(req.params.order);
+      req.order = await Order.findByPk(req.values.params.order);
 
-      if (req.order) {
-        next();
-      } else {
+      if (!req.order) {
         throw new NotFoundError('Order not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -705,15 +616,15 @@ export const removeEmployee = [
   async function params(req, res, next) {
     try {
       req.employee = await req.order.getEmployees({
-        where: { id: req.params.employee },
+        where: { id: req.values.params.employee },
         plain: true
       });
 
-      if (req.employee) {
-        next();
-      } else {
+      if (!req.employee) {
         throw new NotFoundError('Employee not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -721,8 +632,8 @@ export const removeEmployee = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.order.removeEmployee(req.params.employee),
-        error: null
+        data: await req.order.removeEmployee(req.values.params.employee),
+        error: false
       });
     } catch (error) {
       next(error);

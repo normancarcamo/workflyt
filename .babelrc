@@ -33,7 +33,8 @@
       "plugins": [
         ["inline-dotenv", {
           "path": ".env.test"
-        }]
+        }],
+        "@babel/plugin-transform-runtime"
       ]
     }
   }

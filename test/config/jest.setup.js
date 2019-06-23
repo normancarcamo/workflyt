@@ -12,7 +12,7 @@ process.on("uncaughtException", err => {
   console.error("TestSuite: uncaughtException ->", err.message);
 });
 
-if (process.env.INTEGRATION_TEST) {
+if (JSON.parse(process.env.INTEGRATION_TEST)) {
   require("src/db/models").default.sync().then(() => {});
 }
 

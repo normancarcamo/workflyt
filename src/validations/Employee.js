@@ -1,151 +1,175 @@
-import { Joi, schema, validate } from "./index";
+import db from 'src/db/models';
+import Datalizer from "@ncardez/datalizer";
+import * as shared from './index';
 
-module.exports.schema = {};
+const { Employee, User, Quote } = db.sequelize.models;
 
-module.exports.schema.getEmployees = schema.request.keys({
-  headers: schema.headers,
-  query: schema.query.append({
-    fields: Joi.array().items(Joi.string().valid(
-      "id", "supervisor_id", "department_id", "code",
-      "firstname", "lastname", "extra",
-      "created_at", "updated_at", "deleted_at",
-      "created_by", "updated_by", "deleted_by"
-    ), Joi.any().strip()).max(13),
-    search: Joi.object({
-      id: schema.id.forbidden(),
-      supervisor_id: schema.id,
-      departement_id: schema.id,
-      code: schema.code,
-      firstname: schema.look_up(Joi.string().max(100)),
-      lastname: schema.look_up(Joi.string().max(100)),
-      extra: schema.extra,
-      created_at: schema.date_try,
-      updated_at: schema.date_try,
-      deleted_at: schema.date_try,
-      created_by: schema.look_up(schema.id),
-      updated_by: schema.look_up(schema.id),
-      deleted_by: schema.look_up(schema.id),
-    }).unknown(false),
-    include: Joi.string().max(100)
-  })
+const employeeAssociations = Object.keys(Employee.associations);
+const employeeAttributes = Object.keys(Employee.attributes);
+const userAssociations = Object.keys(User.associations);
+const userAttributes = Object.keys(User.attributes);
+const quoteAssociations = Object.keys(Quote.associations);
+const quoteAttributes = Object.keys(Quote.attributes);
+
+const getEmployees = new Datalizer({
+  query: shared.QUERY({
+    id: shared.UUID({ $optional: true, $deny: true }),
+    supervisor_id: shared.UUID({ $optional: true }),
+    departement_id: shared.UUID({ $optional: true }),
+    code: shared.CODE({ $optional: true }),
+    firstname: shared.TEXT_FILTER({ $optional: true }),
+    lastname: shared.TEXT_FILTER({ $optional: true }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE_FILTER({ $optional: true }),
+    updated_at: shared.DATE_FILTER({ $optional: true }),
+    deleted_at: shared.DATE_FILTER({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true }),
+    attributes: shared.ATTRIBUTES(employeeAttributes),
+    include: shared.INCLUDE(employeeAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true }),
+    offset: shared.OFFSET({ $optional: true }),
+    limit: shared.LIMIT({ $optional: true }),
+    sort_by: shared.ENUM(employeeAttributes),
+    order_by: shared.ORDER_BY({ $optional: true })
+  }, { $max: 36 })
 });
 
-module.exports.schema.createEmployees = schema.request.keys({
-  headers: schema.headers,
-  body: schema.body.keys({
-    values: schema.bulk.values.items(schema.values.keys({
-      id: schema.id.allow(null),
-      supervisor_id: schema.id.allow(null),
-      department_id: schema.id.required(),
-      code: schema.code,
-      firstname: schema.name.required(),
-      lastname: schema.name.required(),
-      extra: schema.extra,
-      created_at: schema.created_at,
-      updated_at: schema.updated_at,
-      deleted_at: schema.deleted_at,
-      created_by: schema.created_by,
-      updated_by: schema.updated_by,
-      deleted_by: schema.deleted_by,
-    }).unknown(false))
-  })
+const createEmployees = new Datalizer({
+  body: shared.BODY({
+    id: shared.UUID({ $optional: true, $null: true }),
+    supervisor_id: shared.UUID({ $optional: true, $null: true }),
+    department_id: shared.UUID(),
+    code: shared.CODE({ $optional: true }),
+    firstname: shared.TEXT({ $empty: false, $min: 2 }),
+    lastname: shared.TEXT({ $empty: false, $min: 2 }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE({ $optional: true }),
+    updated_at: shared.DATE({ $optional: true }),
+    deleted_at: shared.DATE({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true })
+  }, { $max: 13, $empty: false })
 });
 
-module.exports.schema.getEmployee = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ employee: schema.id.required() }),
-  query: schema.query.keys({ include: Joi.string().max(100) })
+const getEmployee = new Datalizer({
+  params: shared.PARAMS({ employee: shared.UUID() }, { $length: 1 }),
+  query: shared.QUERY({
+    attributes: shared.ATTRIBUTES(employeeAttributes),
+    include: shared.INCLUDE(employeeAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true }),
+  }, { $max: 18 })
 });
 
-module.exports.schema.updateEmployee = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ employee: schema.id.required() }),
-  body: schema.body.keys({
-    values: schema.values.keys({
-      id: schema.id.forbidden(),
-      supervisor_id: schema.id.allow(null),
-      department_id: schema.id,
-      code: schema.code,
-      firstname: schema.name,
-      lastname: schema.name,
-      extra: schema.extra,
-      created_at: schema.created_at,
-      updated_at: schema.updated_at,
-      deleted_at: schema.deleted_at,
-      created_by: schema.created_by,
-      updated_by: schema.updated_by,
-      deleted_by: schema.deleted_by,
-    }).unknown(false)
-  })
+const updateEmployee = new Datalizer({
+  params: shared.PARAMS({ employee: shared.UUID() }, { $length: 1 }),
+  body: shared.BODY({
+    id: shared.UUID({ $optional: true, $deny: true }),
+    supervisor_id: shared.UUID({ $optional: true, $deny: true }),
+    department_id: shared.UUID({ $optional: true, $deny: true }),
+    code: shared.CODE({ $optional: true }),
+    firstname: shared.TEXT({ $optional: true, $empty: false, $min: 2 }),
+    lastname: shared.TEXT({ $optional: true, $empty: false, $min: 2 }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE({ $optional: true }),
+    updated_at: shared.DATE({ $optional: true }),
+    deleted_at: shared.DATE({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true })
+  }, { $empty: false, $max: 13 })
 });
 
-module.exports.schema.deleteEmployee = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ employee: schema.id.required() }),
-  query: schema.query.keys({ force: schema.force })
+const deleteEmployee = new Datalizer({
+  params: shared.PARAMS(
+    { employee: shared.UUID() },
+    { $length: 1 }
+  ),
+  query: shared.QUERY({
+    force: shared.BOOLEAN({ $optional: true }),
+    paranoid: shared.BOOLEAN({ $optional: true })
+  }, { $max: 2 })
 });
 
-module.exports.schema.getUser = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ employee: schema.id.required() }),
+const getUser = new Datalizer({
+  params: shared.PARAMS({ employee: shared.UUID() }, { $length: 1 }),
+  query: shared.QUERY({
+    attributes: shared.ATTRIBUTES(userAttributes),
+    include: shared.INCLUDE(userAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true })
+  }, { $max: 20 })
 });
 
-module.exports.schema.setUser = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ employee: schema.id.required() }),
-  body: schema.body.keys({ user: schema.id.required() })
+const setUser = new Datalizer({
+  params: shared.PARAMS({ employee: shared.UUID() }, { $length: 1 }),
+  body: shared.BODY({ user: shared.UUID() }, { $length: 1 })
 });
 
-module.exports.schema.removeUser = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ employee: schema.id.required() })
+const removeUser = new Datalizer({
+  params: shared.PARAMS(
+    { employee: shared.UUID() },
+    { $length: 1 }
+  )
 });
 
-module.exports.schema.getQuotes = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ employee: schema.id.required() }),
-  query: schema.query.append({
-    fields: Joi.array().items(Joi.string().valid(
-      "id", "customer_id", "salesman_id", "code",
-      "subject", "status", "extra",
-      "created_at", "updated_at", "deleted_at",
-      "created_by", "updated_by", "deleted_by",
-    ), Joi.any().strip()).max(13),
-    search: Joi.object({
-      id: schema.id.forbidden(),
-      customer_id: schema.id,
-      salesman_id: schema.id,
-      code: schema.code,
-      subject: schema.look_up(schema.desc),
-      status: Joi.string().valid(
-        "open", "confirmed", "other", "approved",
-        "pending", "awaiting", "authorized",
-        "cancelled", "done"
-      ),
-      extra: schema.extra,
-      created_at: schema.date_try,
-      updated_at: schema.date_try,
-      deleted_at: schema.date_try,
-      created_by: schema.look_up(schema.id),
-      updated_by: schema.look_up(schema.id),
-      deleted_by: schema.look_up(schema.id),
-    }).unknown(false)
-  })
+const getQuotes = new Datalizer({
+  params: shared.PARAMS({ employee: shared.UUID() }, { $length: 1 }),
+  query: shared.QUERY({
+    id: shared.UUID({ $optional: true, $deny: true }),
+    customer_id: shared.UUID({ $optional: true }),
+    salesman_id: shared.UUID({ $optional: true }),
+    code: shared.CODE({ $optional: true }),
+    subject: shared.TEXT_FILTER({ $optional: true }),
+    status: shared.ENUM([
+      "open", "confirmed", "other", "approved", "pending",
+      "awaiting", "authorized", "cancelled", "done"
+    ]),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE_FILTER({ $optional: true }),
+    updated_at: shared.DATE_FILTER({ $optional: true }),
+    deleted_at: shared.DATE_FILTER({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true }),
+    attributes: shared.ATTRIBUTES(quoteAttributes),
+    include: shared.INCLUDE(quoteAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true }),
+    limit: shared.LIMIT({ $optional: true }),
+    offset: shared.OFFSET({ $optional: true }),
+    sort_by: shared.ENUM(quoteAttributes),
+    order_by: shared.ORDER_BY({ $optional: true })
+  }, { $max: 34 })
 });
 
-module.exports.schema.setQuotes = schema.request.keys({
-  headers: schema.headers,
-  query: schema.query,
-  params: schema.params.keys({ employee: schema.id.required() }),
-  body: schema.body.keys({ quotes: schema.bulk.id.required() })
+const setQuotes = new Datalizer({
+  params: shared.PARAMS({ employee: shared.UUID() }, { $length: 1 }),
+  body: shared.BODY({ quotes: shared.UUID_ARRAY() }, { $length: 1 })
 });
 
-module.exports.schema.getQuote = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({
-    employee: schema.id.required(),
-    quote: schema.id.required()
-  })
+const getQuote = new Datalizer({
+  params: shared.PARAMS(
+    { employee: shared.UUID(), quote: shared.UUID() },
+    { $length: 2 }
+  ),
+  query: shared.QUERY({
+    attributes: shared.ATTRIBUTES(quoteAttributes),
+    include: shared.INCLUDE(quoteAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true })
+  }, { $max: 20 })
 });
 
-module.exports.validate = validate;
+export default {
+  getEmployees: shared.validate(getEmployees),
+  createEmployees: shared.validate(createEmployees),
+  getEmployee: shared.validate(getEmployee),
+  updateEmployee: shared.validate(updateEmployee),
+  deleteEmployee: shared.validate(deleteEmployee),
+  getUser: shared.validate(getUser),
+  setUser: shared.validate(setUser),
+  removeUser: shared.validate(removeUser),
+  getQuotes: shared.validate(getQuotes),
+  setQuotes: shared.validate(setQuotes),
+  getQuote: shared.validate(getQuote)
+};

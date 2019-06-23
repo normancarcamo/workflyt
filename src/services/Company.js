@@ -1,37 +1,17 @@
 import db from "src/db/models";
-import { is, errors } from '@playscode/fns';
-import { schema, validate } from 'src/validations/Company';
+import { errors } from '@playscode/fns';
+import validate from 'src/validations/Company';
 
 const { Company } = db.sequelize.models;
 const { NotFoundError } = errors;
 
 export const getCompanies = [
-  validate(schema.getCompanies),
-  async function query(req, res, next) {
-    req.options = { where: {}, include: [] };
-
-    if (req.query.search) {
-      for (let key in req.query.search) {
-        if (is.object(req.query.search[key])) {
-          req.options.where[key] = {};
-          for (let operator in req.query.search[key]) {
-            req.options.where[key][
-              db.Sequelize.Op[operator]
-            ] = req.query.search[key][operator];
-          }
-        } else {
-          req.options.where[key] = req.query.search[key];
-        }
-      }
-    }
-
-    next();
-  },
+  validate.getCompanies,
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await Company.findAll(req.options),
-        error: null
+        data: await Company.findAll(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -40,12 +20,12 @@ export const getCompanies = [
 ];
 
 export const createCompanies = [
-  validate(schema.createCompanies),
+  validate.createCompanies,
   async function handler(req, res, next) {
     try {
       res.status(201).json({
-        data: await Company.createMany(req.body.values),
-        error: null
+        data: await Company.createMany(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -54,36 +34,36 @@ export const createCompanies = [
 ];
 
 export const getCompany = [
-  validate(schema.getCompany),
+  validate.getCompany,
   async function params(req, res, next) {
     try {
-      req.company = await Company.findByPk(req.params.company);
+      req.company = await Company.findByPk(req.values.params.company);
 
-      if (req.company) {
-        next();
-      } else {
+      if (!req.company) {
         throw new NotFoundError('Company not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
   async function handler(req, res, next) {
-    res.json({ data: req.company, error: null });
+    res.json({ data: req.company, error: false });
   }
 ];
 
 export const updateCompany = [
-  validate(schema.updateCompany),
+  validate.updateCompany,
   async function params(req, res, next) {
     try {
-      req.company = await Company.findByPk(req.params.company);
+      req.company = await Company.findByPk(req.values.params.company);
 
-      if (req.company) {
-        next();
-      } else {
+      if (!req.company) {
         throw new NotFoundError('Company not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -91,8 +71,8 @@ export const updateCompany = [
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.company.update(req.body.values),
-        error: null
+        data: await req.company.update(req.values.body),
+        error: false
       });
     } catch (error) {
       next(error);
@@ -101,34 +81,25 @@ export const updateCompany = [
 ];
 
 export const deleteCompany = [
-  validate(schema.deleteCompany),
+  validate.deleteCompany,
   async function params(req, res, next) {
     try {
-      req.company = await Company.findByPk(req.params.company);
+      req.company = await Company.findByPk(req.values.params.company);
 
-      if (req.company) {
-        next();
-      } else {
+      if (!req.company) {
         throw new NotFoundError('Company not found.');
       }
+
+      next();
     } catch (error) {
       next(error);
     }
   },
-  async function query(req, res, next) {
-    req.options = {};
-
-    if (req.query.force) {
-      req.options.force = JSON.parse(req.query.force);
-    }
-
-    next();
-  },
   async function handler(req, res, next) {
     try {
       res.json({
-        data: await req.company.destroy(req.options),
-        error: null
+        data: await req.company.destroy(req.values.query),
+        error: false
       });
     } catch (error) {
       next(error);

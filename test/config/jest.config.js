@@ -5,13 +5,14 @@ module.exports = {
   "verbose": false,
   "collectCoverage": false,
   "expand": true,
-  "testURL": "http://localhost/",
+  "testURL": "http://localhost:3000/",
   "coverageDirectory": "./test/reports/coverage",
   "testEnvironment": "node",
   "rootDir": "../../",
   "setupFilesAfterEnv": [
     "./test/config/jest.setup.js"
   ],
+  "watchPathIgnorePatterns": ["node_modules"],
   "transform": {
     "^.+\\.js$": "babel-jest"
   },

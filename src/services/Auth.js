@@ -1,108 +1,62 @@
-/*import {
-  ValidationError,
-  NotFoundError,
-  HttpError,
-  InternalError,
-  BadRequestError
-} from "@playscode/fns/lib/errors";
-import { body, validationResult } from "express-validator/check";
+import { ValidationError, NotFoundError } from "@playscode/fns/lib/errors";
 import db from "src/db/models";
 import bcrypt from "bcrypt";
+import validate from 'src/validations/Auth';
 
-// JWT, LOGIN, SIGNUP, SIGN OUT, RECOVERY PASSWORD, OAuth2, HRBAC, CACHE
+const { User } = db.sequelize.models;
 
-const validator = {
-  username: body("username")
-    .isString()
-    .isLength({ min: 4 })
-    .not()
-    .isEmpty()
-    .trim()
-    .escape()
-    .withMessage('must be at least 4 chars long'),
-  password: body("password")
-    .isString()
-    .isLength({ min: 4 })
-    .not()
-    .isEmpty()
-    .trim()
-    .escape()
-    .withMessage('must be at least 4 chars long'),
-  worker: body("worker_id")
-    .isString()
-    .trim()
-    .not()
-    .isEmpty()
-    .isUUID()
-    .withMessage('must be a UUID value'),
-}
-
-export const signUp = [
-  validator.username,
-  validator.password,
-  validator.worker,
+export const signIn = [
+  validate.signIn,
   async function(req, res, next) {
-    const { Worker, Users } = db.sequelize.models;
-    const errors = validationResult(req);
+    try {
+      let { username, password } = req.values.body;
 
-    if (!errors.isEmpty()) {
-      next(new ValidationError("denied", { errors: errors.array() }));
-    } else {
-      try {
-        const { worker_id, username, password } = req.body;
-        const userIsTaken = await Users.findOne({ where: { username }});
-        if (userIsTaken) {
-          next(new ValidationError("`username` is already taken."));
-        } else {
-          res.status(201).json({
-            success: true,
-            payload: await Users.create({
-              worker_id,
-              username,
-              password: await bcrypt.hash(password, 10)
-            })
-          });
-        }
-      } catch (err) {
-        next(new InternalError(err.message));
+      let user = await User.findOne({ where: { username } });
+
+      if (!user) {
+        throw new NotFoundError("user has not been found.", null);
       }
+
+      let match = await bcrypt.compare(password, user.password);
+
+      if (!match) {
+        throw new ValidationError("user access is denied.");
+      }
+
+      delete user.dataValues.password;
+
+      let cookie = { httpOnly: true, secure: true, signed: true };
+
+      res.cookie("user_id", user.id, cookie);
+
+      res.json({ data: user, error: false });
+    } catch (error) {
+      next(error);
     }
   }
 ];
 
-export const signIn = [
-  validator.username,
-  validator.password,
+export const signUp = [
+  validate.signUp,
   async function(req, res, next) {
-    const { Worker, Users } = db.sequelize.models;
-    const errors = validationResult(req);
+    try {
+      let { username, password } = req.values.body;
 
-    if (!errors.isEmpty()) {
-      next(new ValidationError("denied", { errors: errors.array() }));
-    } else {
-      try {
-        const { username, password } = req.body;
-        const user = await Users.findOne({ where: { username } });
+      let user = await User.findOne({ where: { username } });
 
-        if (user) {
-          const passValid = await bcrypt.compare(password, user.password);
-          if (passValid) {
-            res.cookie("user_id", user.id, {
-              httpOnly: true,
-              secure: req.app.get('env') === "production",
-              signed: true,
-            });
-            res.status(200).json({ success: true, payload: user });
-          } else {
-            next(new ValidationError("access denied"));
-          }
-        } else {
-          next(new NotFoundError("`username` was not found", null));
-        }
-      } catch (err) {
-        next(new InternalError(err.message));
+      if (user) {
+        throw new ValidationError("user is already taken.");
       }
-    };
+
+      res.status(201).json({
+        data: await User.create({
+          username,
+          password: await bcrypt.hash(password, 10)
+        }),
+        error: false,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 ];
-*/

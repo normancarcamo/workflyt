@@ -1,121 +1,135 @@
-import { Joi, schema, validate } from "./index";
+import db from 'src/db/models';
+import Datalizer from "@ncardez/datalizer";
+import * as shared from './index';
 
-module.exports.schema = {};
+const { Customer, Quote } = db.sequelize.models;
 
-module.exports.schema.getCustomers = schema.request.keys({
-  headers: schema.headers,
-  query: schema.query.append({
-    fields: Joi.array().items(Joi.string().valid(
-      "id", "code", "name", "extra",
-      "created_at", "updated_at", "deleted_at",
-      "created_by", "updated_by", "deleted_by",
-    ), Joi.any().strip()).max(10),
-    search: Joi.object({
-      id: schema.id.forbidden(),
-      code: schema.code,
-      name: schema.look_up(Joi.string().max(100)),
-      extra: schema.extra,
-      created_at: schema.date_try,
-      updated_at: schema.date_try,
-      deleted_at: schema.date_try,
-      created_by: schema.look_up(schema.id),
-      updated_by: schema.look_up(schema.id),
-      deleted_by: schema.look_up(schema.id),
-    }).unknown(false)
-  })
+const customerAssociations = Object.keys(Customer.associations);
+const customerAttributes = Object.keys(Customer.attributes);
+const quoteAssociations = Object.keys(Quote.associations);
+const quoteAttributes = Object.keys(Quote.attributes);
+
+const getCustomers = new Datalizer({
+  query: shared.QUERY({
+    id: shared.UUID({ $optional: true, $forbidden: true }),
+    code: shared.CODE({ $optional: true }),
+    name: shared.TEXT_FILTER({ $optional: true, $max: 100 }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE_FILTER({ $optional: true }),
+    updated_at: shared.DATE_FILTER({ $optional: true }),
+    deleted_at: shared.DATE_FILTER({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true }),
+    offset: shared.OFFSET({ $optional: true }),
+    limit: shared.LIMIT({ $optional: true }),
+    attributes: shared.ATTRIBUTES(customerAttributes),
+    include: shared.INCLUDE(customerAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true }),
+    sort_by: shared.ENUM(customerAttributes),
+    order_by: shared.ORDER_BY({ $optional: true })
+  }, { max: 30 })
 });
 
-module.exports.schema.createCustomer = schema.request.keys({
-  headers: schema.headers,
-  body: schema.body.keys({
-    values: schema.bulk.values.items(
-      schema.values.keys({
-        id: schema.id.allow(null),
-        code: schema.code,
-        name: schema.name.required(),
-        extra: schema.extra,
-        created_at: schema.created_at,
-        updated_at: schema.updated_at,
-        deleted_at: schema.deleted_at,
-        created_by: schema.created_by,
-        updated_by: schema.updated_by,
-        deleted_by: schema.deleted_by,
-      }).unknown(false)
-    )
-  })
+const createCustomer = new Datalizer({
+  body: shared.BODY({
+    id: shared.UUID({ $optional: true, $null: true }),
+    code: shared.CODE({ $optional: true }),
+    name: shared.TEXT({ $empty: false, $min: 2 }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE({ $optional: true }),
+    updated_at: shared.DATE({ $optional: true }),
+    deleted_at: shared.DATE({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true })
+  }, { $max: 10 })
 });
 
-module.exports.schema.getCustomer = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ customer: schema.id.required() })
+const getCustomer = new Datalizer({
+  params: shared.PARAMS({ customer: shared.UUID() }, { $length: 1 }),
+  query: shared.QUERY({
+    attributes: shared.ATTRIBUTES(customerAttributes),
+    include: shared.INCLUDE(customerAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true })
+  }, { $max: 20 })
 });
 
-module.exports.schema.updateCustomer = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ customer: schema.id.required() }),
-  body: schema.body.keys({
-    values: schema.values.keys({
-      id: schema.id.forbidden(),
-      code: schema.code,
-      name: schema.name,
-      extra: schema.extra,
-      created_at: schema.created_at,
-      updated_at: schema.updated_at,
-      deleted_at: schema.deleted_at,
-      created_by: schema.created_by,
-      updated_by: schema.updated_by,
-      deleted_by: schema.deleted_by,
-    }).unknown(false)
-  })
+const updateCustomer = new Datalizer({
+  params: shared.PARAMS({ customer: shared.UUID() }, { $length: 1 }),
+  body: shared.BODY({
+    id: shared.UUID({ $optional: true, $forbidden: true }),
+    code: shared.CODE({ $optional: true }),
+    name: shared.TEXT({ $optional: true, $empty: false, $min: 2 }),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE({ $optional: true }),
+    updated_at: shared.DATE({ $optional: true }),
+    deleted_at: shared.DATE({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true })
+  }, { $max: 10, $empty: false })
 });
 
-module.exports.schema.deleteCustomer = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ customer: schema.id.required() }),
-  query: schema.query.keys({ force: schema.force })
+const deleteCustomer = new Datalizer({
+  params: shared.PARAMS({ customer: shared.UUID() }, { $length: 1 }),
+  query: shared.QUERY({
+    force: shared.BOOLEAN({ $optional: true }),
+    paranoid: shared.BOOLEAN({ $optional: true }),
+  }, { $max: 2 })
 });
 
-module.exports.schema.getQuotes = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({ customer: schema.id.required() }),
-  query: schema.query.append({
-    fields: Joi.array().items(Joi.string().valid(
-      "id", "code", "name", "status", "extra",
-      "created_at", "updated_at", "deleted_at",
-      "created_by", "updated_by", "deleted_by",
-    ), Joi.any().strip()).max(11),
-    search: Joi.object({
-      id: schema.id.forbidden(),
-      code: schema.code,
-      name: schema.look_up(schema.name),
-      status: Joi.string().valid(
-        "open", "confirmed", "other", "approved", "pending",
-        "awaiting", "authorized", "cancelled", "done"
-      ).default("awaiting"),
-      extra: schema.extra,
-      created_at: schema.date_try,
-      updated_at: schema.date_try,
-      deleted_at: schema.date_try,
-      created_by: schema.look_up(schema.id),
-      updated_by: schema.look_up(schema.id),
-      deleted_by: schema.look_up(schema.id),
-    }).unknown(false)
-  })
+const getQuotes = new Datalizer({
+  params: shared.PARAMS({ customer: shared.UUID() }, { $length: 1 }),
+  query: shared.QUERY({
+    id: shared.UUID({ $optional: true, $forbidden: true }),
+    code: shared.CODE({ $optional: true }),
+    subject: shared.TEXT_FILTER({ $optional: true, $max: 100 }),
+    status: shared.ENUM([
+      "open", "confirmed", "other", "approved", "pending",
+      "awaiting", "authorized", "cancelled", "done"
+    ]),
+    extra: shared.EXTRA({ $optional: true }),
+    created_at: shared.DATE_FILTER({ $optional: true }),
+    updated_at: shared.DATE_FILTER({ $optional: true }),
+    deleted_at: shared.DATE_FILTER({ $optional: true }),
+    created_by: shared.UUID({ $optional: true }),
+    updated_by: shared.UUID({ $optional: true }),
+    deleted_by: shared.UUID({ $optional: true }),
+    offset: shared.OFFSET({ $optional: true }),
+    limit: shared.LIMIT({ $optional: true }),
+    attributes: shared.ATTRIBUTES(quoteAttributes),
+    include: shared.INCLUDE(quoteAssociations),
+    paranoid: shared.BOOLEAN({ $optional: true }),
+    sort_by: shared.ENUM(quoteAttributes),
+    order_by: shared.ORDER_BY({ $optional: true })
+  }, { $max: 30 })
 });
 
-module.exports.schema.setQuotes = schema.request.keys({
-  headers: schema.headers,
-  query: schema.query,
-  params: schema.params.keys({ customer: schema.id.required() }),
-  body: schema.body.keys({ quotes: schema.bulk.id.required() })
+const setQuotes = new Datalizer({
+  params: shared.PARAMS({ customer: shared.UUID() }, { $length: 1 }),
+  body: shared.BODY({ quotes: shared.UUID_ARRAY() }, { $length: 1 })
 });
 
-module.exports.schema.getQuote = schema.request.keys({
-  headers: schema.headers,
-  params: schema.params.keys({
-    customer: schema.id.required(),
-    quote: schema.id.required()
-  })
+const getQuote = new Datalizer({
+  params: shared.PARAMS({
+    customer: shared.UUID(),
+    quote: shared.UUID()
+  }, { $length: 2 }),
+  query: shared.QUERY({
+    paranoid: shared.BOOLEAN({ $optional: true }),
+    attributes: shared.ATTRIBUTES(quoteAttributes),
+    include: shared.INCLUDE(quoteAssociations)
+  }, { $max: 20 })
 });
 
-module.exports.validate = validate;
+export default {
+  getCustomers: shared.validate(getCustomers),
+  createCustomer: shared.validate(createCustomer),
+  getCustomer: shared.validate(getCustomer),
+  updateCustomer: shared.validate(updateCustomer),
+  deleteCustomer: shared.validate(deleteCustomer),
+  getQuotes: shared.validate(getQuotes),
+  setQuotes: shared.validate(setQuotes),
+  getQuote: shared.validate(getQuote)
+};
