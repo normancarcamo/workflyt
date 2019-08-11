@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  use_env_variable: process.env.DATABASE_URL,
+const sequelize = new Sequelize(process.env.POSTGRES_URL, {
+  use_env_variable: process.env.POSTGRES_URL,
   define: {
     charset: 'utf8',
     engine: 'InnoDB',
