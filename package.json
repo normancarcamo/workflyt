@@ -4,10 +4,6 @@
   "main": "src/index.js",
   "description": "App to handle workflows",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/normancarcamo/workflyt.git"
-  },
   "scripts": {
     "dev": "./node_modules/.bin/nodemon",
     "stage": "pm2 deploy ecosystem.config.js staging update",
@@ -25,6 +21,25 @@
     "db:migration:test": "sh src/providers/postgres/scripts/shell/migrate_test.sh",
     "db:migration:dev": "sh src/providers/postgres/scripts/shell/migrate_dev.sh"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/normancarcamo/workflyt.git"
+  },
+  "contributors": [],
+  "author": {
+    "name": "Norman Carcamo",
+    "email": "normancarcamo@gmail.com"
+  },
+  "maintainers": [
+    "Norman Carcamo <normancarcamo@gmail.com> (normancarcamo.com)"
+  ],
+  "keywords": [
+    "workflyt"
+  ],
+  "bugs": {
+    "url": "https://github.com/normancarcamo/workflyt/issues"
+  },
+  "homepage": "https://github.com/normancarcamo/workflyt",
   "dependencies": {
     "@babel/preset-env": "^7.1.5",
     "@babel/runtime": "^7.1.5",
