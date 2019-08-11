@@ -1,10 +1,18 @@
 FROM node:10
 
-WORKDIR /srv/www/workflyt
+RUN mkdir -p /home/node/app/workflyt
 
-COPY . /workflyt
+RUN chown -R node:node /home/node/app
+
+WORKDIR /home/node/app/workflyt
+
+COPY . ./
+
+USER node
 
 RUN npm install
+
+COPY --chown=node:node . .
 
 EXPOSE 3000
 
