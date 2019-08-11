@@ -1,0 +1,28 @@
+[
+  {
+    "warehouse_id": "ee428eaa-c8ef-4e4d-94f0-505b0b6379bd",
+    "item_id": "411e7fa2-0067-4593-98b0-00eb1713c83a",
+    "extra": {
+      "units": 143
+    },
+    "created_at": "2019-08-10T11:54:15.695Z",
+    "updated_at": "2019-08-10T11:54:15.695Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "ee428eaa-c8ef-4e4d-94f0-505b0b6379bd",
+    "item_id": "62638e8b-9355-490a-99e3-431e1a047a23",
+    "extra": {
+      "units": 11
+    },
+    "created_at": "2019-08-10T11:54:15.695Z",
+    "updated_at": "2019-08-10T11:54:15.695Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

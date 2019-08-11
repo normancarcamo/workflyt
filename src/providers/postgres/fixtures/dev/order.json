@@ -1,0 +1,58 @@
+[
+  {
+    "id": "573dda5d-22ca-43c7-b6e4-16c051e51a0d",
+    "quote_id": "8f235e0e-6c8a-4ae7-b672-4fa538fa689c",
+    "code": "ORD-19/001",
+    "type": "work",
+    "status": "cancelled",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.072Z",
+    "updated_at": "2019-08-10T11:54:24.072Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "9c3e6d3e-d77e-423a-90a7-1eccafa68d08",
+    "quote_id": "c76525ff-38d6-4c8a-a497-6bd5ee821e60",
+    "code": "ORD-19/002",
+    "type": "work",
+    "status": "awaiting",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.072Z",
+    "updated_at": "2019-08-10T11:54:24.072Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "0fac2956-4313-4d8e-82f1-1c6db4d79269",
+    "quote_id": "8c66f070-44b1-4a6a-aae7-67981895569d",
+    "code": "ORD-19/003",
+    "type": "work",
+    "status": "done",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.072Z",
+    "updated_at": "2019-08-10T11:54:24.072Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "8f3c8588-a97b-4957-aa53-3fdd5d58a893",
+    "quote_id": null,
+    "code": "ORD-19/003",
+    "type": "installation",
+    "status": "done",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.072Z",
+    "updated_at": "2019-08-10T11:54:24.072Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

@@ -9,12 +9,11 @@
         "extensions": [ ".js", ".jsx", ".json" ],
         "root": [
           "./",
-          "./src",
-          "./src/db",
-          "./src/services",
-          "./src/utils",
-          "./src/validations",
-          "./test"
+          "./logs",
+          "./dist",
+          "./docs",
+          "./test",
+          "./src"
         ]
       }
     ],

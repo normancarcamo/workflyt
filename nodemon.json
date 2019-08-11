@@ -15,7 +15,7 @@
   "events": {
     "start": "sh nodemon.sh"
   },
-  "script": "src/server.js",
+  "script": "src/index.js",
   "restartable": "rs",
   "verbose": false,
   "watch": ["src"],

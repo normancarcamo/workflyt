@@ -1,11 +1,11 @@
-FROM node:8.11.4
+FROM node:10
 
 WORKDIR /srv/www/workflyt
 
-COPY . .
+COPY . /workflyt
 
 RUN npm install
 
 EXPOSE 3000
 
-CMD ["npm", "run", "prod"]
+CMD ["npm", "run", "dev"]

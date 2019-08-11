@@ -1,0 +1,26 @@
+[
+  {
+    "id": "86655023-4b54-49c8-80bd-878944b996ef",
+    "code": "SPL/001",
+    "name": "Animax",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.080Z",
+    "updated_at": "2019-08-10T11:54:15.080Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "828b5062-73a8-4b68-b74a-ffadd6a75333",
+    "code": "SPL/002",
+    "name": "Cortex",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.080Z",
+    "updated_at": "2019-08-10T11:54:15.080Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

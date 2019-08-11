@@ -1,362 +1,390 @@
-import express from 'express';
-import { methodNotAllowed } from '@playscode/fns/lib/middlewares';
-import * as DepartmentService from 'src/services/Department';
-import * as PermissionService from 'src/services/Permission';
-import * as WarehouseService from 'src/services/Warehouse';
-import * as EmployeeService from 'src/services/Employee';
-import * as SupplierService from 'src/services/Supplier';
-import * as CategoryService from 'src/services/Category';
-import * as CustomerService from 'src/services/Customer';
-import * as CompanyService from 'src/services/Company';
-import * as StockService from 'src/services/Stock';
-import * as OrderService from 'src/services/Order';
-import * as QuoteService from 'src/services/Quote';
-import * as ItemService from 'src/services/Item';
-import * as UserService from 'src/services/User';
-import * as RoleService from 'src/services/Role';
-import * as AuthService from 'src/services/auth';
+const AuthController = require('./core/auth');
+const CategoryController = require('./core/categories');
+const CompanyController = require('./core/companies');
+const CustomerController = require('./core/customers');
+const DepartmentController = require('./core/departments');
+const EmployeeController = require('./core/employees');
+const ItemController = require('./core/items');
+const OrderController = require('./core/orders');
+const PermissionController = require('./core/permissions');
+const QuoteController = require('./core/quotes');
+const RoleController = require('./core/roles');
+const StockController = require('./core/stocks');
+const SupervisorController = require('./core/supervisors');
+const SupplierController = require('./core/suppliers');
+const UserController = require('./core/users');
+const WarehouseController = require('./core/warehouses');
+const middlewares = require('./utils/middlewares');
+const express = require('express');
 
 const router = express.Router();
 
 // AUTH:
 router
   .route('/auth/signin')
-  .post(AuthService.signIn)
-  .all(methodNotAllowed);
+  .post(AuthController.signIn)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/auth/signup')
-  .post(AuthService.signUp)
-  .all(methodNotAllowed);
+  .post(AuthController.signUp)
+  .all(middlewares.onMethodNotAllowed);
 
 // CATEGORIES:
 router
   .route('/categories')
-  .get(CategoryService.getCategories)
-  .post(CategoryService.createCategories)
-  .all(methodNotAllowed);
+  .get(CategoryController.getCategories)
+  .post(CategoryController.createCategories)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/categories/:category')
-  .get(CategoryService.getCategory)
-  .put(CategoryService.updateCategory)
-  .delete(CategoryService.deleteCategory)
-  .all(methodNotAllowed);
+  .get(CategoryController.getCategory)
+  .put(CategoryController.updateCategory)
+  .delete(CategoryController.deleteCategory)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/categories/:category/items')
-  .get(CategoryService.getItems)
-  .post(CategoryService.setItems)
-  .all(methodNotAllowed);
+  .get(CategoryController.getItems)
+  .post(CategoryController.addItems)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/categories/:category/items/:item')
-  .get(CategoryService.getItem)
-  .delete(CategoryService.removeItem)
-  .all(methodNotAllowed);
+  .get(CategoryController.getItem)
+  .delete(CategoryController.removeItem)
+  .all(middlewares.onMethodNotAllowed);
 
 // COMPANIES:
 router
   .route('/companies')
-  .get(CompanyService.getCompanies)
-  .post(CompanyService.createCompanies)
-  .all(methodNotAllowed);
+  .get(CompanyController.getCompanies)
+  .post(CompanyController.createCompanies)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/companies/:company')
-  .get(CompanyService.getCompany)
-  .put(CompanyService.updateCompany)
-  .delete(CompanyService.deleteCompany)
-  .all(methodNotAllowed);
+  .get(CompanyController.getCompany)
+  .put(CompanyController.updateCompany)
+  .delete(CompanyController.deleteCompany)
+  .all(middlewares.onMethodNotAllowed);
 
 // CUSTOMERS:
 router
   .route('/customers')
-  .get(CustomerService.getCustomers)
-  .post(CustomerService.createCustomers)
-  .all(methodNotAllowed);
+  .get(CustomerController.getCustomers)
+  .post(CustomerController.createCustomers)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/customers/:customer')
-  .get(CustomerService.getCustomer)
-  .put(CustomerService.updateCustomer)
-  .delete(CustomerService.deleteCustomer)
-  .all(methodNotAllowed);
+  .get(CustomerController.getCustomer)
+  .put(CustomerController.updateCustomer)
+  .delete(CustomerController.deleteCustomer)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/customers/:customer/quotes')
-  .get(CustomerService.getQuotes)
-  .post(CustomerService.setQuotes)
-  .all(methodNotAllowed);
+  .get(CustomerController.getQuotes)
+  .post(CustomerController.addQuotes)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/customers/:customer/quotes/:quote')
-  .get(CustomerService.getQuote)
-  .all(methodNotAllowed);
+  .get(CustomerController.getQuote)
+  .all(middlewares.onMethodNotAllowed);
 
 // DEPARTMENTS:
 router
   .route('/departments')
-  .get(DepartmentService.getDepartments)
-  .post(DepartmentService.createDepartments)
-  .all(methodNotAllowed);
+  .get(DepartmentController.getDepartments)
+  .post(DepartmentController.createDepartments)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/departments/:department')
-  .get(DepartmentService.getDepartment)
-  .put(DepartmentService.updateDepartment)
-  .delete(DepartmentService.deleteDepartment)
-  .all(methodNotAllowed);
+  .get(DepartmentController.getDepartment)
+  .put(DepartmentController.updateDepartment)
+  .delete(DepartmentController.deleteDepartment)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/departments/:department/employees')
-  .get(DepartmentService.getEmployees)
-  .post(DepartmentService.setEmployees)
-  .all(methodNotAllowed);
+  .get(DepartmentController.getEmployees)
+  .post(DepartmentController.addEmployees)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/departments/:department/employees/:employee')
-  .get(DepartmentService.getEmployee)
-  .all(methodNotAllowed);
+  .get(DepartmentController.getEmployee)
+  .put(DepartmentController.updateEmployee)
+  .delete(DepartmentController.removeEmployee)
+  .all(middlewares.onMethodNotAllowed);
 
 // EMPLOYEES:
 router
   .route('/employees')
-  .get(EmployeeService.getEmployees)
-  .post(EmployeeService.createEmployees)
-  .all(methodNotAllowed);
+  .get(EmployeeController.getEmployees)
+  .post(EmployeeController.createEmployees)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/employees/:employee')
-  .get(EmployeeService.getEmployee)
-  .put(EmployeeService.updateEmployee)
-  .delete(EmployeeService.deleteEmployee)
-  .all(methodNotAllowed);
+  .get(EmployeeController.getEmployee)
+  .put(EmployeeController.updateEmployee)
+  .delete(EmployeeController.deleteEmployee)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/employees/:employee/user')
-  .get(EmployeeService.getUser)
-  .post(EmployeeService.setUser)
-  .delete(EmployeeService.removeUser)
-  .all(methodNotAllowed);
+  .get(EmployeeController.getUser)
+  .post(EmployeeController.setUser)
+  .delete(EmployeeController.removeUser)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/employees/:employee/quotes')
-  .get(EmployeeService.getQuotes)
-  .post(EmployeeService.setQuotes)
-  .all(methodNotAllowed);
+  .get(EmployeeController.getQuotes)
+  .post(EmployeeController.addQuotes)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/employees/:employee/quotes/:quote')
-  .get(EmployeeService.getQuote)
-  .all(methodNotAllowed);
+  .get(EmployeeController.getQuote)
+  .all(middlewares.onMethodNotAllowed);
+router
+  .route('/employees/:employee/supervisors')
+  .get(EmployeeController.getSupervisors)
+  .post(EmployeeController.addSupervisors)
+  .all(middlewares.onMethodNotAllowed);
+router
+  .route('/employees/:employee/supervisors/:supervisor')
+  .get(EmployeeController.getSupervisor)
+  .put(EmployeeController.updateSupervisor)
+  .delete(EmployeeController.removeSupervisor)
+  .all(middlewares.onMethodNotAllowed);
 
 // ITEMS:
 router
   .route('/items')
-  .get(ItemService.getItems)
-  .post(ItemService.createItems)
-  .all(methodNotAllowed);
+  .get(ItemController.getItems)
+  .post(ItemController.createItems)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/items/:item')
-  .get(ItemService.getItem)
-  .put(ItemService.updateItem)
-  .delete(ItemService.deleteItem)
-  .all(methodNotAllowed);
+  .get(ItemController.getItem)
+  .put(ItemController.updateItem)
+  .delete(ItemController.deleteItem)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/items/:item/stocks')
-  .get(ItemService.getStocks)
-  .post(ItemService.setStocks)
-  .all(methodNotAllowed);
+  .get(ItemController.getStocks)
+  .post(ItemController.addStocks)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/items/:item/stocks/:stock')
-  .get(ItemService.getStock)
-  .all(methodNotAllowed);
+  .get(ItemController.getStock)
+  .all(middlewares.onMethodNotAllowed);
 
 // ORDERS:
 router
   .route('/orders')
-  .get(OrderService.getOrders)
-  .post(OrderService.createOrders)
-  .all(methodNotAllowed);
+  .get(OrderController.getOrders)
+  .post(OrderController.createOrders)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/orders/:order')
-  .get(OrderService.getOrder)
-  .put(OrderService.updateOrder)
-  .delete(OrderService.deleteOrder)
-  .all(methodNotAllowed);
+  .get(OrderController.getOrder)
+  .put(OrderController.updateOrder)
+  .delete(OrderController.deleteOrder)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/orders/:order/items')
-  .get(OrderService.getItems)
-  .post(OrderService.setItems)
-  .all(methodNotAllowed);
+  .get(OrderController.getItems)
+  .post(OrderController.addItems)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/orders/:order/items/:item')
-  .get(OrderService.getItem)
-  .put(OrderService.updateItem)
-  .delete(OrderService.removeItem)
-  .all(methodNotAllowed);
+  .get(OrderController.getItem)
+  .put(OrderController.updateItem)
+  .delete(OrderController.removeItem)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/orders/:order/departments')
-  .get(OrderService.getDepartments)
-  .post(OrderService.setDepartments)
-  .all(methodNotAllowed);
+  .get(OrderController.getDepartments)
+  .post(OrderController.addDepartments)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/orders/:order/departments/:department')
-  .get(OrderService.getDepartment)
-  .put(OrderService.updateDepartment)
-  .delete(OrderService.removeDepartment)
-  .all(methodNotAllowed);
+  .get(OrderController.getDepartment)
+  .put(OrderController.updateDepartment)
+  .delete(OrderController.removeDepartment)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/orders/:order/employees')
-  .get(OrderService.getEmployees)
-  .post(OrderService.setEmployees)
-  .all(methodNotAllowed);
+  .get(OrderController.getEmployees)
+  .post(OrderController.addEmployees)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/orders/:order/employees/:employee')
-  .get(OrderService.getEmployee)
-  .put(OrderService.updateEmployee)
-  .delete(OrderService.removeEmployee)
-  .all(methodNotAllowed);
+  .get(OrderController.getEmployee)
+  .put(OrderController.updateEmployee)
+  .delete(OrderController.removeEmployee)
+  .all(middlewares.onMethodNotAllowed);
 
 // PERMISSIONS:
 router
   .route('/permissions')
-  .get(PermissionService.getPermissions)
-  .post(PermissionService.createPermissions)
-  .all(methodNotAllowed);
+  .get(PermissionController.getPermissions)
+  .post(PermissionController.createPermissions)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/permissions/:permission')
-  .get(PermissionService.getPermission)
-  .put(PermissionService.updatePermission)
-  .delete(PermissionService.deletePermission)
-  .all(methodNotAllowed);
+  .get(PermissionController.getPermission)
+  .put(PermissionController.updatePermission)
+  .delete(PermissionController.deletePermission)
+  .all(middlewares.onMethodNotAllowed);
 
 // QUOTES:
 router
   .route('/quotes')
-  .get(QuoteService.getQuotes)
-  .post(QuoteService.createQuotes)
-  .all(methodNotAllowed);
+  .get(QuoteController.getQuotes)
+  .post(QuoteController.createQuotes)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/quotes/:quote')
-  .get(QuoteService.getQuote)
-  .put(QuoteService.updateQuote)
-  .delete(QuoteService.deleteQuote)
-  .all(methodNotAllowed);
+  .get(QuoteController.getQuote)
+  .put(QuoteController.updateQuote)
+  .delete(QuoteController.deleteQuote)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/quotes/:quote/items')
-  .get(QuoteService.getItems)
-  .post(QuoteService.setItems)
-  .all(methodNotAllowed);
+  .get(QuoteController.getItems)
+  .post(QuoteController.addItems)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/quotes/:quote/items/:item')
-  .get(QuoteService.getItem)
-  .put(QuoteService.updateItem)
-  .delete(QuoteService.removeItem)
-  .all(methodNotAllowed);
+  .get(QuoteController.getItem)
+  .put(QuoteController.updateItem)
+  .delete(QuoteController.removeItem)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/quotes/:quote/orders')
-  .get(QuoteService.getOrders)
-  .post(QuoteService.setOrders)
-  .all(methodNotAllowed);
+  .get(QuoteController.getOrders)
+  .post(QuoteController.addOrders)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/quotes/:quote/orders/:order')
-  .get(QuoteService.getOrder)
-  .all(methodNotAllowed);
+  .get(QuoteController.getOrder)
+  .all(middlewares.onMethodNotAllowed);
 
 // ROLES:
 router
   .route('/roles')
-  .get(RoleService.getRoles)
-  .post(RoleService.createRoles)
-  .all(methodNotAllowed);
+  .get(RoleController.getRoles)
+  .post(RoleController.createRoles)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/roles/:role')
-  .get(RoleService.getRole)
-  .put(RoleService.updateRole)
-  .delete(RoleService.deleteRole)
-  .all(methodNotAllowed);
+  .get(RoleController.getRole)
+  .put(RoleController.updateRole)
+  .delete(RoleController.deleteRole)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/roles/:role/permissions')
-  .get(RoleService.getPermissions)
-  .post(RoleService.setPermissions)
-  .all(methodNotAllowed);
+  .get(RoleController.getPermissions)
+  .post(RoleController.addPermissions)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/roles/:role/permissions/:permission')
-  .get(RoleService.getPermission)
-  .put(RoleService.updatePermission)
-  .delete(RoleService.removePermission)
-  .all(methodNotAllowed);
+  .get(RoleController.getPermission)
+  .put(RoleController.updatePermission)
+  .delete(RoleController.removePermission)
+  .all(middlewares.onMethodNotAllowed);
 
 // STOCKS:
 router
   .route('/stocks')
-  .get(StockService.getStocks)
-  .post(StockService.createStocks)
-  .all(methodNotAllowed);
+  .get(StockController.getStocks)
+  .post(StockController.createStocks)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/stocks/:stock')
-  .get(StockService.getStock)
-  .put(StockService.updateStock)
-  .delete(StockService.deleteStock)
-  .all(methodNotAllowed);
+  .get(StockController.getStock)
+  .put(StockController.updateStock)
+  .delete(StockController.deleteStock)
+  .all(middlewares.onMethodNotAllowed);
+
+// SUPERVISORS:
+router
+  .route('/supervisors')
+  .get(SupervisorController.getSupervisors)
+  .all(middlewares.onMethodNotAllowed);
+router
+  .route('/supervisors/:supervisor')
+  .get(SupervisorController.getSupervisor)
+  .all(middlewares.onMethodNotAllowed);
+router
+  .route('/supervisors/:supervisor/employees')
+  .get(SupervisorController.getEmployees)
+  .all(middlewares.onMethodNotAllowed);
 
 // SUPPLIERS:
 router
   .route('/suppliers')
-  .get(SupplierService.getSuppliers)
-  .post(SupplierService.createSuppliers)
-  .all(methodNotAllowed);
+  .get(SupplierController.getSuppliers)
+  .post(SupplierController.createSuppliers)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/suppliers/:supplier')
-  .get(SupplierService.getSupplier)
-  .put(SupplierService.updateSupplier)
-  .delete(SupplierService.deleteSupplier)
-  .all(methodNotAllowed);
+  .get(SupplierController.getSupplier)
+  .put(SupplierController.updateSupplier)
+  .delete(SupplierController.deleteSupplier)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/suppliers/:supplier/items')
-  .get(SupplierService.getItems)
-  .post(SupplierService.setItems)
-  .all(methodNotAllowed);
+  .get(SupplierController.getItems)
+  .post(SupplierController.addItems)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/suppliers/:supplier/items/:item')
-  .get(SupplierService.getItem)
-  .put(SupplierService.updateItem)
-  .delete(SupplierService.removeItem)
-  .all(methodNotAllowed);
+  .get(SupplierController.getItem)
+  .put(SupplierController.updateItem)
+  .delete(SupplierController.removeItem)
+  .all(middlewares.onMethodNotAllowed);
 
 // USERS:
 router
   .route('/users')
-  .get(UserService.getUsers)
-  .post(UserService.createUsers)
-  .all(methodNotAllowed);
+  .get(UserController.getUsers)
+  .post(UserController.createUsers)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/users/:user')
-  .get(UserService.getUser)
-  .put(UserService.updateUser)
-  .delete(UserService.deleteUser)
-  .all(methodNotAllowed);
+  .get(UserController.getUser)
+  .put(UserController.updateUser)
+  .delete(UserController.deleteUser)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/users/:user/roles')
-  .get(UserService.getRoles)
-  .post(UserService.setRoles)
-  .all(methodNotAllowed);
+  .get(UserController.getRoles)
+  .post(UserController.addRoles)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/users/:user/roles/:role')
-  .get(UserService.getRole)
-  .put(UserService.updateRole)
-  .delete(UserService.removeRole)
-  .all(methodNotAllowed);
+  .get(UserController.getRole)
+  .put(UserController.updateRole)
+  .delete(UserController.removeRole)
+  .all(middlewares.onMethodNotAllowed);
 
 // WAREHOUSES:
 router
   .route('/warehouses')
-  .get(WarehouseService.getWarehouses)
-  .post(WarehouseService.createWarehouses)
-  .all(methodNotAllowed);
+  .get(WarehouseController.getWarehouses)
+  .post(WarehouseController.createWarehouses)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/warehouses/:warehouse')
-  .get(WarehouseService.getWarehouse)
-  .put(WarehouseService.updateWarehouse)
-  .delete(WarehouseService.deleteWarehouse)
-  .all(methodNotAllowed);
+  .get(WarehouseController.getWarehouse)
+  .put(WarehouseController.updateWarehouse)
+  .delete(WarehouseController.deleteWarehouse)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/warehouses/:warehouse/items')
-  .get(WarehouseService.getItems)
-  .post(WarehouseService.setItems)
-  .all(methodNotAllowed);
+  .get(WarehouseController.getItems)
+  .post(WarehouseController.addItems)
+  .all(middlewares.onMethodNotAllowed);
 router
   .route('/warehouses/:warehouse/items/:item')
-  .get(WarehouseService.getItem)
-  .put(WarehouseService.updateItem)
-  .delete(WarehouseService.removeItem)
-  .all(methodNotAllowed);
+  .get(WarehouseController.getItem)
+  .put(WarehouseController.updateItem)
+  .delete(WarehouseController.removeItem)
+  .all(middlewares.onMethodNotAllowed);
 
-export default router;
+module.exports = router;

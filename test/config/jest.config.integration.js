@@ -1,30 +1,33 @@
 'use strict';
 
-require('dotenv').config({ path: '.env.test' });
+const dotenv = require('dotenv');
+
+dotenv.config({ path: '.env.test' });
 
 const config = require('./jest.config');
 
-process.env.INTEGRATION_TEST = true;
-
-if (typeof process.env.MOCK === 'undefined') {
-  process.env.MOCK = true;
+if (process.env.MOCK === 'true') {
+  config.reporters[1][1].outputPath = "docs/test/report/integration-mock.html";
+  config.coverageDirectory = "docs/test/coverage/integration-mock";
 } else {
-  if (['true','false'].indexOf(process.env.MOCK) === -1) {
-    throw new Error('"process.env.MOCK" value must be of boolean type.');
-  }
+  config.reporters[1][1].outputPath = "docs/test/report/integration.html";
+  config.coverageDirectory = "docs/test/coverage/integration";
 }
 
 module.exports = {
   ...config,
   "coveragePathIgnorePatterns": [
-    "<rootDir>/test"
+    "<rootDir>/test",
+    "<rootDir>/src/providers",
+    "<rootDir>/src/index.js"
   ],
   "collectCoverageFrom": [
-    "src/services/*.js",
-    "src/validation(s|s2)/*.js",
-    // "src/validations2/*.js",
+    "<rootDir>/src/*.(js|ts)",
+    "<rootDir>/src/**/*.(js|ts)",
+    "<rootDir>/src/**/**/*.(js|ts)"
   ],
   "testMatch": [
-    "<rootDir>/test/integration/**/*.(spec|test).js?(x)"
+    "<rootDir>/test/integration/*-(spec|test).js?(x)",
+    "<rootDir>/test/integration/**/*-(spec|test).js?(x)"
   ]
 };

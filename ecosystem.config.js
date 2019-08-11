@@ -33,8 +33,8 @@ module.exports = {
       host          : [ 'virtual.staging' ],
       user          : 'deploy',
       ref           : 'origin/master',
-      repo          : `git@virtual.services:/srv/git/${pkg.name}.git`,
-      path          : `/srv/www/${pkg.name}`,
+      repo          : `git@virtual.services:/usr/git/${pkg.name}.git`,
+      path          : `/usr/src/${pkg.name}`,
       "post-setup"  : 'bash deploy.sh staging setup',
       "post-deploy" : 'bash deploy.sh staging update'
     },
@@ -42,8 +42,8 @@ module.exports = {
       host          : [ 'virtual.production' ],
       user          : 'deploy',
       ref           : 'origin/master',
-      repo          : `git@virtual.services:/srv/git/${pkg.name}.git`,
-      path          : `/srv/www/${pkg.name}`,
+      repo          : `git@virtual.services:/usr/git/${pkg.name}.git`,
+      path          : `/usr/src/${pkg.name}`,
       "post-setup"  : 'bash deploy.sh production setup',
       "post-deploy" : 'bash deploy.sh production update'
     }

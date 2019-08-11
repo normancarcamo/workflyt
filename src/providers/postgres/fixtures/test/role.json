@@ -1,0 +1,74 @@
+[
+  {
+    "id": "4a25586b-b1bb-4d22-8589-87002660a876",
+    "code": "ROL/001",
+    "name": "Admin",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.078Z",
+    "updated_at": "2019-08-10T11:54:15.078Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "df0fb631-7ac0-4f5a-859d-48fbc3d9c5f0",
+    "code": "ROL/002",
+    "name": "Tester",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.078Z",
+    "updated_at": "2019-08-10T11:54:15.078Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "c93bc1a6-04eb-4014-80e1-0ae0eee51422",
+    "code": "ROL/003",
+    "name": "Developer",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.078Z",
+    "updated_at": "2019-08-10T11:54:15.078Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "5884276f-e88f-4c2b-b6e1-b6dd4249b637",
+    "code": "ROL/004",
+    "name": "Salesman",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.078Z",
+    "updated_at": "2019-08-10T11:54:15.078Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "2393beb5-5979-4b2f-bc06-fc01ca483534",
+    "code": "ROL/005",
+    "name": "Designer",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.078Z",
+    "updated_at": "2019-08-10T11:54:15.078Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "5232730a-6683-4fee-8268-60b30bb92efd",
+    "code": "ROL/006",
+    "name": "Printer",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.078Z",
+    "updated_at": "2019-08-10T11:54:15.078Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

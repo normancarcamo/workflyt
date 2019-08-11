@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1da8f3d7-13cb-4f16-8c8e-d8d98a7c1865",
+    "code": "CUS/001",
+    "name": "Jetstereo",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.066Z",
+    "updated_at": "2019-08-10T11:54:15.066Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "616c6761-2829-4de4-bb47-b0addccc5887",
+    "code": "CUS/002",
+    "name": "Bac credomátic",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.066Z",
+    "updated_at": "2019-08-10T11:54:15.066Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "9f9d5701-bb79-43d9-b361-66d0e7050628",
+    "code": "CUS/003",
+    "name": "Claro",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.066Z",
+    "updated_at": "2019-08-10T11:54:15.066Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

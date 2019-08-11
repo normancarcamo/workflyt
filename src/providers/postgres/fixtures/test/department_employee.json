@@ -1,0 +1,79 @@
+[
+  {
+    "department_id": "dd2f22b3-3041-4da5-9b38-5ef30c40a506",
+    "employee_id": "4a579e4e-d570-4496-8e87-50cff0ce1a7e",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.068Z",
+    "updated_at": "2019-08-10T11:54:15.068Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "department_id": "dd2f22b3-3041-4da5-9b38-5ef30c40a506",
+    "employee_id": "0db2eca2-1359-4b47-9a02-9ab55dbea0e7",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.068Z",
+    "updated_at": "2019-08-10T11:54:15.068Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "department_id": "51e15373-3825-4c43-a38d-5317a19caaff",
+    "employee_id": "95a43985-1639-4691-8e45-8a2eb71a97fc",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.068Z",
+    "updated_at": "2019-08-10T11:54:15.068Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "department_id": "2f93ad2f-bb4c-4d7e-b25a-aff83960c222",
+    "employee_id": "95a43985-1639-4691-8e45-8a2eb71a97fc",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.068Z",
+    "updated_at": "2019-08-10T11:54:15.068Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "department_id": "51e15373-3825-4c43-a38d-5317a19caaff",
+    "employee_id": "4c991798-edb8-4396-bb79-f8e57b72d470",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.068Z",
+    "updated_at": "2019-08-10T11:54:15.068Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "department_id": "2f93ad2f-bb4c-4d7e-b25a-aff83960c222",
+    "employee_id": "4c991798-edb8-4396-bb79-f8e57b72d470",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.068Z",
+    "updated_at": "2019-08-10T11:54:15.068Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "department_id": "51e15373-3825-4c43-a38d-5317a19caaff",
+    "employee_id": "a1261d31-0a0f-407f-be1a-fe3b89675cf5",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.068Z",
+    "updated_at": "2019-08-10T11:54:15.068Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "b8a97ec0-2ea6-46e9-86d3-e33b42619399",
+    "code": "DEP/001",
+    "name": "Art",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.069Z",
+    "updated_at": "2019-08-10T11:54:24.069Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "6ac43b72-e25a-47b9-856a-e21c211b45e8",
+    "code": "DEP/002",
+    "name": "Printing",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.069Z",
+    "updated_at": "2019-08-10T11:54:24.069Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "7ea59dee-20b8-4cbc-8768-5c6cdbb91579",
+    "code": "DEP/003",
+    "name": "Sales",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.069Z",
+    "updated_at": "2019-08-10T11:54:24.069Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "23fefc5e-bea2-41b2-9870-acae32729c06",
+    "code": "DEP/004",
+    "name": "Administration",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.069Z",
+    "updated_at": "2019-08-10T11:54:24.069Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

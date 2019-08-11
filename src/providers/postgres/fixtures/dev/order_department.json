@@ -1,0 +1,57 @@
+[
+  {
+    "order_id": "573dda5d-22ca-43c7-b6e4-16c051e51a0d",
+    "department_id": "b8a97ec0-2ea6-46e9-86d3-e33b42619399",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.073Z",
+    "updated_at": "2019-08-10T11:54:24.073Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "order_id": "9c3e6d3e-d77e-423a-90a7-1eccafa68d08",
+    "department_id": "b8a97ec0-2ea6-46e9-86d3-e33b42619399",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.073Z",
+    "updated_at": "2019-08-10T11:54:24.073Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "order_id": "0fac2956-4313-4d8e-82f1-1c6db4d79269",
+    "department_id": "6ac43b72-e25a-47b9-856a-e21c211b45e8",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.073Z",
+    "updated_at": "2019-08-10T11:54:24.073Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "order_id": "0fac2956-4313-4d8e-82f1-1c6db4d79269",
+    "department_id": "7ea59dee-20b8-4cbc-8768-5c6cdbb91579",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.073Z",
+    "updated_at": "2019-08-10T11:54:24.073Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "order_id": "0fac2956-4313-4d8e-82f1-1c6db4d79269",
+    "department_id": "23fefc5e-bea2-41b2-9870-acae32729c06",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.073Z",
+    "updated_at": "2019-08-10T11:54:24.073Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

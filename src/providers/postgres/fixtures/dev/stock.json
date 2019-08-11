@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ce805eb6-d1c9-4cd6-aa2f-a0a0db15f3e2",
+    "item_id": "8ce13f55-6d9f-43cc-8d5b-a174240c820f",
+    "entries": 5000,
+    "exits": 4900,
+    "stock": 100,
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.082Z",
+    "updated_at": "2019-08-10T11:54:24.082Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "c1126ced-c0d0-4458-88f0-3beeb3c93f9d",
+    "item_id": "270bac3b-d2b2-462f-9d10-2640e6f082cb",
+    "entries": 4000,
+    "exits": 3950,
+    "stock": 50,
+    "extra": {},
+    "created_at": "2019-08-10T11:54:24.082Z",
+    "updated_at": "2019-08-10T11:54:24.082Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

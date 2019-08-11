@@ -1,0 +1,6 @@
+https://thatcoder.space/microservices-event-driven-architecture/
+https://medium.com/@qasimsoomro/building-microservices-using-node-js-with-ddd-cqrs-and-event-sourcing-part-1-of-2-52e0dc3d81df
+https://searchsecurity.techtarget.com/definition/multifactor-authentication-MFA
+
+
+https://stackoverflow.com/questions/4923786/fuzzy-user-management-in-web-applications

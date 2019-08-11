@@ -1,0 +1,62 @@
+[
+  {
+    "id": "70d89542-af64-43fe-b234-7bcde55bca5a",
+    "customer_id": "1da8f3d7-13cb-4f16-8c8e-d8d98a7c1865",
+    "salesman_id": "95a43985-1639-4691-8e45-8a2eb71a97fc",
+    "subject": "Stickers for furniture 2x24",
+    "code": "QUO-19/001",
+    "status": "confirmed",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.070Z",
+    "updated_at": "2019-08-10T11:54:15.070Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "655ae357-dec3-43ca-aa7f-8699d6515b0b",
+    "customer_id": "616c6761-2829-4de4-bb47-b0addccc5887",
+    "salesman_id": "4c991798-edb8-4396-bb79-f8e57b72d470",
+    "subject": "Stickers for frontal doors of the bank",
+    "code": "QUO-19/002",
+    "status": "cancelled",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.070Z",
+    "updated_at": "2019-08-10T11:54:15.070Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "2384177f-74b7-4a32-8576-d3ce24f9e66e",
+    "customer_id": "9f9d5701-bb79-43d9-b361-66d0e7050628",
+    "salesman_id": "a1261d31-0a0f-407f-be1a-fe3b89675cf5",
+    "subject": "Banner wall 129.23 x 32",
+    "code": "QUO-19/003",
+    "status": "open",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.070Z",
+    "updated_at": "2019-08-10T11:54:15.070Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "7e08b1f3-1c35-44a2-9285-d8b023706da6",
+    "customer_id": "9f9d5701-bb79-43d9-b361-66d0e7050628",
+    "salesman_id": "a1261d31-0a0f-407f-be1a-fe3b89675cf5",
+    "subject": "Banner door 23x3",
+    "code": "QUO-19/003",
+    "status": "open",
+    "extra": {},
+    "created_at": "2019-08-10T11:54:15.070Z",
+    "updated_at": "2019-08-10T11:54:15.070Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

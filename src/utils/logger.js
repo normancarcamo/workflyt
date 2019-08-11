@@ -1,65 +1,51 @@
-const uuid = require("uuid/v4");
-const os = require("os");
-const Pino = require("pino");
+const uuid = require('uuid/v4');
+const os = require('os');
+const Pino = require('pino');
 
-const _instance = uuid();
+module.exports = {
+  base: {
+    instance: uuid(),
+    pid: process.pid,
+    hostname: os.hostname(),
+    hostport: JSON.parse(process.env.SERVER_PORT),
+    hostip: process.env.SERVER_HOST,
+    env: process.env.NODE_ENV
+  },
+  enabled: JSON.parse(process.env.LOG_ENABLED),
+  name: process.env.APP_NAME,
+  level: process.env.LOG_LEVEL,
+  prettyPrint: process.env.LOG_PRETTY_PRINT,
+  serializers: {
+    req: req => ({
+      id: uuid(),
+      method: req.method,
+      url: req.url,
+      headers: { ...req.headers, authorization: undefined },
+      remoteAddress: req.connection.remoteAddress,
+      remotePort: req.connection.remotePort
+    }),
+    res: Pino.stdSerializers.res,
+    err: Pino.stdSerializers.err
+  },
+  onFinish: (req, res, logger) => () => {
+    if (process.env.LOG_ENABLED === 'true') {
+      let responseTime = `${Date.now() - req.start}ms`;
+      if (req.error) {
+        let level = null;
 
-export default function(ctx = "no context", opts) {
-  var env = {
-    APP_NAME: process.env.APP_NAME || "unknown",
-    NODE_ENV: process.env.NODE_ENV || "unknown",
-    SERVER_PORT: process.env.SERVER_PORT
-      ? JSON.parse(process.env.SERVER_PORT)
-      : "unknown",
-    SERVER_HOST: process.env.SERVER_HOST
-      ? process.env.SERVER_HOST
-      : "127.0.0.1",
-    LOG_ENABLED: process.env.LOG_ENABLED
-      ? JSON.parse(process.env.LOG_ENABLED)
-      : false,
-    LOG_LEVEL: process.env.LOG_LEVEL || "error",
-    LOG_PRETTY_PRINT: process.env.LOG_PRETTY_PRINT
-      ? JSON.parse(process.env.LOG_PRETTY_PRINT)
-      : false
-  };
-
-  return Pino({
-    base: {
-      instance: _instance,
-      context: ctx,
-      pid: process.pid,
-      hostname: os.hostname(),
-      hostport: env.SERVER_PORT,
-      hostip: env.SERVER_HOST,
-      env: env.NODE_ENV
-    },
-    enabled: env.LOG_ENABLED,
-    name: env.APP_NAME,
-    level: env.LOG_LEVEL,
-    prettyPrint: env.LOG_PRETTY_PRINT,
-    serializers: {
-      req: function(req) {
-        return {
-          method: req.method,
-          url: req.url,
-          id: req.id,
-          seq: req.seq,
-          params: req.params,
-          query: req.query,
-          headers: req.headers,
-          remoteAddress: req.connection.remoteAddress,
-          remotePort: req.connection.remotePort
+        if (req.error.status >= 400 && req.error.status < 500) {
+          level = 'warn';
+        } else {
+          level = 'error';
         }
-      },
-      res: function(res) {
-        return {
-          elapsed: `${Date.now() - res.req.start}ms`,
-          status: res.statusCode,
-          headers: res.getHeaders()
-        }
-      },
-      err: Pino.stdSerializers.err
-    },
-    ...opts
-  });
-}
+
+        logger[level](
+          { req, res, err: req.error, responseTime },
+          req.error.message
+        );
+      } else {
+        logger.info({ req, res, responseTime }, 'Request completed.');
+      }
+    }
+  }
+};
