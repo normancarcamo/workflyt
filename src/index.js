@@ -6,13 +6,12 @@ const Logger = require('pino');
 const app = require('./app');
 
 let logger = new Logger(loggerOptions);
-let PORT = process.env.SERVER_PORT;
 let isServerStopped = false;
 
 // START:
 let server = http.createServer(app);
 
-server.listen(PORT, async function() {
+server.listen(process.env.SERVER_PORT || 3000, async function() {
   try {
     logger.info('Server is connected.');
     await database.sequelize.authenticate();
