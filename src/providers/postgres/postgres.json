@@ -3,7 +3,7 @@
     "username": "dev",
     "password": "dev",
     "database": "workflyt_dev",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "postgres",
     "operatorsAliases": false
   },

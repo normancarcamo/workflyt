@@ -4,3 +4,81 @@ https://searchsecurity.techtarget.com/definition/multifactor-authentication-MFA
 
 
 https://stackoverflow.com/questions/4923786/fuzzy-user-management-in-web-applications
+
+Interesting article, it talks about wait-for a terminal utility to know when to connect to a database
+using docker and microservices:
+https://www.digitalocean.com/community/tutorials/containerizing-a-node-js-application-for-development-with-docker-compose
+
+
+
+** Recommendations of REST APIs to avoid useless use cases:
+
+- Add this for all the POST actions in your code base:
+  The new URL is delivered back to the client in the Location Header (e.g. Location: /employees/12)
+  Example image of creation: https://phauer.com/blog/2015/0304-restful-api-design-best-practices/POST-for-Creation.svg
+
+
+- PUT: Always include the whole payload in the request. It’s all or nothing. PUT is not meant to be used for partial updates (see PATCH).
+  PUT is NOT supposed for partial updates.
+  Use PATCH for Partial Updates of a Resource
+  PUT should only be used for complete replacements of a resource.
+
+- PATCH: Used for partial updates. Example: PATCH /employees/1 - updates employee 1 with the fields contained in the payload. The other fields of employee 1 are not changed.
+
+- ADD HATEOAS:
+{
+  "data": [
+    {
+      "id":1,
+      "name":"Paul",
+      "links": [
+        {
+          "salary": "http://www.domain.com/employees/1/salaryStatements"
+        }
+      ]
+    }
+  ]
+}
+
+using limit/offset:
+{
+  "pagination": {
+    "offset": 20,
+    "limit": 10,
+    "total": 3465,
+  },
+  "data": [
+    //...
+  ],
+  "links": {
+    "next": "http://www.domain.com/employees?offset=30&limit=10",
+    "prev": "http://www.domain.com/employees?offset=10&limit=10"
+  }
+}
+
+
+- Keep Business Logic on the Server-Side
+
+Don’t let your service become a dump data access layer which provides CRUD functionality by directly exposing your database model (low-level API). This creates high coupling.
+
+The business logic is shifted to the client and is often replicated between the client and the server (just think about validation). We have to keep both in sync.
+Often, the client is coupled to the server’s database model.
+We should avoid creating dump data access APIs because they lead to high coupling between the server and the clients because the business workflows are getting distributed between the client and the server. That, in turn, makes it likely that new business requirements require a change in both the client and the server and to break the API. So the API/system is not that evolvable.
+
+So we should build high-level/workflow-based APIs instead of low-level APIs. An example: Don’t provide a simple CRUD service for the order entities in the database. Don’t require the clients to know that to cancel an order, the client has to PUT an order to the generic /order/1 resource with a certain cancelation payload (reflecting the database model) in it. This leads to high coupling (business logic and domain knowledge on the client-side; exposed database model). Instead, provide a dedicated resource /order/1/cancelation and add a link to it in the payload of the order resource. The client can navigate to the cancelation URL and send a tailored cancelation payload. The business logic for mapping this payload to the database model is done in the server. Moreover, the server can easily change the URL without breaking the client, because the client simply follows links. Besides, the decision logic, if an order can be canceled or not is now in the server: If a cancelation a possible the server adds the link to the cancelation resource in the order payload. So the client only has to check if the cancelation links are present (for example to know if he should draw the cancelation button). So we moved domain knowledge away from the client back to the server. Changes to the cancelation conditions can be easily applied by only touching the server, which in turn make the system evolvable. No API change is required.
+
+If you like to read more about this topic, I recommend the talk REST beyond the obvious – API design for ever evolving systems by Oliver Gierke.
+
+
+
+------------
+
+buena lectura de api:
+https://www.thoughtworks.com/insights/blog/rest-api-design-resource-modeling
+
+
+
+
+===================
+Instead of cancelling an order using PUT /order/1
+do: /order/1/cancelation and add a link to it in the payload of the order resource.

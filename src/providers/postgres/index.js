@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
 
-const sequelize = new Sequelize(process.env.POSTGRES_URL, {
+const valor = "postgres://dev:dev@192.128.0.4:5432/workflyt_dev";
+
+console.log('URL: =================>', process.env.POSTGRES_URL);
+console.log('URL: =================>', valor);
+console.log('URL: =================>', process.env.NODE_ENV);
+
+const sequelize = new Sequelize(valor, {
   use_env_variable: process.env.POSTGRES_URL,
   define: {
     charset: 'utf8',
