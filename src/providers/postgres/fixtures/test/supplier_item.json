@@ -1,25 +1,25 @@
 [
   {
-    "supplier_id": "86655023-4b54-49c8-80bd-878944b996ef",
-    "item_id": "411e7fa2-0067-4593-98b0-00eb1713c83a",
+    "supplier_id": "7a9b2af6-1777-48ad-9047-ebb78ba1cadf",
+    "item_id": "abfe59c7-a510-4e12-8614-71db6442fa19",
     "extra": {
       "units": 423
     },
-    "created_at": "2019-08-10T11:54:15.080Z",
-    "updated_at": "2019-08-10T11:54:15.080Z",
+    "created_at": "2019-08-17T22:27:07.542Z",
+    "updated_at": "2019-08-17T22:27:07.542Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,
     "deleted_by": null
   },
   {
-    "supplier_id": "86655023-4b54-49c8-80bd-878944b996ef",
-    "item_id": "62638e8b-9355-490a-99e3-431e1a047a23",
+    "supplier_id": "7a9b2af6-1777-48ad-9047-ebb78ba1cadf",
+    "item_id": "7aa3f2ec-8627-4007-9de1-a94912dc6ddf",
     "extra": {
       "units": 211
     },
-    "created_at": "2019-08-10T11:54:15.080Z",
-    "updated_at": "2019-08-10T11:54:15.080Z",
+    "created_at": "2019-08-17T22:27:07.542Z",
+    "updated_at": "2019-08-17T22:27:07.542Z",
     "deleted_at": null,
     "created_by": null,
     "updated_by": null,

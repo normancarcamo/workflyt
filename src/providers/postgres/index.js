@@ -1,34 +1,11 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
+const config = require('./config.js');
 
-const valor = "postgres://dev:dev@192.128.0.4:5432/workflyt_dev";
-
-console.log('URL: =================>', process.env.POSTGRES_URL);
-console.log('URL: =================>', valor);
-console.log('URL: =================>', process.env.NODE_ENV);
-
-const sequelize = new Sequelize(valor, {
-  use_env_variable: process.env.POSTGRES_URL,
-  define: {
-    charset: 'utf8',
-    engine: 'InnoDB',
-    dialectOptions: { collate: 'utf8_general_ci', useUTC: false, },
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-    deletedAt: 'deleted_at',
-    timestamps: true,
-    paranoid: true,
-    underscored: true,
-    freezeTableName: true,
-    version: false
-  },
-  dialect: 'postgres',
-  logging: false,
-  pool: { max: 5, idle: 30000, acquire: 60000 },
-  version: false,
-  quoteIdentifiers: true,
-  sync: { force: false }
-});
+const sequelize = new Sequelize(
+  process.env.POSTGRES_URL,
+  config[process.env.NODE_ENV]
+);
 
 fs.readdirSync(`${__dirname}/models`).filter(file => (
   (file.indexOf('.') !== 0) &&

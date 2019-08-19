@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-  'config'          : path.resolve('src', 'providers', 'postgres', 'postgres.json'),
+  'config'          : path.resolve('src', 'providers', 'postgres', 'config.js'),
   'migrations-path': path.resolve('src', 'providers', 'postgres', 'migrations'),
   'models-path'    : path.resolve('src', 'providers', 'postgres', 'models'),
   'seeders-path'   : path.resolve('src', 'providers', 'postgres', 'seeders'),

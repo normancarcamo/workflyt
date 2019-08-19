@@ -16,24 +16,21 @@
           "./src"
         ]
       }
-    ],
-    "@babel/plugin-proposal-object-rest-spread"
+    ]
   ],
   "env": {
     "development": {
       "plugins": [
         ["inline-dotenv", {
           "path": ".env.dev"
-        }],
-        "@babel/plugin-transform-runtime"
+        }]
       ]
     },
     "test": {
       "plugins": [
         ["inline-dotenv", {
           "path": ".env.test"
-        }],
-        "@babel/plugin-transform-runtime"
+        }]
       ]
     }
   }

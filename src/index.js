@@ -4,6 +4,8 @@ const database = require('./providers/postgres');
 const loggerOptions = require('./utils/logger');
 const Logger = require('pino');
 const app = require('./app');
+const PORT = process.env.SERVER_PORT || 3000;
+const HOST = process.env.SERVER_HOST;
 
 let logger = new Logger(loggerOptions);
 let isServerStopped = false;
@@ -11,7 +13,7 @@ let isServerStopped = false;
 // START:
 let server = http.createServer(app);
 
-server.listen(process.env.SERVER_PORT || 3000, async function() {
+server.listen(PORT, HOST, async function() {
   try {
     logger.info('Server is connected.');
     await database.sequelize.authenticate();
