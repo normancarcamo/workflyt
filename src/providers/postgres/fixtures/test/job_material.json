@@ -1,0 +1,57 @@
+[
+  {
+    "job_id": "b89296bd-8295-4273-95c9-1690f68dd010",
+    "material_id": "5bb8b174-fde8-4fd9-a2dd-e0c16ad91d6b",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.567Z",
+    "updated_at": "2019-09-08T10:53:29.567Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "35204a9f-0a8d-4348-b75a-09c6046294a0",
+    "material_id": "5bb8b174-fde8-4fd9-a2dd-e0c16ad91d6b",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.567Z",
+    "updated_at": "2019-09-08T10:53:29.567Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "2ca3cb0b-f486-436e-b465-f1cde5695a44",
+    "material_id": "02f21a94-d5f2-4587-ab79-75cddbbffeb7",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.567Z",
+    "updated_at": "2019-09-08T10:53:29.567Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "2ca3cb0b-f486-436e-b465-f1cde5695a44",
+    "material_id": "da5d5d2d-c28d-4092-b980-f906b18757be",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.567Z",
+    "updated_at": "2019-09-08T10:53:29.567Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "2ca3cb0b-f486-436e-b465-f1cde5695a44",
+    "material_id": "f9146b2a-f16d-425e-8f30-93691314db39",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.567Z",
+    "updated_at": "2019-09-08T10:53:29.567Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

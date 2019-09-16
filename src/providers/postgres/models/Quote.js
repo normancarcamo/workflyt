@@ -10,14 +10,14 @@ export function Schema(DataTypes) {
         defaultValue: DataTypes.UUIDV4,
         validate: { isUUID: 4 }
       },
-      customer_id: {
+      client_id: {
         type: DataTypes.UUID,
         allowNull: false,
         unique: false,
         references: {
           model: {
             schema: "public",
-            tableName: "customer"
+            tableName: "client"
           },
           key: "id"
         },
@@ -32,7 +32,7 @@ export function Schema(DataTypes) {
         references: {
           model: {
             schema: "public",
-            tableName: "employee"
+            tableName: "worker"
           },
           key: "id"
         },
@@ -125,31 +125,25 @@ export function Model(sequelize, DataTypes) {
   const Quote = sequelize.define(name, attributes, options);
 
   Quote.associate = function(models) {
+    Quote.belongsTo(models.Client, {
+      as: "client",
+      foreignKey: "client_id"
+    });
+    Quote.belongsTo(models.Worker, {
+      as: "Salesman",
+      foreignKey: "salesman_id"
+    });
     Quote.hasMany(models.Order, {
-      as: {
-        singular: "order",
-        plural: "orders"
-      },
+      as: { singular: "order", plural: "orders" },
       foreignKey: "quote_id",
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
-    Quote.belongsTo(models.Customer, {
-      as: "customer",
-      foreignKey: "customer_id"
-    });
-    Quote.belongsTo(models.Employee, {
-      as: "Salesman",
-      foreignKey: "salesman_id"
-    });
-    Quote.belongsToMany(models.Item, {
-      as: {
-        singular: "item",
-        plural: "items"
-      },
-      through: models.QuoteItem,
+    Quote.belongsToMany(models.Service, {
+      as: { singular: "service", plural: "services" },
+      through: models.QuoteService,
       foreignKey: "quote_id",
-      otherKey: "item_id",
+      otherKey: "service_id",
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });

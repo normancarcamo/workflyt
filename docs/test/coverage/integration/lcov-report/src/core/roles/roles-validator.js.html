@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>5/5</span>
+        <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>5/5</span>
+        <span class='fraction'>4/4</span>
       </div>
     </div>
     <p class="quiet">
@@ -238,8 +238,17 @@
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">856x</span>
-<span class="cline-any cline-yes">856x</span>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">122x</span>
+<span class="cline-any cline-yes">122x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -252,7 +261,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">856x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">122x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,9 +277,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">856x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">856x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">122x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -431,35 +449,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">module.exports = ({ schema, Datalizer }) =&gt; {
-  const roleAttributes = [
-    'id',
-    'code',
-    'name',
-    'extra',
-    'created_at',
-    'updated_at',
-    'deleted_at',
-    'created_by',
-    'updated_by',
-    'deleted_by'
-  ];
+  let role = {
+    attributes: [
+      'id',
+      'code',
+      'name',
+      'extra',
+      'created_at',
+      'updated_at',
+      'deleted_at',
+      'created_by',
+      'updated_by',
+      'deleted_by'
+    ],
+    associations: [ 'permissions' ]
+  };
 &nbsp;
-  const permissionAttributes = [
-    'id',
-    'code',
-    'name',
-    'extra',
-    'created_at',
-    'updated_at',
-    'deleted_at',
-    'created_by',
-    'updated_by',
-    'deleted_by'
-  ];
-&nbsp;
-  const roleAssociations = [ 'permissions' ];
+  let permission = {
+    attributes: [
+      'id',
+      'code',
+      'name',
+      'extra',
+      'created_at',
+      'updated_at',
+      'deleted_at',
+      'created_by',
+      'updated_by',
+      'deleted_by'
+    ]
+  };
 &nbsp;
   return Object.freeze({
+&nbsp;
+    // roles:
+&nbsp;
     getRoles: new Datalizer({
       query: schema.QUERY({
         id: schema.UUID({ $optional: true, $deny: true }),
@@ -472,12 +496,11 @@
         created_by: schema.UUID({ $optional: true }),
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true }),
-        attributes: schema.ATTRIBUTES(roleAttributes),
-        include: schema.INCLUDE(roleAssociations),
+        attributes: schema.ATTRIBUTES(role.attributes),
         paranoid: schema.BOOLEAN({ $optional: true }),
         limit: schema.LIMIT({ $optional: true }),
         offset: schema.OFFSET({ $optional: true }),
-        sort_by: schema.ENUM(roleAttributes),
+        sort_by: schema.ENUM(role.attributes),
         order_by: schema.ORDER_BY({ $optional: true })
       }, { $max: 20 })
     }),
@@ -495,7 +518,7 @@
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true }),
       }, { $max: 10, $empty: false })
-    }),
+    }, { addKey: false }),
 &nbsp;
     getRole: new Datalizer({
       params: schema.PARAMS(
@@ -503,8 +526,8 @@
         { $length: 1 }
       ),
       query: schema.QUERY({
-        attributes: schema.ATTRIBUTES(roleAttributes),
-        include: schema.INCLUDE(roleAssociations),
+        attributes: schema.ATTRIBUTES(role.attributes),
+        include: schema.INCLUDE(role.associations),
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 10 })
     }),
@@ -514,9 +537,10 @@
         { role: schema.UUID() },
         { $length: 1 }
       ),
-      query: schema.QUERY({
-        paranoid: schema.BOOLEAN({ $optional: true })
-      }, { $max: 1, $optional: true }),
+      query: schema.QUERY(
+        { paranoid: schema.BOOLEAN({ $optional: true }) },
+        { $max: 1, $optional: true }
+      ),
       body: schema.BODY({
         id: schema.UUID({ $optional: true, $deny: true }),
         code: schema.CODE({ $optional: true }),
@@ -529,7 +553,7 @@
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true }),
       }, { $max: 10, $empty: false })
-    }),
+    }, { addKey: false }),
 &nbsp;
     deleteRole: new Datalizer({
       params: schema.PARAMS(
@@ -541,6 +565,8 @@
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 2 })
     }),
+&nbsp;
+    // permissions:
 &nbsp;
     getPermissions: new Datalizer({
       params: schema.PARAMS(
@@ -558,11 +584,11 @@
         created_by: schema.UUID({ $optional: true }),
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true }),
-        attributes: schema.ATTRIBUTES(permissionAttributes),
+        attributes: schema.ATTRIBUTES(permission.attributes),
         paranoid: schema.BOOLEAN({ $optional: true }),
         limit: schema.LIMIT({ $optional: true }),
         offset: schema.OFFSET({ $optional: true }),
-        sort_by: schema.ENUM(permissionAttributes),
+        sort_by: schema.ENUM(permission.attributes),
         order_by: schema.ORDER_BY({ $optional: true })
       }, { $max: 20 })
     }),
@@ -584,7 +610,7 @@
         { $length: 2 }
       ),
       query: schema.QUERY({
-        attributes: schema.ATTRIBUTES(permissionAttributes),
+        attributes: schema.ATTRIBUTES(permission.attributes),
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 10 })
     }),
@@ -620,6 +646,7 @@
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 2 })
     })
+&nbsp;
   });
 };
 &nbsp;</pre></td></tr>
@@ -628,7 +655,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Aug 10 2019 07:33:18 GMT-0600 (Central Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Aug 30 2019 22:06:34 GMT-0600 (Central Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

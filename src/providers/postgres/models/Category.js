@@ -90,18 +90,15 @@ export function Model(sequelize, DataTypes) {
   const Category = sequelize.define(name, attributes, options);
 
   Category.associate = function(models) {
-    Category.hasMany(models.Item, {
-      as: {
-        singular: "item",
-        plural: "items"
-      },
-      foreignKey: 'category_id',
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
     Category.belongsTo(models.Category, {
       as: "parent",
       foreignKey: "parent_id",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    Category.hasMany(models.Material, {
+      as: { singular: "material", plural: "materials" },
+      foreignKey: 'category_id',
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "6966bbd8-f73f-4abf-bf4f-ac4d6ba55e60",
+    "area_id": "2b53781c-aa92-4733-aa08-4facdfe8d53e",
+    "code": "SER/001",
+    "name": "Diseño de arte",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.026Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "81f02542-c37f-436f-8c25-82352698723e",
+    "area_id": "5d25b795-49c6-4fad-b9ac-0624ba3c33cd",
+    "code": "SER/002",
+    "name": "Impresión de arte",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.026Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "75fd1028-da29-4e55-b676-0452c4ec5fe6",
+    "area_id": "86a2a301-b67a-4df9-872a-612bc8883962",
+    "code": "SER/003",
+    "name": "Corte de impresión",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.026Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "feedb9a4-af23-432c-a439-4d705d05396b",
+    "area_id": "bdbd5890-6a77-48fe-888e-367cde45897d",
+    "code": "SER/004",
+    "name": "Pegado de stickers",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.026Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "a6739305-4d67-4d30-8695-ba8ce2c87529",
+    "area_id": "634f24ec-0c81-4379-aa82-75fb1b54e39e",
+    "code": "SER/005",
+    "name": "Madera",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.026Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "bb48a2db-5d4d-4a6e-bcb7-aa8f0782efbe",
+    "area_id": "2af41624-9ca2-4da1-a160-97b35e56e489",
+    "code": "SER/006",
+    "name": "Instalación",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.026Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

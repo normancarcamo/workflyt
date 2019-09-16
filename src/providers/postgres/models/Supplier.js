@@ -25,7 +25,7 @@ export function Schema(DataTypes) {
       },
       extra: {
         type: DataTypes.JSONB,
-        allowNull: true
+        allowNull: true,
       },
       created_at: {
         type: DataTypes.DATE,
@@ -77,14 +77,11 @@ export function Model(sequelize, DataTypes) {
   const Supplier = sequelize.define(name, attributes, options);
 
   Supplier.associate = function(models) {
-    Supplier.belongsToMany(models.Item, {
-      as: {
-        singular: "item",
-        plural: "items",
-      },
-      through: models.SupplierItem,
+    Supplier.belongsToMany(models.Material, {
+      as: { singular: "material", plural: "materials" },
+      through: models.SupplierMaterial,
       foreignKey: "supplier_id",
-      otherKey: "item_id",
+      otherKey: "material_id",
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });

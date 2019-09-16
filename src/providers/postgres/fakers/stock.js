@@ -1,13 +1,13 @@
 const faker = require('faker');
-const items = require('./item');
+const materials = require('./material');
 
 module.exports = [
   {
     id: faker.random.uuid(),
-    item_id: items.find(i => i.name.includes('design')).id,
+    material_id: materials.find(i => i.code.includes('MTR/001')).id,
     entries: 5000,
     exits: 4900,
-    stock: 100,
+    stocks: 100,
     extra: {},
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -18,10 +18,10 @@ module.exports = [
   },
   {
     id: faker.random.uuid(),
-    item_id: items.find(i => i.name.includes('traffic')).id,
+    material_id: materials.find(i => i.code.includes('MTR/002')).id,
     entries: 4000,
     exits: 3950,
-    stock: 50,
+    stocks: 50,
     extra: {},
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),

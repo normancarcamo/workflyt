@@ -1,7 +1,7 @@
 {
   "name": "workflyt",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "description": "App to handle workflows",
   "license": "MIT",
   "repository": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/normancarcamo/workflyt",
   "scripts": {
-    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon --inspect=0.0.0.0 -- ./node_modules/.bin/babel-node src/index.js",
+    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon -- ./node_modules/.bin/babel-node src/server.js",
     "stage": "pm2 deploy ecosystem.config.js staging update",
     "prod": "pm2 deploy ecosystem.config.js production update",
     "stage:setup": "pm2 deploy ecosystem.config.js staging setup",
@@ -32,16 +32,15 @@
     "create": "mkdir -p logs; mkdir -p logs/all logs/err logs/out; mkdir -p docs; mkdir -p docs/diagrams; mkdir -p docs/test;",
     "remove": "rm -rf node_modules dist logs docs/test package-lock.json yarn.lock",
     "build": "babel src --out-dir dist -D",
-    "test": "NODE_ENV=test npm run test:unit && npm run test:integration:both",
-    "test:unit": "NODE_ENV=test jest --config test/config/jest.config.unit.js --detectOpenHandles",
-    "test:integration": "NODE_ENV=test MOCK=false jest --config test/config/jest.config.integration.js --runInBand --detectOpenHandles",
-    "test:integration:mock": "NODE_ENV=test MOCK=true jest --config test/config/jest.config.integration.js --runInBand --detectOpenHandles",
-    "test:integration:both": "NODE_ENV=test npm run test:integration:mock -- --coverage; npm run db:migration:test; npm run test:integration -- --coverage;",
+    "test": "NODE_ENV=test MOCK=true jest --config test/config/jest.config.js --detectOpenHandles",
+    "test:stage": "NODE_ENV=test MOCK=false jest --config test/config/jest.config.js --runInBand --detectOpenHandles",
+    "test:acc": "NODE_ENV=test MOCK=true jest --config test/config/jest.acc.config.js --detectOpenHandles",
     "db:migration": "npm run db:migration:dev && npm run db:migration:test",
     "db:migration:test": "sh src/providers/postgres/scripts/shell/migrate_test.sh",
     "db:migration:dev": "sh src/providers/postgres/scripts/shell/migrate_dev.sh"
   },
   "dependencies": {
+    "@ncardez/datalizer": "^1.0.6",
     "bcrypt": "^3.0.6",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
@@ -51,6 +50,7 @@
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
     "pino": "^5.13.2",
+    "pino-http": "^4.3.0",
     "sequelize": "^5.15.0",
     "superagent": "^5.1.0",
     "uuid": "^3.3.2"
@@ -59,7 +59,9 @@
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
     "babel-plugin-inline-dotenv": "^1.3.3",
     "babel-plugin-module-resolver": "^3.2.0",
     "dotenv": "^8.1.0",
@@ -67,12 +69,14 @@
     "fs-extra": "^8.1.0",
     "jest": "^24.9.0",
     "jest-chain": "^1.1.2",
+    "jest-cucumber": "^2.0.11",
     "jest-extended": "^0.11.2",
     "jest-html-reporter": "^2.5.0",
     "jsdoc": "^3.6.3",
     "nodemon": "^1.19.1",
     "pino-pretty": "^3.2.1",
     "sequelize-cli": "^5.5.0",
+    "sequelize-mock": "^0.10.2",
     "supertest": "^4.0.2"
   }
 }

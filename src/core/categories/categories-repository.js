@@ -1,73 +1,55 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.Category.findAll(
+module.exports = ({ database }) => ({
+  async getCategories (options) {
+    return await database.models.Category.findAll(options);
+  },
+
+  async createCategory (values) {
+    return await database.models.Category.create(values);
+  },
+
+  async getCategory ({ category_id, options }, assert) {
+    let category = await database.models.Category.findByPk(
+      category_id,
       database.queryBuilder(options)
     );
+
+    if (assert && !category) {
+      throw new Error('Not found');
+    } else {
+      return category;
+    }
   },
 
-  create (data) {
-    return database.models.Category.create(data);
+  async updateCategory ({ category_id, values, options }) {
+    let category = await this.getCategory({ category_id }, true);
+    return await category.update(values, options);
   },
 
-  findByPk ({ category_id, options }) {
-    return database.models.Category.findByPk(
-      category_id, database.queryBuilder(options)
-    );
+  async deleteCategory ({ category_id, options }) {
+    let category = await this.getCategory({ category_id }, true);
+    return await category.destroy(options);
   },
 
-  update ({ category_id, data, options }) {
-    return database.models.Category.update(data, {
-      where: { id: category_id },
-      returning: true,
+  async getMaterials ({ category_id, options }) {
+    let category = await this.getCategory({ category_id }, true);
+    return await category.getMaterials(database.queryBuilder(options));
+  },
+
+  async getMaterial ({ category_id, material_id, options }, assert) {
+    let category = await this.getCategory({ category_id }, true);
+
+    let material = await category.getMaterials({
       plain: true,
-      ...options
-    }).then(result => result[1]);
-  },
-
-  destroy ({ category_id, options }) {
-    return database.models.Category.destroy({
-      where: { id: category_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
-  },
-
-  getItems ({ category_id, options }) {
-    return database.models.Item.findAll(database.queryBuilder({
-      category_id, ...options
-    }));
-  },
-
-  addItems ({ category_id, items, options }) {
-    return database.models.Item.update({ category_id }, {
-      where: {
-        id: {
-          [database.Sequelize.Op.in]: [ ...items || [] ]
-        }
-      },
-      returning: true,
-      ...options
-    }).then(result => result[1]);
-  },
-
-  getItem ({ category_id, item_id, options }) {
-    return database.models.Item.findOne(database.queryBuilder({
-      id: item_id,
-      category_id,
-      ...options
-    }));
-  },
-
-  removeItem ({ category_id, item_id, options }) {
-    return database.models.Item.update(
-      { category_id: null },
-      {
-        where: { id: item_id, category_id },
-        returning: true,
-        plain: true,
+      ...database.queryBuilder({
+        id: material_id,
         ...options
-      }
-    ).then(result => result[1]);
+      })
+    });
+
+    if (assert && !material) {
+      throw new Error('Not found');
+    } else {
+      return material;
+    }
   }
 });

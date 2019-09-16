@@ -1,105 +1,93 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.Quote.findAll(
-      database.queryBuilder(options)
-    );
+module.exports = ({ database }) => ({
+  async getQuotes (options) {
+    return await database.models.Quote.findAll(options);
   },
 
-  create (data) {
-    return database.models.Quote.create(data);
+  async createQuote (values) {
+    return await database.models.Quote.create(values);
   },
 
-  findByPk ({ quote_id, options }) {
-    return database.models.Quote.findByPk(
+  async getQuote ({ quote_id, options }, assert) {
+    let quote = await database.models.Quote.findByPk(
       quote_id,
       database.queryBuilder(options)
     );
+
+    if (assert && !quote) {
+      throw new Error('Not found');
+    } else {
+      return quote;
+    }
   },
 
-  update ({ quote_id, data, options }) {
-    return database.models.Quote.update(data, {
-      where: { id: quote_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result.pop());
+  async updateQuote ({ quote_id, values, options }) {
+    let quote = await this.getQuote({ quote_id }, true);
+    return await quote.update(values, options);
   },
 
-  destroy ({ quote_id, options }) {
-    return database.models.Quote.destroy({
-      where: { id: quote_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
+  async deleteQuote ({ quote_id, options }) {
+    let quote = await this.getQuote({ quote_id }, true);
+    return await quote.destroy(options);
   },
 
-  getItems ({ quote, options }) {
-    return quote.getItems(database.queryBuilder(options));
+  async getServices ({ quote_id, options }) {
+    let quote = await this.getQuote({ quote_id }, true);
+    return await quote.getServices(database.queryBuilder(options));
   },
 
-  addItems ({ quote_id, items }) {
-    return database.models.QuoteItem.bulkCreate(
-      items.map(item_id => ({
-        quote_id,
-        item_id
-      }))
-    );
+  async addServices ({ quote_id, services }) {
+    let quote = await this.getQuote({ quote_id }, true);
+    return await quote.addServices(services);
   },
 
-  getItem ({ quote, item_id, options }) {
-    return quote.getItems({
+  async getService ({ quote_id, service_id, options }, assert) {
+    let quote = await this.getQuote({ quote_id }, true);
+
+    let service = await quote.getServices({
       plain: true,
       ...database.queryBuilder({
-        id: item_id,
+        id: service_id,
         ...options
       })
     });
+
+    if (assert && !service) {
+      throw new Error('Not found');
+    } else {
+      return service;
+    }
   },
 
-  updateItem ({ quote_id, item_id, data, options }) {
-    return database.models.QuoteItem.update(data, {
-      where: { quote_id, item_id },
-      returning: true,
+  async updateService ({ quote_id, service_id, values, options }) {
+    let service = await this.getService({ quote_id, service_id }, true);
+    return await service.QuoteService.update(values, options);
+  },
+
+  async deleteService ({ quote_id, service_id, options }) {
+    let service = await this.getService({ quote_id, service_id }, true);
+    return await service.QuoteService.destroy(options);
+  },
+
+  async getOrders ({ quote_id, options }) {
+    let quote = await this.getQuote({ quote_id }, true);
+    return await quote.getOrders(database.queryBuilder(options));
+  },
+
+  async getOrder ({ quote_id, order_id, options }, assert) {
+    let quote = await this.getQuote({ quote_id }, true);
+
+    let order = await quote.getOrders({
       plain: true,
-      ...options
-    }).then(result => result.pop());
-  },
-
-  removeItem ({ quote_id, item_id, options }) {
-    return database.models.QuoteItem.destroy({
-      where: { quote_id, item_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
-  },
-
-  getOrders ({ quote_id, options }) {
-    return database.models.Order.findAll(
-      database.queryBuilder({ quote_id, ...options })
-    );
-  },
-
-  addOrders ({ quote_id, orders, options }) {
-    return database.models.Order.update({ quote_id }, {
-      where: {
-        id: {
-          [database.Sequelize.Op.in]: [ ...orders ]
-        }
-      },
-      returning: true,
-      ...options
-    }).then(result => result.pop());
-  },
-
-  getOrder ({ quote_id, order_id, options }) {
-    return database.models.Order.findOne(
-      database.queryBuilder({
+      ...database.queryBuilder({
         id: order_id,
-        quote_id,
         ...options
       })
-    );
+    });
+
+    if (assert && !order) {
+      throw new Error('Not found');
+    } else {
+      return order;
+    }
   }
 });

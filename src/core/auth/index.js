@@ -1,19 +1,17 @@
 // dependencies:
 const database = require('src/providers/postgres');
-const Datalizer = require('@ncardez/datalizer');
-const jsonwebtoken = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const helpers = require('src/utils');
+const validator = require('./auth-validator');
 const Repository = require('./auth-repository');
+const UserRepository = require('../users/users-repository');
 const Service = require('./auth-service');
-const Validator = require('./auth-validator');
-const Adapter = require('./auth-adapter');
 const Controller = require('./auth-controller');
+const Router = require('./auth-router');
 
 // compose:
-const repository = Repository(database);
-const validator = Validator({ Datalizer });
-const adapter = Adapter({ bcrypt, jsonwebtoken });
-const service = Service({ repository, validator, adapter });
-const controller = Controller(service);
+const repository = Repository({ User: UserRepository({ database }) });
+const service = Service({ repository, helpers });
+const controller = Controller({ service, validator, helpers });
+const router = Router(controller);
 
-module.exports = controller;
+module.exports = router;

@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>4/4</span>
       </div>
     </div>
     <p class="quiet">
@@ -221,26 +221,8 @@
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">856x</span>
-<span class="cline-any cline-yes">856x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">856x</span>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">122x</span>
+<span class="cline-any cline-yes">122x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -257,14 +239,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">856x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">856x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">856x</span>
+<span class="cline-any cline-yes">122x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">122x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -405,42 +397,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">module.exports = ({ schema, Datalizer }) =&gt; {
-  const categoryAttributes = [
-    'id',
-    'parent_id',
-    'code',
-    'name',
-    'extra',
-    'created_at',
-    'updated_at',
-    'deleted_at',
-    'created_by',
-    'updated_by',
-    'deleted_by'
-  ];
+  let category = {
+    attributes: [
+      'id',
+      'parent_id',
+      'code',
+      'name',
+      'extra',
+      'created_at',
+      'updated_at',
+      'deleted_at',
+      'created_by',
+      'updated_by',
+      'deleted_by'
+    ],
+    associations: [ 'materials', 'parent' ]
+  };
 &nbsp;
-  const itemAttributes = [
-    'id',
-    'category_id',
-    'code',
-    'name',
-    'type',
-    'stock',
-    'price',
-    'extra',
-    'created_at',
-    'updated_at',
-    'deleted_at',
-    'created_by',
-    'updated_by',
-    'deleted_by'
-  ];
-&nbsp;
-  const itemAssociations = [ 'stocks' ];
-&nbsp;
-  const categoryAssociations = [ 'items', 'parent' ];
+  let material = {
+    attributes: [
+      'id',
+      'category_id',
+      'code',
+      'name',
+      'extra',
+      'created_at',
+      'updated_at',
+      'deleted_at',
+      'created_by',
+      'updated_by',
+      'deleted_by'
+    ],
+    associations: [ 'stocks' ]
+  };
 &nbsp;
   return Object.freeze({
+&nbsp;
+    // categories:
+&nbsp;
     getCategories: new Datalizer({
       query: schema.QUERY({
         id: schema.UUID({ $optional: true, $forbidden: true }),
@@ -456,10 +450,9 @@
         deleted_by: schema.UUID({ $optional: true }),
         offset: schema.OFFSET({ $optional: true }),
         limit: schema.LIMIT({ $optional: true }),
-        attributes: schema.ATTRIBUTES(categoryAttributes),
-        include: schema.INCLUDE(categoryAssociations),
+        attributes: schema.ATTRIBUTES(category.attributes),
         paranoid: schema.BOOLEAN({ $optional: true }),
-        sort_by: schema.ENUM(categoryAttributes),
+        sort_by: schema.ENUM(category.attributes),
         order_by: schema.ORDER_BY({ $optional: true })
       }, { $max: 30 })
     }),
@@ -478,7 +471,7 @@
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true })
       }, { $max: 11, $empty: false })
-    }),
+    }, { addKey: false }),
 &nbsp;
     getCategory: new Datalizer({
       params: schema.PARAMS(
@@ -486,8 +479,8 @@
         { $length: 1 }
       ),
       query: schema.QUERY({
-        attributes: schema.ATTRIBUTES(categoryAttributes),
-        include: schema.INCLUDE(categoryAssociations),
+        attributes: schema.ATTRIBUTES(category.attributes),
+        include: schema.INCLUDE(category.associations),
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 17 })
     }),
@@ -514,7 +507,7 @@
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true })
       }, { $max: 11, $empty: false })
-    }),
+    }, { addKey: false }),
 &nbsp;
     deleteCategory: new Datalizer({
       params: schema.PARAMS(
@@ -527,20 +520,15 @@
       }, { $max: 2 })
     }),
 &nbsp;
-    getItems: new Datalizer({
+    // materials:
+&nbsp;
+    getMaterials: new Datalizer({
       params: schema.PARAMS({ category: schema.UUID() }, { $length: 1 }),
       query: schema.QUERY({
         id: schema.UUID({ $optional: true, $forbidden: true }),
-        parent_id: schema.UUID({ $optional: true }),
+        category_id: schema.UUID({ $optional: true }),
         code: schema.CODE({ $optional: true }),
         name: schema.TEXT_FILTER({ $optional: true }),
-        type: schema.ENUM([ 'service', 'product', 'material' ]),
-        stock: schema.NUMBER_FILTER({
-          $optional: true,
-          $integer: true,
-          $positive: true
-        }),
-        price: schema.PRICE_FILTER({ $optional: true }),
         extra: schema.EXTRA({ $optional: true }),
         created_at: schema.DATE_FILTER({ $optional: true }),
         updated_at: schema.DATE_FILTER({ $optional: true }),
@@ -550,37 +538,37 @@
         deleted_by: schema.UUID({ $optional: true }),
         offset: schema.OFFSET({ $optional: true }),
         limit: schema.LIMIT({ $optional: true }),
-        attributes: schema.ATTRIBUTES(itemAttributes),
-        include: schema.INCLUDE(itemAssociations),
+        attributes: schema.ATTRIBUTES(material.attributes),
         paranoid: schema.BOOLEAN({ $optional: true }),
-        sort_by: schema.ENUM(itemAttributes),
-        order_by: schema.ORDER_BY({ $optional: true }),
+        sort_by: schema.ENUM(material.attributes),
+        order_by: schema.ORDER_BY({ $optional: true })
       }, { $max: 30 })
     }),
 &nbsp;
-    addItems: new Datalizer({
+    addMaterials: new Datalizer({
       params: schema.PARAMS({ category: schema.UUID() }, { $length: 1 }),
-      body: schema.BODY({ items: schema.UUID_ARRAY() }, { $length: 1 })
+      body: schema.BODY({ materials: schema.UUID_ARRAY() }, { $length: 1 })
     }),
 &nbsp;
-    getItem: new Datalizer({
+    getMaterial: new Datalizer({
       params: schema.PARAMS({
         category: schema.UUID(),
-        item: schema.UUID()
+        material: schema.UUID()
       }, { $length: 2 }),
       query: schema.QUERY({
-        attributes: schema.ATTRIBUTES(itemAttributes),
-        include: schema.INCLUDE(itemAssociations),
+        attributes: schema.ATTRIBUTES(material.attributes),
+        include: schema.INCLUDE(material.associations),
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 24 })
     }),
 &nbsp;
-    removeItem: new Datalizer({
+    removeMaterial: new Datalizer({
       params: schema.PARAMS(
-        { category: schema.UUID(), item: schema.UUID() },
+        { category: schema.UUID(), material: schema.UUID() },
         { $length: 2 }
       )
     })
+&nbsp;
   });
 };
 &nbsp;</pre></td></tr>
@@ -589,7 +577,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Aug 10 2019 07:33:18 GMT-0600 (Central Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Aug 30 2019 22:06:34 GMT-0600 (Central Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

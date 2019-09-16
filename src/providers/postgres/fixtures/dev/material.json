@@ -1,0 +1,54 @@
+[
+  {
+    "id": "ca7dc0db-12a1-47fd-b0a0-70cbb8df769e",
+    "category_id": "06267a5b-eec9-4bec-a02c-c6bc426c6a48",
+    "code": "MTR/001",
+    "name": "Tornillo 3x5 para madera",
+    "extra": {},
+    "created_at": "2019-01-01T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.031Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "227bfd26-b8d1-4134-921d-51b89268958d",
+    "category_id": "06267a5b-eec9-4bec-a02c-c6bc426c6a48",
+    "code": "MTR/002",
+    "name": "clavo de acero 1x3",
+    "extra": {},
+    "created_at": "2019-05-21T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:16.031Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "f2e940f6-5546-4a80-b68b-79a48fcf0e17",
+    "category_id": "0b8980f3-e633-4ede-b488-e918f45106b6",
+    "code": "MTR/003",
+    "name": "Brocha pequeña",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:16.031Z",
+    "updated_at": "2019-09-08T10:53:16.031Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "a25cba81-57e8-4281-a3c1-fa938bcd301d",
+    "category_id": "0b8980f3-e633-4ede-b488-e918f45106b6",
+    "code": "MTR/004",
+    "name": "Cinta aislante",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:16.031Z",
+    "updated_at": "2019-09-08T10:53:16.031Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

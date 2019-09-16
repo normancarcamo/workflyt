@@ -1,16 +1,16 @@
 // dependencies:
 const database = require('src/providers/postgres');
-const schema = require('src/utils/validator');
-const Datalizer = require('@ncardez/datalizer');
-const Validator = require('./categories-validator');
+const helpers = require('src/utils');
+const validator = require('./categories-validator');
 const Repository = require('./categories-repository');
 const Service = require('./categories-service');
 const Controller = require('./categories-controller');
+const Router = require('./categories-router');
 
 // compose:
-const repository = Repository(database);
-const validator = Validator({ schema, Datalizer });
-const service = Service({ repository, validator });
-const controller = Controller(service);
+const repository = Repository({ database });
+const service = Service({ repository });
+const controller = Controller({ service, validator, helpers });
+const router = Router(controller);
 
-module.exports = controller;
+module.exports = router;

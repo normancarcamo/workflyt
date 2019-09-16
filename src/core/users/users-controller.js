@@ -1,91 +1,124 @@
-module.exports = service => Object.freeze({
-  async getUsers (request, response, next) {
-    let result = await service.getUsers(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+module.exports = ({ service, validator, helpers }) => Object.freeze({
+  getUsers: [
+    helpers.validateRights('get users'),
+    helpers.validateInput(validator.getUsers),
+    function handler (req, res, next) {
+      service.getUsers(req.query)
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async createUsers (request, response, next) {
-    let result = await service.createUsers(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.status(201).json(result);
+  createUser: [
+    helpers.validateRights('create user'),
+    helpers.validateInput(validator.createUser),
+    function handler (req, res, next) {
+      let values = req.body;
+      let options = {};
+      service.createUser({ values, options })
+        .then(result => res.status(201).json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getUser (request, response, next) {
-    let result = await service.getUser(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getUser: [
+    helpers.validateRights('get user'),
+    helpers.validateInput(validator.getUser),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let options = req.query;
+      service.getUser({ user_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async updateUser (request, response, next) {
-    let result = await service.updateUser(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  updateUser: [
+    helpers.validateRights('update user'),
+    helpers.validateInput(validator.updateUser),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let values = req.body;
+      let options = req.query;
+      service.updateUser({ user_id, values, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async deleteUser (request, response, next) {
-    let result = await service.deleteUser(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  deleteUser: [
+    helpers.validateRights('delete user'),
+    helpers.validateInput(validator.deleteUser),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let options = req.query;
+      service.deleteUser({ user_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getRoles (request, response, next) {
-    let result = await service.getRoles(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getRoles: [
+    helpers.validateRights('get roles from user'),
+    helpers.validateInput(validator.getRoles),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let options = req.query;
+      service.getRoles({ user_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async addRoles (request, response, next) {
-    let result = await service.addRoles(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  addRoles: [
+    helpers.validateRights('add roles to user'),
+    helpers.validateInput(validator.addRoles),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let roles = req.body.roles;
+      service.addRoles({ user_id, roles })
+        .then(result => res.status(201).json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getRole (request, response, next) {
-    let result = await service.getRole(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getRole: [
+    helpers.validateRights('get role from user'),
+    helpers.validateInput(validator.getRole),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let role_id = req.params.role;
+      let options = req.query;
+      service.getRole({ user_id, role_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async updateRole (request, response, next) {
-    let result = await service.updateRole(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  updateRole: [
+    helpers.validateRights('update role from user'),
+    helpers.validateInput(validator.updateRole),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let role_id = req.params.role;
+      let values = req.body;
+      let options = req.query;
+      service.updateRole({ user_id, role_id, values, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async removeRole (request, response, next) {
-    let result = await service.removeRole(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  deleteRole: [
+    helpers.validateRights('delete role from user'),
+    helpers.validateInput(validator.deleteRole),
+    function handler (req, res, next) {
+      let user_id = req.params.user;
+      let role_id = req.params.role;
+      let options = req.query;
+      service.deleteRole({ user_id, role_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  }
+  ]
 });

@@ -8,3 +8,6 @@ yarn-error.log*
 dist
 logs
 .vscode
+./docker/
+./docker
+docker

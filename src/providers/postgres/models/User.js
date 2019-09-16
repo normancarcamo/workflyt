@@ -10,13 +10,13 @@ export function Schema(DataTypes) {
         defaultValue: DataTypes.UUIDV4,
         validate: { isUUID: 4 }
       },
-      employee_id: {
+      worker_id: {
         type: DataTypes.UUID,
         allowNull: true,
         unique: false,
         references: {
           model: {
-            tableName: "employee",
+            tableName: "worker",
             schema: "public"
           },
           key: "id"
@@ -96,6 +96,58 @@ export function Model(sequelize, DataTypes) {
   const User = sequelize.define(name, attributes, options);
 
   User.associate = function(models) {
+    // area:
+    User.hasOne(models.Area, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Area, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Area, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // area_worker:
+    User.hasOne(models.AreaWorker, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.AreaWorker, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.AreaWorker, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // area_subarea:
+    User.hasOne(models.AreaSubarea, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.AreaSubarea, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.AreaSubarea, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // category:
     User.hasOne(models.Category, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -112,6 +164,24 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
+    // client:
+    User.hasOne(models.Client, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Client, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Client, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // company:
     User.hasOne(models.Company, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -128,154 +198,92 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.Customer, {
+    // job:
+    User.hasOne(models.Job, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.Customer, {
+    User.hasOne(models.Job, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.Customer, {
+    User.hasOne(models.Job, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.Department, {
+    // job_material:
+    User.hasOne(models.JobMaterial, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.Department, {
+    User.hasOne(models.JobMaterial, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.Department, {
+    User.hasOne(models.JobMaterial, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
-    User.belongsTo(models.Employee, {
-      as: "employee",
-      foreignKey: "employee_id"
-    });
-    User.hasOne(models.Employee, {
+    // job_subjob:
+    User.hasOne(models.JobSubjob, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.Employee, {
+    User.hasOne(models.JobSubjob, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.Employee, {
+    User.hasOne(models.JobSubjob, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.EmployeeSupervisor, {
+    // job_worker:
+    User.hasOne(models.JobWorker, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.EmployeeSupervisor, {
+    User.hasOne(models.JobWorker, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.EmployeeSupervisor, {
+    User.hasOne(models.JobWorker, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.DepartmentEmployee, {
+    // material:
+    User.hasOne(models.Material, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.DepartmentEmployee, {
+    User.hasOne(models.Material, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.DepartmentEmployee, {
+    User.hasOne(models.Material, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.Item, {
-      foreignKey: "created_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.Item, {
-      foreignKey: "updated_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.Item, {
-      foreignKey: "deleted_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-
-    User.hasOne(models.OrderDepartment, {
-      foreignKey: "created_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.OrderDepartment, {
-      foreignKey: "updated_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.OrderDepartment, {
-      foreignKey: "deleted_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-
-    User.hasOne(models.OrderEmployee, {
-      foreignKey: "created_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.OrderEmployee, {
-      foreignKey: "updated_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.OrderEmployee, {
-      foreignKey: "deleted_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-
-    User.hasOne(models.OrderItem, {
-      foreignKey: "created_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.OrderItem, {
-      foreignKey: "updated_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.OrderItem, {
-      foreignKey: "deleted_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-
+    // order:
     User.hasOne(models.Order, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -292,6 +300,7 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
+    // permission:
     User.hasOne(models.Permission, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -308,22 +317,7 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.QuoteItem, {
-      foreignKey: "created_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.QuoteItem, {
-      foreignKey: "updated_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.QuoteItem, {
-      foreignKey: "deleted_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-
+    // quote:
     User.hasOne(models.Quote, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -340,27 +334,26 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.RolePermission, {
+    // quote_service:
+    User.hasOne(models.QuoteService, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.RolePermission, {
+    User.hasOne(models.QuoteService, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.RolePermission, {
+    User.hasOne(models.QuoteService, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
+    // role:
     User.belongsToMany(models.Role, {
-      as: {
-        singular: "role",
-        plural: "roles",
-      },
+      as: { singular: "role", plural: "roles" },
       through: models.UserRole,
       foreignKey: "user_id",
       otherKey: "role_id",
@@ -383,6 +376,41 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
+    // role_permission:
+    User.hasOne(models.RolePermission, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.RolePermission, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.RolePermission, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // service:
+    User.hasOne(models.Service, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Service, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Service, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // stock:
     User.hasOne(models.Stock, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -399,22 +427,7 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.SupplierItem, {
-      foreignKey: "created_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.SupplierItem, {
-      foreignKey: "updated_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-    User.hasOne(models.SupplierItem, {
-      foreignKey: "deleted_by",
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
-    });
-
+    // supplier:
     User.hasOne(models.Supplier, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -431,22 +444,24 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.UserRole, {
+    // supplier_material:
+    User.hasOne(models.SupplierMaterial, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.UserRole, {
+    User.hasOne(models.SupplierMaterial, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.UserRole, {
+    User.hasOne(models.SupplierMaterial, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
+    // user:
     User.hasOne(models.User, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -463,22 +478,24 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
 
-    User.hasOne(models.WarehouseItem, {
+    // user_role:
+    User.hasOne(models.UserRole, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.WarehouseItem, {
+    User.hasOne(models.UserRole, {
       foreignKey: "updated_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
-    User.hasOne(models.WarehouseItem, {
+    User.hasOne(models.UserRole, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'
     });
 
+    // warehouse:
     User.hasOne(models.Warehouse, {
       foreignKey: "created_by",
       onUpdate: 'CASCADE',
@@ -490,6 +507,61 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'SET NULL'
     });
     User.hasOne(models.Warehouse, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // warehouse_material:
+    User.hasOne(models.WarehouseMaterial, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.WarehouseMaterial, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.WarehouseMaterial, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // worker:
+    User.belongsTo(models.Worker, {
+      as: "worker",
+      foreignKey: "worker_id"
+    });
+    User.hasOne(models.Worker, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Worker, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.Worker, {
+      foreignKey: "deleted_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+
+    // worker_supervisor:
+    User.hasOne(models.WorkerSupervisor, {
+      foreignKey: "created_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.WorkerSupervisor, {
+      foreignKey: "updated_by",
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    });
+    User.hasOne(models.WorkerSupervisor, {
       foreignKey: "deleted_by",
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL'

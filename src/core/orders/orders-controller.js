@@ -1,181 +1,83 @@
-module.exports = service => Object.freeze({
-  async getOrders (request, response, next) {
-    let result = await service.getOrders(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+module.exports = ({ service, validator, helpers }) => Object.freeze({
+  getOrders: [
+    helpers.validateRights('get orders'),
+    helpers.validateInput(validator.getOrders),
+    function handler (req, res, next) {
+      service.getOrders(req.query)
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async createOrders (request, response, next) {
-    let result = await service.createOrders(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.status(201).json(result);
+  createOrder: [
+    helpers.validateRights('create order'),
+    helpers.validateInput(validator.createOrder),
+    function handler (req, res, next) {
+      service.createOrder(req.body)
+        .then(result => res.status(201).json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getOrder (request, response, next) {
-    let result = await service.getOrder(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getOrder: [
+    helpers.validateRights('get order'),
+    helpers.validateInput(validator.getOrder),
+    function handler (req, res, next) {
+      let order_id = req.params.order;
+      let options = req.query;
+      service.getOrder({ order_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async updateOrder (request, response, next) {
-    let result = await service.updateOrder(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  updateOrder: [
+    helpers.validateRights('update order'),
+    helpers.validateInput(validator.updateOrder),
+    function handler (req, res, next) {
+      let order_id = req.params.order;
+      let values = req.body;
+      let options = req.query;
+      service.updateOrder({ order_id, values, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async deleteOrder (request, response, next) {
-    let result = await service.deleteOrder(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  deleteOrder: [
+    helpers.validateRights('delete order'),
+    helpers.validateInput(validator.deleteOrder),
+    function handler (req, res, next) {
+      let order_id = req.params.order;
+      let options = req.query;
+      service.deleteOrder({ order_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getItems (request, response, next) {
-    let result = await service.getItems(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getJobs: [
+    helpers.validateRights('get jobs from order'),
+    helpers.validateInput(validator.getJobs),
+    function handler (req, res, next) {
+      let order_id = req.params.order;
+      let options = req.query;
+      service.getJobs({ order_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async addItems (request, response, next) {
-    let result = await service.addItems(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getJob: [
+    helpers.validateRights('get job from order'),
+    helpers.validateInput(validator.getJob),
+    function handler (req, res, next) {
+      let order_id = req.params.order;
+      let job_id = req.params.job;
+      let options = req.query;
+      service.getJob({ order_id, job_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
-
-  async getItem (request, response, next) {
-    let result = await service.getItem(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async updateItem (request, response, next) {
-    let result = await service.updateItem(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async removeItem (request, response, next) {
-    let result = await service.removeItem(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async getDepartments (request, response, next) {
-    let result = await service.getDepartments(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async addDepartments (request, response, next) {
-    let result = await service.addDepartments(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async getDepartment (request, response, next) {
-    let result = await service.getDepartment(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async updateDepartment (request, response, next) {
-    let result = await service.updateDepartment(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async removeDepartment (request, response, next) {
-    let result = await service.removeDepartment(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async getEmployees (request, response, next) {
-    let result = await service.getEmployees(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async addEmployees (request, response, next) {
-    let result = await service.addEmployees(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async getEmployee (request, response, next) {
-    let result = await service.getEmployee(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async updateEmployee (request, response, next) {
-    let result = await service.updateEmployee(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async removeEmployee (request, response, next) {
-    let result = await service.removeEmployee(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  }
+  ]
 });

@@ -1,82 +1,115 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.User.findAll(database.queryBuilder(options));
+module.exports = ({ database }) => ({
+  async getUsers (options) {
+    return await database.models.User.findAll(options);
   },
 
-  create (data) {
-    return database.models.User
-      .create(data)
-      .then(user => user.dataValues);
+  async createUser ({ values, options }) {
+    return await database.models.User.create(values, options);
   },
 
-  findByUsername ({ username, options }) {
-    return database.models.User.findOne(
-      database.queryBuilder({ username, ...options })
+  async getUser ({ user_id, options, throwNotFound }) {
+    let user = await database.models.User.findByPk(
+      user_id,
+      database.queryBuilder(options)
     );
+
+    if (throwNotFound && !user) {
+      throw new Error('Not found');
+    } else {
+      return user;
+    }
   },
 
-  findByPk ({ user_id, options }) {
-    return database.models.User.findByPk(
-      user_id, database.queryBuilder(options)
-    );
-  },
-
-  update ({ user_id, data, options }) {
-    return database.models.User.update(data, {
-      where: { id: user_id },
-      returning: true,
+  async getUserByUsername ({ username, options, throwNotFound }) {
+    let user = await database.models.User.findOne({
+      where: { username },
       plain: true,
-      ...options
-    }).then(result => result.pop());
+      raw: true,
+      options
+    });
+
+    if (throwNotFound && !user) {
+      throw new Error('Not found');
+    }
+
+    return user;
   },
 
-  destroy ({ user_id, options }) {
-    return database.models.User.destroy({
-      where: { id: user_id },
-      returning: true,
+  async getUserByUsernameWithRoles ({ username, options, throwNotFound }) {
+    let user = await database.sequelize.query(`
+      SELECT
+        u.*,
+        array_remove(array_agg(DISTINCT r.name), null) roles,
+        array_remove(array_agg(DISTINCT p.name), null) permissions
+      FROM users AS u
+      JOIN user_role AS ur ON (ur.user_id = u.id AND ur.deleted_at IS NULL)
+      JOIN role AS r ON (r.id = ur.role_id AND r.deleted_at IS NULL)
+      JOIN role_permission AS rp ON (rp.role_id = r.id AND rp.deleted_at IS NULL)
+      JOIN permission AS p ON (p.id = rp.permission_id AND p.deleted_at IS NULL)
+      WHERE u.deleted_at IS NULL AND u.username = ?
+      GROUP BY u.id;
+    `, {
+      model: database.models.User,
+      mapToModel: true,
       plain: true,
+      raw: true,
+      replacements: [ username ],
+      type: database.Sequelize.QueryTypes.SELECT,
       ...options
     });
+
+    if (throwNotFound && !user) {
+      throw new Error('Not found');
+    }
+
+    return user;
   },
 
-  getRoles ({ user, options }) {
-    return user.getRoles(database.queryBuilder(options));
+  async updateUser ({ user_id, values, options }) {
+    let user = await this.getUser({ user_id, throwNotFound: true });
+    return await user.update(values, options);
   },
 
-  addRoles ({ user_id, roles }) {
-    return database.models.UserRole.bulkCreate(
-      roles.map(role_id => ({
-        user_id,
-        role_id
-      }))
-    );
+  async deleteUser ({ user_id, options }) {
+    let user = await this.getUser({ user_id, throwNotFound: true });
+    return await user.destroy(options);
   },
 
-  getRole ({ user, role_id, options }) {
-    return user.getRoles(
-      database.queryBuilder({
-        plain: true,
+  async getRoles ({ user_id, options }) {
+    let user = await this.getUser({ user_id, throwNotFound: true });
+    return await user.getRoles(database.queryBuilder(options));
+  },
+
+  async addRoles ({ user_id, roles }) {
+    let user = await this.getUser({ user_id, throwNotFound: true });
+    return await user.addRoles(roles);
+  },
+
+  async getRole ({ user_id, role_id, options, throwNotFound }) {
+    let user = await this.getUser({ user_id, throwNotFound: true });
+
+    let role = await user.getRoles({
+      plain: true,
+      ...database.queryBuilder({
         id: role_id,
         ...options
       })
-    );
-  },
-
-  updateRole ({ user_id, role_id, data, options }) {
-    return database.models.UserRole.update(data, {
-      where: { user_id, role_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result.pop());
-  },
-
-  removeRole ({ user_id, role_id, options }) {
-    return database.models.UserRole.destroy({
-      where: { user_id, role_id },
-      returning: true,
-      plain: true,
-      ...options
     });
+
+    if (throwNotFound && !role) {
+      throw new Error('Not found');
+    } else {
+      return role;
+    }
+  },
+
+  async updateRole ({ user_id, role_id, values, options }) {
+    let role = await this.getRole({ user_id, role_id, throwNotFound: true });
+    return await role.UserRole.update(values, options);
+  },
+
+  async deleteRole ({ user_id, role_id, options }) {
+    let role = await this.getRole({ user_id, role_id, throwNotFound: true });
+    return await role.UserRole.destroy(options);
   }
 });

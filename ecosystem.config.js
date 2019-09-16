@@ -3,7 +3,7 @@ const pkg = require('package.json');
 module.exports = {
   apps : [{
     name           : pkg.name,
-    script         : 'dist/index.js',
+    script         : 'dist/server.js',
     output         : 'logs/out/logs.log',
     error          : 'logs/err/logs.log',
     log            : 'logs/all/logs.log',

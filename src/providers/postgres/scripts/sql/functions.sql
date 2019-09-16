@@ -15,6 +15,23 @@ begin
 end
 $body$ language 'plpgsql' stable;
 
+-- client ---------------------------------------------------------------------
+
+drop function if exists client_code_trigger_fn() cascade;
+
+create or replace function client_code_trigger_fn()
+returns trigger as $body$
+begin
+  new.code := gen_code_sequence_fn(
+    'CLI',null,'000',
+    '{p}/{s}',
+    'client_code_sequence',
+    new.created_at::timestamp
+  );
+  return new;
+end
+$body$ language 'plpgsql' stable;
+
 -- company --------------------------------------------------------------------
 
 drop function if exists company_code_trigger_fn() cascade;
@@ -32,84 +49,87 @@ begin
 end
 $body$ language 'plpgsql' stable;
 
--- customer -------------------------------------------------------------------
+-- area -----------------------------------------------------------------------
 
-drop function if exists customer_code_trigger_fn() cascade;
+drop function if exists area_code_trigger_fn() cascade;
 
-create or replace function customer_code_trigger_fn()
-returns trigger as $body$
-begin
-  new.code := gen_code_sequence_fn(
-    'CUS',null,'000',
-    '{p}/{s}',
-    'customer_code_sequence',
-    new.created_at::timestamp
-  );
-  return new;
-end
-$body$ language 'plpgsql' stable;
-
--- department -----------------------------------------------------------------
-
-drop function if exists department_code_trigger_fn() cascade;
-
-create or replace function department_code_trigger_fn()
+create or replace function area_code_trigger_fn()
 returns trigger as $body$
 begin
   new.code := gen_code_sequence_fn(
     'DEP',null,'000',
     '{p}/{s}',
-    'department_code_sequence',
+    'area_code_sequence',
     new.created_at::timestamp
   );
   return new;
 end
 $body$ language 'plpgsql' stable;
 
--- employee -------------------------------------------------------------------
+-- worker ---------------------------------------------------------------------
 
-drop function if exists employee_code_trigger_fn() cascade;
+drop function if exists worker_code_trigger_fn() cascade;
 
-create or replace function employee_code_trigger_fn()
+create or replace function worker_code_trigger_fn()
 returns trigger as $body$
 begin
   new.code := gen_code_sequence_fn(
     'EMP',null,'000',
     '{p}/{s}',
-    'employee_code_sequence',
+    'worker_code_sequence',
     new.created_at::timestamp
   );
   return new;
 end
 $body$ language 'plpgsql' stable;
 
--- item -----------------------------------------------------------------------
+-- service --------------------------------------------------------------------
 
-drop function if exists item_code_trigger_fn() cascade;
+drop function if exists service_code_trigger_fn() cascade;
 
-create or replace function item_code_trigger_fn()
+create or replace function service_code_trigger_fn()
 returns trigger as $body$
-declare
-  _sequence text;
-  _prefix text;
 begin
-  if (lower(new.type::text) = 'material') then
-    _sequence := 'item_material_code_sequence';
-    _prefix := 'MAT';
-  elsif (lower(new.type::text) = 'product') then
-    _sequence := 'item_product_code_sequence';
-    _prefix := 'PRO';
-  else
-    _sequence := 'item_service_code_sequence';
-    _prefix := 'SER';
-  end if;
-
   new.code := gen_code_sequence_fn(
-    _prefix,null,'000',
-    '{p}/{s}',_sequence,
+    'EMP',null,'000',
+    '{p}/{s}',
+    'service_code_sequence',
     new.created_at::timestamp
   );
+  return new;
+end
+$body$ language 'plpgsql' stable;
 
+-- job ------------------------------------------------------------------------
+
+drop function if exists job_code_trigger_fn() cascade;
+
+create or replace function job_code_trigger_fn()
+returns trigger as $body$
+begin
+  new.code := gen_code_sequence_fn(
+    'JOB',null,'000',
+    '{p}/{s}',
+    'job_code_sequence',
+    new.created_at::timestamp
+  );
+  return new;
+end
+$body$ language 'plpgsql' stable;
+
+-- material -------------------------------------------------------------------
+
+drop function if exists material_code_trigger_fn() cascade;
+
+create or replace function material_code_trigger_fn()
+returns trigger as $body$
+begin
+  new.code := gen_code_sequence_fn(
+    'MAT',null,'000',
+    '{p}/{s}',
+    'material_code_sequence',
+    new.created_at::timestamp
+  );
   return new;
 end
 $body$ language 'plpgsql' stable;
@@ -120,24 +140,12 @@ drop function if exists order_code_trigger_fn() cascade;
 
 create or replace function order_code_trigger_fn()
 returns trigger as $body$
-declare
-  _sequence text;
-  _prefix text;
 begin
-  if (lower(new.type::text) = 'installation') then
-    _sequence := 'order_installation_code_sequence';
-    _prefix := 'ORI';
-  else
-    _sequence := 'order_work_code_sequence';
-    _prefix := 'ORW';
-  end if;
-
   new.code := gen_code_sequence_fn(
-    _prefix,null,'000',
-    '{p}/{s}',_sequence,
+    'ORD',null,'000',
+    '{p}/{s}', 'order_work_code_sequence',
     new.created_at::timestamp
   );
-
   return new;
 end
 $body$ language 'plpgsql' stable;

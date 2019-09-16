@@ -26,26 +26,5 @@ module.exports = {
     }),
     res: Pino.stdSerializers.res,
     err: Pino.stdSerializers.err
-  },
-  onFinish: (req, res, logger) => () => {
-    if (process.env.LOG_ENABLED === 'true') {
-      let responseTime = `${Date.now() - req.start}ms`;
-      if (req.error) {
-        let level = null;
-
-        if (req.error.status >= 400 && req.error.status < 500) {
-          level = 'warn';
-        } else {
-          level = 'error';
-        }
-
-        logger[level](
-          { req, res, err: req.error, responseTime },
-          req.error.message
-        );
-      } else {
-        logger.info({ req, res, responseTime }, 'Request completed.');
-      }
-    }
   }
 };

@@ -1,0 +1,28 @@
+[
+  {
+    "supplier_id": "bc807441-9439-468e-9682-1c00155445bf",
+    "material_id": "5bb8b174-fde8-4fd9-a2dd-e0c16ad91d6b",
+    "extra": {
+      "units": 423
+    },
+    "created_at": "2019-09-08T10:53:29.580Z",
+    "updated_at": "2019-09-08T10:53:29.580Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "supplier_id": "bc807441-9439-468e-9682-1c00155445bf",
+    "material_id": "02f21a94-d5f2-4587-ab79-75cddbbffeb7",
+    "extra": {
+      "units": 211
+    },
+    "created_at": "2019-09-08T10:53:29.580Z",
+    "updated_at": "2019-09-08T10:53:29.580Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

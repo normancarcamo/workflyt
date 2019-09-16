@@ -3,36 +3,40 @@
 drop sequence if exists category_code_sequence;
 create sequence if not exists category_code_sequence;
 
+-- client -------------------------------------------------------------------
+
+drop sequence if exists client_code_sequence;
+create sequence if not exists client_code_sequence;
+
 -- company --------------------------------------------------------------------
 
 drop sequence if exists company_code_sequence;
 create sequence if not exists company_code_sequence;
 
--- customer -------------------------------------------------------------------
+-- area -----------------------------------------------------------------
 
-drop sequence if exists customer_code_sequence;
-create sequence if not exists customer_code_sequence;
+drop sequence if exists area_code_sequence;
+create sequence if not exists area_code_sequence;
 
--- department -----------------------------------------------------------------
+-- service -----------------------------------------------------------------
 
-drop sequence if exists department_code_sequence;
-create sequence if not exists department_code_sequence;
+drop sequence if exists service_code_sequence;
+create sequence if not exists service_code_sequence;
 
--- employee -------------------------------------------------------------------
+-- worker -------------------------------------------------------------------
 
-drop sequence if exists employee_code_sequence;
-create sequence if not exists employee_code_sequence;
+drop sequence if exists worker_code_sequence;
+create sequence if not exists worker_code_sequence;
 
--- item -----------------------------------------------------------------------
+-- job ------------------------------------------------------------------------
 
-drop sequence if exists item_material_code_sequence;
-create sequence if not exists item_material_code_sequence;
+drop sequence if exists job_code_sequence;
+create sequence if not exists job_code_sequence;
 
-drop sequence if exists item_product_code_sequence;
-create sequence if not exists item_product_code_sequence;
+-- material -------------------------------------------------------------------
 
-drop sequence if exists item_service_code_sequence;
-create sequence if not exists item_service_code_sequence;
+drop sequence if exists material_code_sequence;
+create sequence if not exists material_code_sequence;
 
 -- order ----------------------------------------------------------------------
 

@@ -32,14 +32,12 @@ export function Schema(DataTypes) {
         defaultValue: 'unset',
         validate: { notEmpty: true }
       },
-      type: {
-        type: DataTypes.ENUM([ "work", "installation" ]),
-        allowNull: false,
-        defaultValue: "work",
-        validate: {
-          isIn: [[ "work", "installation" ]],
-          notEmpty: true
-        }
+      subject: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        unique: false,
+        defaultValue: 'No extra details',
+        validate: { len: [2, 150], notEmpty: true }
       },
       status: {
         type: DataTypes.ENUM([ "awaiting", "working", "cancelled", "done" ]),
@@ -47,6 +45,26 @@ export function Schema(DataTypes) {
         defaultValue: "awaiting",
         validate: {
           isIn: [[ "awaiting", "working", "cancelled", "done" ]],
+          notEmpty: true
+        }
+      },
+      priority: {
+        type: DataTypes.ENUM([ "high", "medium", "low" ]),
+        allowNull: false,
+        defaultValue: "low",
+        validate: {
+          isIn: [[ "high", "medium", "low" ]],
+          notEmpty: true
+        }
+      },
+      progress: {
+        type: DataTypes.DECIMAL(5, 2),
+        allowNull: false,
+        defaultValue: 0.0,
+        validate: {
+          isDecimal: true,
+          min: 0,
+          max: 100,
           notEmpty: true
         }
       },
@@ -108,36 +126,9 @@ export function Model(sequelize, DataTypes) {
       as: "quote",
       foreignKey: "quote_id"
     });
-    Order.belongsToMany(models.Department, {
-      as: {
-        singular: "department",
-        plural: "departments"
-      },
-      through: models.OrderDepartment,
+    Order.hasMany(models.Job, {
+      as: { singular: "job", plural: "jobs" },
       foreignKey: "order_id",
-      otherKey: "department_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
-    Order.belongsToMany(models.Item, {
-      as: {
-        singular: "item",
-        plural: "items"
-      },
-      through: models.OrderItem,
-      foreignKey: "order_id",
-      otherKey: "item_id",
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
-    Order.belongsToMany(models.Employee, {
-      as: {
-        singular: "employee",
-        plural: "employees"
-      },
-      through: models.OrderEmployee,
-      foreignKey: "order_id",
-      otherKey: "employee_id",
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });

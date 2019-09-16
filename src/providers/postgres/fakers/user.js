@@ -1,13 +1,13 @@
 const faker = require('faker');
 const bcrypt = require('bcrypt');
-const employees = require('./employee.js');
+const workers = require('./worker.js');
 
 module.exports = [
   {
     id: faker.random.uuid(),
+    worker_id: workers[0].id,
     code: 'USR/001',
     username: 'lberrios',
-    employee_id: employees[0].id,
     password: bcrypt.hashSync('Lberrios.2019', 10),
     extra: {},
     created_at: new Date().toISOString(),
@@ -19,9 +19,9 @@ module.exports = [
   },
   {
     id: faker.random.uuid(),
+    worker_id: workers[1].id,
     code: 'USR/002',
     username: 'dbric',
-    employee_id: employees[1].id,
     password: bcrypt.hashSync('Dbric.2019', 10),
     extra: {},
     created_at: new Date().toISOString(),
@@ -33,9 +33,9 @@ module.exports = [
   },
   {
     id: faker.random.uuid(),
+    worker_id: workers[3].id,
     code: 'USR/003',
     username: 'dvasquez',
-    employee_id: employees[3].id,
     password: bcrypt.hashSync('DVasquez.2019', 10),
     extra: {},
     created_at: new Date().toISOString(),
@@ -47,9 +47,9 @@ module.exports = [
   },
   {
     id: faker.random.uuid(),
+    worker_id: workers[2].id,
     code: 'USR/004',
     username: 'jvasquez',
-    employee_id: employees[2].id,
     password: bcrypt.hashSync('JVasquez.2019', 10),
     extra: {},
     created_at: new Date().toISOString(),
@@ -61,9 +61,9 @@ module.exports = [
   },
   {
     id: faker.random.uuid(),
+    worker_id: workers[4].id,
     code: 'USR/005',
     username: 'jbogran',
-    employee_id: employees[4].id,
     password: bcrypt.hashSync('JBogran.2019', 10),
     extra: {},
     created_at: new Date().toISOString(),
@@ -75,9 +75,9 @@ module.exports = [
   },
   {
     id: faker.random.uuid(),
+    worker_id: null,
     code: 'USR/006',
     username: 'ncarcamo',
-    employee_id: null,
     password: bcrypt.hashSync('NCarcamo.2019', 10),
     extra: {},
     created_at: new Date().toISOString(),
@@ -89,9 +89,9 @@ module.exports = [
   },
   {
     id: faker.random.uuid(),
+    worker_id: null,
     code: 'USR/007',
     username: 'tester',
-    employee_id: null,
     password: bcrypt.hashSync('a0123456789z', 10),
     extra: {},
     created_at: new Date().toISOString(),

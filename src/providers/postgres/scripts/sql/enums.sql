@@ -1,3 +1,5 @@
+-- QUOTE ----------------------------------------------------------------------
+
 drop type if exists enum_quote_status;
 create type enum_quote_status as enum (
   'open',
@@ -9,8 +11,11 @@ create type enum_quote_status as enum (
   'awaiting',
   'authorized',
   'cancelled',
-  'done'
+  'done',
+  'finished'
 );
+
+-- ORDER ----------------------------------------------------------------------
 
 drop type if exists enum_orders_status;
 create type enum_orders_status as enum (
@@ -20,18 +25,37 @@ create type enum_orders_status as enum (
   'awaiting'
 );
 
+drop type if exists enum_orders_priority;
+create type enum_orders_priority as enum (
+  'low',
+  'medium',
+  'high'
+);
+
 drop type if exists enum_orders_type;
 create type enum_orders_type as enum (
   'installation',
   'work'
 );
 
-drop type if exists enum_item_type;
-create type enum_item_type as enum (
-  'material',
-  'product',
-  'service'
+-- JOB ------------------------------------------------------------------------
+
+drop type if exists enum_jobs_status;
+create type enum_jobs_status as enum (
+  'done',
+  'cancelled',
+  'working',
+  'awaiting'
 );
+
+drop type if exists enum_jobs_priority;
+create type enum_jobs_priority as enum (
+  'low',
+  'medium',
+  'high'
+);
+
+-- SOCIAL ---------------------------------------------------------------------
 
 drop type if exists enum_social_type;
 create type enum_social_type as enum(
@@ -46,6 +70,8 @@ create type enum_social_type as enum(
   'other'
 );
 
+-- PHONE ----------------------------------------------------------------------
+
 drop type if exists enum_phone_type;
 create type enum_phone_type as enum(
   'work',
@@ -55,6 +81,8 @@ create type enum_phone_type as enum(
   'other'
 );
 
+-- ADDRESS --------------------------------------------------------------------
+
 drop type if exists enum_address_type;
 create type enum_address_type as enum(
   'work',
@@ -63,8 +91,10 @@ create type enum_address_type as enum(
   'other'
 );
 
-drop type if exists enum_customer_type;
-create type enum_customer_type as enum(
+-- CLIENT_TYPE ----------------------------------------------------------------
+
+drop type if exists enum_client_type;
+create type enum_client_type as enum(
   'normal',
   'company',
   'juridical',

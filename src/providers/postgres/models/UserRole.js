@@ -83,8 +83,8 @@ export function Schema(DataTypes) {
 
 export function Model(sequelize, DataTypes) {
   const { name, attributes, options } = Schema(DataTypes);
-  const UserRoles = sequelize.define(name, attributes, options);
-  return UserRoles;
+  const UserRole = sequelize.define(name, attributes, options);
+  return UserRole;
 }
 
 export default Model;

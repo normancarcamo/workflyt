@@ -1,0 +1,80 @@
+[
+  {
+    "id": "76c7652a-7411-4392-b9b6-813c1b467dcc",
+    "area_id": "69517057-ec8c-4ae5-ac0a-8a919317a5e6",
+    "code": "SER/001",
+    "name": "Diseño de arte",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:29.564Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "8e7c4f0e-c4e5-4c12-bbc3-1c7aafb4b8ce",
+    "area_id": "0553ab6c-6f1b-4db7-b350-8131674a9b21",
+    "code": "SER/002",
+    "name": "Impresión de arte",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:29.564Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "9ab017c3-9df9-4dd5-80f4-0e977597c577",
+    "area_id": "d949e83e-9f40-4ada-8a38-d93313e9c922",
+    "code": "SER/003",
+    "name": "Corte de impresión",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:29.564Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "3e243f5f-0ba6-4186-8a48-afc7b37226da",
+    "area_id": "cbcfcb50-2b8d-4fe6-bd70-9210119febb9",
+    "code": "SER/004",
+    "name": "Pegado de stickers",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:29.564Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "272aecd2-1987-4f09-9c5b-fda4889ec392",
+    "area_id": "7d563cf3-9a1d-4560-b2b9-3d08f8aecaa9",
+    "code": "SER/005",
+    "name": "Madera",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:29.564Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "id": "5748dfe0-9a79-46d0-9e86-ede86ffa6861",
+    "area_id": "0ff9bde5-9c03-4d96-adc7-ac7e6f2ccd2b",
+    "code": "SER/006",
+    "name": "Instalación",
+    "extra": {},
+    "created_at": "2018-05-06T00:00:00.000Z",
+    "updated_at": "2019-09-08T10:53:29.564Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

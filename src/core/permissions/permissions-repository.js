@@ -1,36 +1,32 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.Permission.findAll(
-      database.queryBuilder(options)
-    );
+module.exports = ({ database }) => ({
+  async getPermissions (options) {
+    return await database.models.Permission.findAll(options);
   },
 
-  create (data) {
-    return database.models.Permission.create(data);
+  async createPermission (values) {
+    return await database.models.Permission.create(values);
   },
 
-  findByPk ({ permission_id, options }) {
-    return database.models.Permission.findByPk(
+  async getPermission ({ permission_id, options }, assert) {
+    let permission = await database.models.Permission.findByPk(
       permission_id,
       database.queryBuilder(options)
     );
+
+    if (assert && !permission) {
+      throw new Error('Not found');
+    } else {
+      return permission;
+    }
   },
 
-  update ({ permission_id, data, options }) {
-    return database.models.Permission.update(data, {
-      where: { id: permission_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result.pop());
+  async updatePermission ({ permission_id, values, options }) {
+    let permission = await this.getPermission({ permission_id }, true);
+    return await permission.update(values, options);
   },
 
-  destroy ({ permission_id, options }) {
-    return database.models.Permission.destroy({
-      where: { id: permission_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
+  async deletePermission ({ permission_id, options }) {
+    let permission = await this.getPermission({ permission_id }, true);
+    return await permission.destroy(options);
   }
 });

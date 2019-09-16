@@ -1,82 +1,83 @@
-module.exports = service => Object.freeze({
-  async getCategories (request, response, next) {
-    let result = await service.getCategories(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+module.exports = ({ service, validator, helpers }) => Object.freeze({
+  getCategories: [
+    helpers.validateRights('get categories'),
+    helpers.validateInput(validator.getCategories),
+    function handler (req, res, next) {
+      service.getCategories(req.query)
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async createCategories (request, response, next) {
-    let result = await service.createCategories(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.status(201).json(result);
+  createCategory: [
+    helpers.validateRights('create category'),
+    helpers.validateInput(validator.createCategory),
+    function handler (req, res, next) {
+      service.createCategory(req.body)
+        .then(result => res.status(201).json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getCategory (request, response, next) {
-    let result = await service.getCategory(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getCategory: [
+    helpers.validateRights('get category'),
+    helpers.validateInput(validator.getCategory),
+    function handler (req, res, next) {
+      let category_id = req.params.category;
+      let options = req.query;
+      service.getCategory({ category_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async updateCategory (request, response, next) {
-    let result = await service.updateCategory(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  updateCategory: [
+    helpers.validateRights('update category'),
+    helpers.validateInput(validator.updateCategory),
+    function handler (req, res, next) {
+      let category_id = req.params.category;
+      let values = req.body;
+      let options = req.query;
+      service.updateCategory({ category_id, values, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async deleteCategory (request, response, next) {
-    let result = await service.deleteCategory(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  deleteCategory: [
+    helpers.validateRights('delete category'),
+    helpers.validateInput(validator.deleteCategory),
+    function handler (req, res, next) {
+      let category_id = req.params.category;
+      let options = req.query;
+      service.deleteCategory({ category_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getItems (request, response, next) {
-    let result = await service.getItems(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getMaterials: [
+    helpers.validateRights('get materials from category'),
+    helpers.validateInput(validator.getMaterials),
+    function handler (req, res, next) {
+      let category_id = req.params.category;
+      let options = req.query;
+      service.getMaterials({ category_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async addItems (request, response, next) {
-    let result = await service.addItems(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getMaterial: [
+    helpers.validateRights('get material from category'),
+    helpers.validateInput(validator.getMaterial),
+    function handler (req, res, next) {
+      let category_id = req.params.category;
+      let material_id = req.params.material;
+      let options = req.query;
+      service.getMaterial({ category_id, material_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
-
-  async getItem (request, response, next) {
-    let result = await service.getItem(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  },
-
-  async removeItem (request, response, next) {
-    let result = await service.removeItem(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
-    }
-  }
+  ]
 });

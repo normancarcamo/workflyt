@@ -1,0 +1,38 @@
+# ignore .git files:
+.git
+.gitignore
+
+# ignore .cache files:
+.cache
+**.cache
+
+# ignore node files:
+node_modules
+npm-debug.log
+
+# ignore docker files:
+dev.docker*
+dev.Dockerfile
+docker*
+Dockerfile*
+.dockerignore
+
+# ignore .env files:
+.env
+.env.dev
+.env.test
+
+# ignore markdown files:
+*.md
+**.md
+
+# ignore .vscode files from Visual Studio Code:
+*.vscode
+**.vscode
+
+# ignore .DS_Store files in OSX:
+.DS_Store
+**/.DS_Store
+
+# exclude files:
+!README.md

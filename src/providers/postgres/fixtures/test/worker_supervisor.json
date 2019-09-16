@@ -1,0 +1,79 @@
+[
+  {
+    "worker_id": "51015270-9733-4274-a431-5ae02c29dd06",
+    "supervisor_id": "7da2327e-0255-45e3-8f26-ab0956b0a924",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:30.175Z",
+    "updated_at": "2019-09-08T10:53:30.175Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "worker_id": "51015270-9733-4274-a431-5ae02c29dd06",
+    "supervisor_id": "dc398e2e-dec5-4d9e-9859-a1c0d66571bf",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:30.175Z",
+    "updated_at": "2019-09-08T10:53:30.175Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "worker_id": "81076bc1-70cb-4d4f-8ef9-9e01f8555523",
+    "supervisor_id": "7da2327e-0255-45e3-8f26-ab0956b0a924",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:30.175Z",
+    "updated_at": "2019-09-08T10:53:30.175Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "worker_id": "81076bc1-70cb-4d4f-8ef9-9e01f8555523",
+    "supervisor_id": "dc398e2e-dec5-4d9e-9859-a1c0d66571bf",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:30.175Z",
+    "updated_at": "2019-09-08T10:53:30.175Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "worker_id": "c27b5bdb-b344-4116-90bd-0c86e676e936",
+    "supervisor_id": "7da2327e-0255-45e3-8f26-ab0956b0a924",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:30.175Z",
+    "updated_at": "2019-09-08T10:53:30.175Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "worker_id": "c27b5bdb-b344-4116-90bd-0c86e676e936",
+    "supervisor_id": "dc398e2e-dec5-4d9e-9859-a1c0d66571bf",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:30.175Z",
+    "updated_at": "2019-09-08T10:53:30.175Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "worker_id": "90421a40-8fe8-4ac2-a6ff-32067865cbb2",
+    "supervisor_id": "dc398e2e-dec5-4d9e-9859-a1c0d66571bf",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:30.175Z",
+    "updated_at": "2019-09-08T10:53:30.175Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  orders_api:
+    image: orders_api
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    container_name: orders_api
+    env_file: .env.dev
+    ports:
+      - 3000:3000
+      - 9229:9229
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - database_dev
+      - database_test
+
+  database_dev:
+    image: postgres:10
+    container_name: database_dev
+    restart: on-failure
+    env_file: .env.dev
+    ports:
+      - "5480:5432"
+    volumes:
+      - ./docker/volumes/postgres/data/dev:/var/lib/postgresql/data
+
+  database_test:
+    image: postgres:10
+    container_name: database_test
+    restart: on-failure
+    env_file: .env.test
+    ports:
+      - "5481:5432"
+    volumes:
+      - ./docker/volumes/postgres/data/test:/var/lib/postgresql/data

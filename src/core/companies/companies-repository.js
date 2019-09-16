@@ -1,35 +1,32 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.Company.findAll(
+module.exports = ({ database }) => ({
+  async getCompanies (options) {
+    return await database.models.Company.findAll(options);
+  },
+
+  async createCompany (values) {
+    return await database.models.Company.create(values);
+  },
+
+  async getCompany ({ company_id, options }, assert) {
+    let company = await database.models.Company.findByPk(
+      company_id,
       database.queryBuilder(options)
     );
+
+    if (assert && !company) {
+      throw new Error('Not found');
+    } else {
+      return company;
+    }
   },
 
-  create (data) {
-    return database.models.Company.create(data);
+  async updateCompany ({ company_id, values, options }) {
+    let company = await this.getCompany({ company_id }, true);
+    return await company.update(values, options);
   },
 
-  findByPk ({ company_id, options }) {
-    return database.models.Company.findByPk(
-      company_id, database.queryBuilder(options)
-    );
-  },
-
-  update ({ company_id, data, options }) {
-    return database.models.Company.update(data, {
-      where: { id: company_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result[1]);
-  },
-
-  destroy ({ company_id, options }) {
-    return database.models.Company.destroy({
-      where: { id: company_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
+  async deleteCompany ({ company_id, options }) {
+    let company = await this.getCompany({ company_id }, true);
+    return await company.destroy(options);
   }
 });

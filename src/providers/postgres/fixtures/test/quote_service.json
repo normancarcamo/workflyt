@@ -1,0 +1,79 @@
+[
+  {
+    "quote_id": "c0f2a845-ac5f-4c3f-86a0-27415f8fa8e3",
+    "service_id": "76c7652a-7411-4392-b9b6-813c1b467dcc",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.577Z",
+    "updated_at": "2019-09-08T10:53:29.577Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "quote_id": "c0f2a845-ac5f-4c3f-86a0-27415f8fa8e3",
+    "service_id": "8e7c4f0e-c4e5-4c12-bbc3-1c7aafb4b8ce",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.577Z",
+    "updated_at": "2019-09-08T10:53:29.577Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "quote_id": "c0f2a845-ac5f-4c3f-86a0-27415f8fa8e3",
+    "service_id": "9ab017c3-9df9-4dd5-80f4-0e977597c577",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.577Z",
+    "updated_at": "2019-09-08T10:53:29.577Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "quote_id": "686ac0ec-01de-42e1-b471-4fa07838424b",
+    "service_id": "9ab017c3-9df9-4dd5-80f4-0e977597c577",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.577Z",
+    "updated_at": "2019-09-08T10:53:29.577Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "quote_id": "686ac0ec-01de-42e1-b471-4fa07838424b",
+    "service_id": "3e243f5f-0ba6-4186-8a48-afc7b37226da",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.577Z",
+    "updated_at": "2019-09-08T10:53:29.577Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "quote_id": "400ba5df-1bdd-4a68-99ac-b51d3c12d271",
+    "service_id": "3e243f5f-0ba6-4186-8a48-afc7b37226da",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.577Z",
+    "updated_at": "2019-09-08T10:53:29.577Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "quote_id": "4d4f3ab9-fc3e-44a9-8da2-44adf43e8ff9",
+    "service_id": "3e243f5f-0ba6-4186-8a48-afc7b37226da",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.577Z",
+    "updated_at": "2019-09-08T10:53:29.577Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

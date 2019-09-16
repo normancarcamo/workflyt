@@ -4,5 +4,5 @@ module.exports = {
   'config'          : path.resolve('src', 'providers', 'postgres', 'config.js'),
   'migrations-path': path.resolve('src', 'providers', 'postgres', 'migrations'),
   'models-path'    : path.resolve('src', 'providers', 'postgres', 'models'),
-  'seeders-path'   : path.resolve('src', 'providers', 'postgres', 'seeders'),
+  'seeders-path'   : path.resolve('src', 'providers', 'postgres', 'seeders')
 };

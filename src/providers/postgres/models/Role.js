@@ -78,10 +78,7 @@ export function Model(sequelize, DataTypes) {
 
   Role.associate = function(models) {
     Role.belongsToMany(models.User, {
-      as: {
-        singular: "user",
-        plural: "users",
-      },
+      as: { singular: "user", plural: "users" },
       through: models.UserRole,
       foreignKey: "role_id",
       otherKey: "user_id",
@@ -89,10 +86,7 @@ export function Model(sequelize, DataTypes) {
       onDelete: 'CASCADE'
     });
     Role.belongsToMany(models.Permission, {
-      as: {
-        singular: "permission",
-        plural: "permissions"
-      },
+      as: { singular: "permission", plural: "permissions" },
       through: models.RolePermission,
       foreignKey: "role_id",
       otherKey: "permission_id",

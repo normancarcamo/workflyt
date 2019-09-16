@@ -1,0 +1,90 @@
+[
+  {
+    "job_id": "2ca3cb0b-f486-436e-b465-f1cde5695a44",
+    "worker_id": "51015270-9733-4274-a431-5ae02c29dd06",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "81a1c439-8745-47eb-8d3b-9b282b76a509",
+    "worker_id": "51015270-9733-4274-a431-5ae02c29dd06",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "2ca3cb0b-f486-436e-b465-f1cde5695a44",
+    "worker_id": "81076bc1-70cb-4d4f-8ef9-9e01f8555523",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "81a1c439-8745-47eb-8d3b-9b282b76a509",
+    "worker_id": "81076bc1-70cb-4d4f-8ef9-9e01f8555523",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "2ca3cb0b-f486-436e-b465-f1cde5695a44",
+    "worker_id": "c27b5bdb-b344-4116-90bd-0c86e676e936",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "81a1c439-8745-47eb-8d3b-9b282b76a509",
+    "worker_id": "c27b5bdb-b344-4116-90bd-0c86e676e936",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "81a1c439-8745-47eb-8d3b-9b282b76a509",
+    "worker_id": "90421a40-8fe8-4ac2-a6ff-32067865cbb2",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "job_id": "b89296bd-8295-4273-95c9-1690f68dd010",
+    "worker_id": "51015270-9733-4274-a431-5ae02c29dd06",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.568Z",
+    "updated_at": "2019-09-08T10:53:29.568Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

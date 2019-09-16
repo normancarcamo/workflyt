@@ -1,0 +1,102 @@
+const faker = require('faker');
+
+module.exports = [
+  {
+    id: faker.random.uuid(),
+    code: 'WRK/001',
+    firstname: 'Luís',
+    lastname: 'Berrios',
+    is_supervisor: false,
+    extra: {},
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    created_by: null,
+    updated_by: null,
+    deleted_by: null
+  },
+  {
+    id: faker.random.uuid(),
+    code: 'WRK/002',
+    firstname: 'Danilo',
+    lastname: 'Briceño',
+    is_supervisor: false,
+    extra: {},
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    created_by: null,
+    updated_by: null,
+    deleted_by: null
+  },
+  {
+    id: faker.random.uuid(),
+    code: 'WRK/003',
+    firstname: 'Javier',
+    lastname: 'Vasquez',
+    is_supervisor: true,
+    extra: {},
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    created_by: null,
+    updated_by: null,
+    deleted_by: null
+  },
+  {
+    id: faker.random.uuid(),
+    code: 'WRK/004',
+    firstname: 'Denis',
+    lastname: 'Vasquez',
+    is_supervisor: true,
+    extra: {},
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    created_by: null,
+    updated_by: null,
+    deleted_by: null
+  },
+  {
+    id: faker.random.uuid(),
+    code: 'WRK/005',
+    firstname: 'Jorge',
+    lastname: 'Bográn',
+    is_supervisor: false,
+    extra: {},
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    created_by: null,
+    updated_by: null,
+    deleted_by: null
+  },
+  {
+    id: faker.random.uuid(),
+    code: 'WRK/006',
+    firstname: 'Erick',
+    lastname: 'Lopez',
+    is_supervisor: false,
+    extra: {},
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    created_by: null,
+    updated_by: null,
+    deleted_by: null
+  },
+  {
+    id: faker.random.uuid(),
+    code: 'WRK/007',
+    firstname: 'Luís',
+    lastname: 'Lopez',
+    is_supervisor: false,
+    extra: {},
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    created_by: null,
+    updated_by: null,
+    deleted_by: null
+  }
+];

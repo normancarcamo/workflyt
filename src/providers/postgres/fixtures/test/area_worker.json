@@ -1,0 +1,101 @@
+[
+  {
+    "area_id": "591903ac-35ad-422d-92e1-ac54a5dede1d",
+    "worker_id": "dc398e2e-dec5-4d9e-9859-a1c0d66571bf",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.561Z",
+    "updated_at": "2019-09-08T10:53:29.561Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "591903ac-35ad-422d-92e1-ac54a5dede1d",
+    "worker_id": "7da2327e-0255-45e3-8f26-ab0956b0a924",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.561Z",
+    "updated_at": "2019-09-08T10:53:29.561Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "69517057-ec8c-4ae5-ac0a-8a919317a5e6",
+    "worker_id": "81076bc1-70cb-4d4f-8ef9-9e01f8555523",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.561Z",
+    "updated_at": "2019-09-08T10:53:29.561Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "69517057-ec8c-4ae5-ac0a-8a919317a5e6",
+    "worker_id": "51015270-9733-4274-a431-5ae02c29dd06",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.562Z",
+    "updated_at": "2019-09-08T10:53:29.562Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "26b4aebc-a68d-41ee-818a-317e850708e1",
+    "worker_id": "c27b5bdb-b344-4116-90bd-0c86e676e936",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.562Z",
+    "updated_at": "2019-09-08T10:53:29.562Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "26b4aebc-a68d-41ee-818a-317e850708e1",
+    "worker_id": "dc398e2e-dec5-4d9e-9859-a1c0d66571bf",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.562Z",
+    "updated_at": "2019-09-08T10:53:29.562Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "26b4aebc-a68d-41ee-818a-317e850708e1",
+    "worker_id": "7da2327e-0255-45e3-8f26-ab0956b0a924",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.562Z",
+    "updated_at": "2019-09-08T10:53:29.562Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "0553ab6c-6f1b-4db7-b350-8131674a9b21",
+    "worker_id": "784021b5-5d07-44f4-b57b-146f083b27df",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.562Z",
+    "updated_at": "2019-09-08T10:53:29.562Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "area_id": "0553ab6c-6f1b-4db7-b350-8131674a9b21",
+    "worker_id": "90421a40-8fe8-4ac2-a6ff-32067865cbb2",
+    "extra": {},
+    "created_at": "2019-09-08T10:53:29.562Z",
+    "updated_at": "2019-09-08T10:53:29.562Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

@@ -1,19 +1,12 @@
-module.exports = service => Object.freeze({
-  async signIn (request, response, next) {
-    let result = await service.signIn(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+module.exports = ({ service, validator, helpers }) => Object.freeze({
+  signIn: [
+    helpers.validateInput(validator.signIn),
+    function handler (req, res, next) {
+      let username = req.body.username;
+      let password = req.body.password;
+      service.signIn({ username, password })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
-
-  async signUp (request, response, next) {
-    let result = await service.signUp(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.status(201).json(result);
-    }
-  }
+  ]
 });

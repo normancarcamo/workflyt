@@ -13,4 +13,4 @@ module.exports = [
     updated_by: null,
     deleted_by: null
   }
-]
+];

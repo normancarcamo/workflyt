@@ -1,77 +1,70 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.Warehouse.findAll(
-      database.queryBuilder(options)
-    );
+module.exports = ({ database }) => ({
+  async getWarehouses (options) {
+    return await database.models.Warehouse.findAll(options);
   },
 
-  create (data) {
-    return database.models.Warehouse.create(data);
+  async createWarehouse (values) {
+    return await database.models.Warehouse.create(values);
   },
 
-  findByPk ({ warehouse_id, options }) {
-    return database.models.Warehouse.findByPk(
+  async getWarehouse ({ warehouse_id, options }, assert) {
+    let warehouse = await database.models.Warehouse.findByPk(
       warehouse_id,
       database.queryBuilder(options)
     );
+
+    if (assert && !warehouse) {
+      throw new Error('Not found');
+    } else {
+      return warehouse;
+    }
   },
 
-  update ({ warehouse_id, data, options }) {
-    return database.models.Warehouse.update(data, {
-      where: { id: warehouse_id },
-      returning: true,
+  async updateWarehouse ({ warehouse_id, values, options }) {
+    let warehouse = await this.getWarehouse({ warehouse_id }, true);
+    return await warehouse.update(values, options);
+  },
+
+  async deleteWarehouse ({ warehouse_id, options }) {
+    let warehouse = await this.getWarehouse({ warehouse_id }, true);
+    return await warehouse.destroy(options);
+  },
+
+  async getMaterials ({ warehouse_id, options }) {
+    let warehouse = await this.getWarehouse({ warehouse_id }, true);
+    return await warehouse.getMaterials(database.queryBuilder(options));
+  },
+
+  async addMaterials ({ warehouse_id, materials }) {
+    let warehouse = await this.getWarehouse({ warehouse_id }, true);
+    return await warehouse.addMaterials(materials);
+  },
+
+  async getMaterial ({ warehouse_id, material_id, options }, assert) {
+    let warehouse = await this.getWarehouse({ warehouse_id }, true);
+
+    let material = await warehouse.getMaterials({
       plain: true,
-      ...options
-    }).then(result => result.pop());
-  },
-
-  destroy ({ warehouse_id, options }) {
-    return database.models.Warehouse.destroy({
-      where: { id: warehouse_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
-  },
-
-  getItems ({ warehouse, options }) {
-    return warehouse.getItems(database.queryBuilder(options));
-  },
-
-  addItems ({ warehouse_id, items }) {
-    return database.models.WarehouseItem.bulkCreate(
-      items.map(item_id => ({
-        warehouse_id,
-        item_id
-      }))
-    );
-  },
-
-  getItem ({ warehouse, item_id, options }) {
-    return warehouse.getItems(
-      database.queryBuilder({
-        plain: true,
-        id: item_id,
+      ...database.queryBuilder({
+        id: material_id,
         ...options
       })
-    );
-  },
-
-  updateItem ({ warehouse_id, item_id, data, options }) {
-    return database.models.WarehouseItem.update(data, {
-      where: { warehouse_id, item_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result.pop());
-  },
-
-  removeItem ({ warehouse_id, item_id, options }) {
-    return database.models.WarehouseItem.destroy({
-      where: { warehouse_id, item_id },
-      returning: true,
-      plain: true,
-      ...options
     });
+
+    if (assert && !material) {
+      throw new Error('Not found');
+    } else {
+      return material;
+    }
+  },
+
+  async updateMaterial ({ warehouse_id, material_id, values, options }) {
+    let material = await this.getMaterial({ warehouse_id, material_id }, true);
+    return await material.WarehouseMaterial.update(values, options);
+  },
+
+  async deleteMaterial ({ warehouse_id, material_id, options }) {
+    let material = await this.getMaterial({ warehouse_id, material_id }, true);
+    return await material.WarehouseMaterial.destroy(options);
   }
 });

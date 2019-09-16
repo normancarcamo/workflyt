@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>0/4</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,21 +30,21 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/1</span>
+        <span class='fraction'>0/1</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>0/4</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -247,9 +247,8 @@
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -263,11 +262,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -276,16 +275,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -450,43 +447,50 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">module.exports = ({ schema, Datalizer }) =&gt; {
-  const userAttributes = [
-    'id',
-    'employee_id',
-    'code',
-    'username',
-    'extra',
-    'created_at',
-    'updated_at',
-    'deleted_at',
-    'created_by',
-    'updated_by',
-    'deleted_by'
-  ];
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >module.exports = <span class="fstat-no" title="function not covered" >({</span> schema, Datalizer }) =&gt; {</span>
+  let user = <span class="cstat-no" title="statement not covered" >{</span>
+    attributes: [
+      'id',
+      'worker_id',
+      'code',
+      'username',
+      // 'password', omitted by security reasons...
+      'extra',
+      'created_at',
+      'updated_at',
+      'deleted_at',
+      'created_by',
+      'updated_by',
+      'deleted_by'
+    ],
+    associations: [ 'roles' ]
+  };
 &nbsp;
-  const roleAttributes = [
-    'id',
-    'code',
-    'name',
-    'extra',
-    'created_at',
-    'updated_at',
-    'deleted_at',
-    'created_by',
-    'updated_by',
-    'deleted_by'
-  ];
+  let role = <span class="cstat-no" title="statement not covered" >{</span>
+    attributes: [
+      'id',
+      'code',
+      'name',
+      'extra',
+      'created_at',
+      'updated_at',
+      'deleted_at',
+      'created_by',
+      'updated_by',
+      'deleted_by'
+    ],
+    associations: [ 'permissions' ]
+  };
 &nbsp;
-  const userAssociations = [ 'roles' ];
+<span class="cstat-no" title="statement not covered" >  return Object.freeze({</span>
 &nbsp;
-  const roleAssociations = [ 'permissions' ];
+    // users:
 &nbsp;
-  return Object.freeze({
     getUsers: new Datalizer({
       query: schema.QUERY({
         id: schema.UUID({ $optional: true, $deny: true }),
-        employee_id: schema.UUID({ $optional: true }),
+        worker_id: schema.UUID({ $optional: true }),
         code: schema.CODE({ $optional: true }),
         username: schema.TEXT_FILTER({ $optional: true }),
         extra: schema.EXTRA({ $optional: true }),
@@ -496,12 +500,11 @@
         created_by: schema.UUID({ $optional: true }),
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true }),
-        attributes: schema.ATTRIBUTES(userAttributes),
-        include: schema.ATTRIBUTES(userAssociations),
+        attributes: schema.ATTRIBUTES(user.attributes),
         paranoid: schema.BOOLEAN({ $optional: true }),
         offset: schema.OFFSET({ $optional: true }),
         limit: schema.LIMIT({ $optional: true }),
-        sort_by: schema.ENUM(userAttributes),
+        sort_by: schema.ENUM(user.attributes),
         order_by: schema.ORDER_BY({ $optional: true })
       }, { $max: 32 })
     }),
@@ -509,7 +512,7 @@
     createUsers: new Datalizer({
       body: schema.BODY({
         id: schema.UUID({ $optional: true, $null: true }),
-        employee_id: schema.UUID({ $optional: true, $null: true }),
+        worker_id: schema.UUID({ $optional: true, $null: true }),
         code: schema.CODE({ $optional: true }),
         username: schema.TEXT({ $empty: false, $min: 2 }),
         password: schema.PASS(),
@@ -521,7 +524,7 @@
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true })
       }, { $max: 12, $empty: false })
-    }),
+    }, { addKey: false }),
 &nbsp;
     getUser: new Datalizer({
       params: schema.PARAMS(
@@ -529,8 +532,8 @@
         { $length: 1 }
       ),
       query: schema.QUERY({
-        attributes: schema.ATTRIBUTES(userAttributes),
-        include: schema.ATTRIBUTES(userAssociations),
+        attributes: schema.ATTRIBUTES(user.attributes),
+        include: schema.ATTRIBUTES(user.associations),
         paranoid: schema.BOOLEAN({ $optional: true })
       })
     }),
@@ -545,7 +548,7 @@
       }, { $max: 1, $optional: true }),
       body: schema.BODY({
         id: schema.UUID({ $optional: true, $deny: true }),
-        employee_id: schema.UUID({ $optional: true, $null: true }),
+        worker_id: schema.UUID({ $optional: true, $null: true }),
         code: schema.CODE({ $optional: true }),
         username: schema.TEXT({ $optional: true, $empty: false, $min: 2 }),
         password: schema.PASS({ $optional: true, $empty: false, $min: 5 }),
@@ -557,7 +560,7 @@
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true }),
       }, { $max: 12, $empty: false })
-    }),
+    }, { addKey: false }),
 &nbsp;
     deleteUser: new Datalizer({
       params: schema.PARAMS(
@@ -570,11 +573,10 @@
       }, { $max: 2 })
     }),
 &nbsp;
+    // roles:
+&nbsp;
     getRoles: new Datalizer({
-      params: schema.PARAMS(
-        { user: schema.UUID() },
-        { $length: 1 }
-      ),
+      params: schema.PARAMS({ user: schema.UUID() }, { $length: 1 }),
       query: schema.QUERY({
         id: schema.UUID({ $optional: true, $deny: true }),
         code: schema.CODE({ $optional: true }),
@@ -586,25 +588,18 @@
         created_by: schema.UUID({ $optional: true }),
         updated_by: schema.UUID({ $optional: true }),
         deleted_by: schema.UUID({ $optional: true }),
-        attributes: schema.ATTRIBUTES(roleAttributes),
-        include: schema.INCLUDE(roleAssociations),
+        attributes: schema.ATTRIBUTES(role.attributes),
         paranoid: schema.BOOLEAN({ $optional: true }),
         limit: schema.LIMIT({ $optional: true }),
         offset: schema.OFFSET({ $optional: true }),
-        sort_by: schema.ENUM(roleAttributes),
+        sort_by: schema.ENUM(role.attributes),
         order_by: schema.ORDER_BY({ $optional: true })
       }, { $max: 26 })
     }),
 &nbsp;
     addRoles: new Datalizer({
-      params: schema.PARAMS(
-        { user: schema.UUID() },
-        { $length: 1 }
-      ),
-      body: schema.BODY(
-        { roles: schema.UUID_ARRAY() },
-        { $length: 1 }
-      )
+      params: schema.PARAMS({ user: schema.UUID() }, { $length: 1 }),
+      body: schema.BODY({ roles: schema.UUID_ARRAY() }, { $length: 1 })
     }),
 &nbsp;
     getRole: new Datalizer({
@@ -613,8 +608,8 @@
         { $length: 2 }
       ),
       query: schema.QUERY({
-        attributes: schema.ATTRIBUTES(roleAttributes),
-        include: schema.INCLUDE(roleAssociations),
+        attributes: schema.ATTRIBUTES(role.attributes),
+        include: schema.INCLUDE(role.associations),
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 16 })
     }),
@@ -624,9 +619,10 @@
         { user: schema.UUID(), role: schema.UUID() },
         { $length: 2 }
       ),
-      query: schema.QUERY({
-        paranoid: schema.BOOLEAN({ $optional: true })
-      }, { $max: 1, $optional: true }),
+      query: schema.QUERY(
+        { paranoid: schema.BOOLEAN({ $optional: true }) },
+        { $max: 1, $optional: true }
+      ),
       body: schema.BODY({
         user_id: schema.UUID({ $optional: true, $deny: true }),
         role_id: schema.UUID({ $optional: true, $deny: true }),
@@ -650,6 +646,7 @@
         paranoid: schema.BOOLEAN({ $optional: true })
       }, { $max: 2 })
     })
+&nbsp;
   });
 };
 &nbsp;</pre></td></tr>
@@ -658,7 +655,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Aug 10 2019 05:59:46 GMT-0600 (Central Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Aug 31 2019 22:24:32 GMT-0600 (Central Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

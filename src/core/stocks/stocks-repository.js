@@ -1,36 +1,32 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.Stock.findAll(
-      database.queryBuilder(options)
-    );
+module.exports = ({ database }) => ({
+  async getStocks (options) {
+    return await database.models.Stock.findAll(options);
   },
 
-  create (data) {
-    return database.models.Stock.create(data);
+  async createStock (values) {
+    return await database.models.Stock.create(values);
   },
 
-  findByPk ({ stock_id, options }) {
-    return database.models.Stock.findByPk(
+  async getStock ({ stock_id, options }, assert) {
+    let stock = await database.models.Stock.findByPk(
       stock_id,
       database.queryBuilder(options)
     );
+
+    if (assert && !stock) {
+      throw new Error('Not found');
+    } else {
+      return stock;
+    }
   },
 
-  update ({ stock_id, data, options }) {
-    return database.models.Stock.update(data, {
-      where: { id: stock_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result.pop());
+  async updateStock ({ stock_id, values, options }) {
+    let stock = await this.getStock({ stock_id }, true);
+    return await stock.update(values, options);
   },
 
-  destroy ({ stock_id, options }) {
-    return database.models.Stock.destroy({
-      where: { id: stock_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
+  async deleteStock ({ stock_id, options }) {
+    let stock = await this.getStock({ stock_id }, true);
+    return await stock.destroy(options);
   }
 });

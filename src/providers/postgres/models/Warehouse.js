@@ -77,14 +77,11 @@ export function Model(sequelize, DataTypes) {
   const Warehouse = sequelize.define(name, attributes, options);
 
   Warehouse.associate = function(models) {
-    Warehouse.belongsToMany(models.Item, {
-      as: {
-        singular: 'item',
-        plural: 'items',
-      },
-      through: models.WarehouseItem,
+    Warehouse.belongsToMany(models.Material, {
+      as: { singular: 'material', plural: 'materials' },
+      through: models.WarehouseMaterial,
       foreignKey: "warehouse_id",
-      otherKey: "item_id",
+      otherKey: "material_id",
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });

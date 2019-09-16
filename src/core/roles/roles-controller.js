@@ -1,91 +1,122 @@
-module.exports = service => Object.freeze({
-  async getRoles (request, response, next) {
-    let result = await service.getRoles(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+module.exports = ({ service, validator, helpers }) => Object.freeze({
+  getRoles: [
+    helpers.validateRights('get roles'),
+    helpers.validateInput(validator.getRoles),
+    function handler (req, res, next) {
+      service.getRoles(req.query)
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async createRoles (request, response, next) {
-    let result = await service.createRoles(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.status(201).json(result);
+  createRole: [
+    helpers.validateRights('create role'),
+    helpers.validateInput(validator.createRole),
+    function handler (req, res, next) {
+      service.createRole(req.body)
+        .then(result => res.status(201).json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getRole (request, response, next) {
-    let result = await service.getRole(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getRole: [
+    helpers.validateRights('get role'),
+    helpers.validateInput(validator.getRole),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let options = req.query;
+      service.getRole({ role_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async updateRole (request, response, next) {
-    let result = await service.updateRole(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  updateRole: [
+    helpers.validateRights('update role'),
+    helpers.validateInput(validator.updateRole),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let values = req.body;
+      let options = req.query;
+      service.updateRole({ role_id, values, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async deleteRole (request, response, next) {
-    let result = await service.deleteRole(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  deleteRole: [
+    helpers.validateRights('delete role'),
+    helpers.validateInput(validator.deleteRole),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let options = req.query;
+      service.deleteRole({ role_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getPermissions (request, response, next) {
-    let result = await service.getPermissions(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getPermissions: [
+    helpers.validateRights('get permissions from role'),
+    helpers.validateInput(validator.getPermissions),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let options = req.query;
+      service.getPermissions({ role_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async addPermissions (request, response, next) {
-    let result = await service.addPermissions(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  addPermissions: [
+    helpers.validateRights('add permissions to role'),
+    helpers.validateInput(validator.addPermissions),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let permissions = req.body.permissions;
+      service.addPermissions({ role_id, permissions })
+        .then(result => res.status(201).json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getPermission (request, response, next) {
-    let result = await service.getPermission(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getPermission: [
+    helpers.validateRights('get permission from role'),
+    helpers.validateInput(validator.getPermission),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let permission_id = req.params.permission;
+      let options = req.query;
+      service.getPermission({ role_id, permission_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async updatePermission (request, response, next) {
-    let result = await service.updatePermission(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  updatePermission: [
+    helpers.validateRights('update permission from role'),
+    helpers.validateInput(validator.updatePermission),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let permission_id = req.params.permission;
+      let values = req.body;
+      let options = req.query;
+      service.updatePermission({ role_id, permission_id, values, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async removePermission (request, response, next) {
-    let result = await service.removePermission(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  deletePermission: [
+    helpers.validateRights('delete permission from role'),
+    helpers.validateInput(validator.deletePermission),
+    function handler (req, res, next) {
+      let role_id = req.params.role;
+      let permission_id = req.params.permission;
+      let options = req.query;
+      service.deletePermission({ role_id, permission_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  }
+  ]
 });

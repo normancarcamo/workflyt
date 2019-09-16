@@ -1,77 +1,70 @@
-module.exports = database => Object.freeze({
-  findAll (options) {
-    return database.models.Role.findAll(
-      database.queryBuilder(options)
-    );
+module.exports = ({ database }) => ({
+  async getRoles (options) {
+    return await database.models.Role.findAll(options);
   },
 
-  create (data) {
-    return database.models.Role.create(data);
+  async createRole (values) {
+    return await database.models.Role.create(values);
   },
 
-  findByPk ({ role_id, options }) {
-    return database.models.Role.findByPk(
+  async getRole ({ role_id, options }, assert) {
+    let role = await database.models.Role.findByPk(
       role_id,
       database.queryBuilder(options)
     );
+
+    if (assert && !role) {
+      throw new Error('Not found');
+    } else {
+      return role;
+    }
   },
 
-  update ({ role_id, data, options }) {
-    return database.models.Role.update(data, {
-      where: { id: role_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result.pop());
+  async updateRole ({ role_id, values, options }) {
+    let role = await this.getRole({ role_id }, true);
+    return await role.update(values, options);
   },
 
-  destroy ({ role_id, options }) {
-    return database.models.Role.destroy({
-      where: { id: role_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
+  async deleteRole ({ role_id, options }) {
+    let role = await this.getRole({ role_id }, true);
+    return await role.destroy(options);
   },
 
-  getPermissions ({ role, options }) {
-    return role.getPermissions(database.queryBuilder(options));
+  async getPermissions ({ role_id, options }) {
+    let role = await this.getRole({ role_id }, true);
+    return await role.getPermissions(database.queryBuilder(options));
   },
 
-  addPermissions ({ role_id, permissions }) {
-    return database.models.RolePermission.bulkCreate(
-      permissions.map(permission_id => ({
-        role_id,
-        permission_id
-      }))
-    );
+  async addPermissions ({ role_id, permissions }) {
+    let role = await this.getRole({ role_id }, true);
+    return await role.addPermissions(permissions);
   },
 
-  getPermission ({ role, permission_id, options }) {
-    return role.getPermissions({
+  async getPermission ({ role_id, permission_id, options }, assert) {
+    let role = await this.getRole({ role_id }, true);
+
+    let permission = await role.getPermissions({
       plain: true,
       ...database.queryBuilder({
         id: permission_id,
         ...options
       })
     });
+
+    if (assert && !permission) {
+      throw new Error('Not found');
+    } else {
+      return permission;
+    }
   },
 
-  updatePermission ({ role_id, permission_id, data, options }) {
-    return database.models.RolePermission.update(data, {
-      where: { role_id, permission_id },
-      returning: true,
-      plain: true,
-      ...options
-    }).then(result => result.pop());
+  async updatePermission ({ role_id, permission_id, values, options }) {
+    let permission = await this.getPermission({ role_id, permission_id }, true);
+    return await permission.RolePermission.update(values, options);
   },
 
-  removePermission ({ role_id, permission_id, options }) {
-    return database.models.RolePermission.destroy({
-      where: { role_id, permission_id },
-      returning: true,
-      plain: true,
-      ...options
-    });
+  async deletePermission ({ role_id, permission_id, options }) {
+    let permission = await this.getPermission({ role_id, permission_id }, true);
+    return await permission.RolePermission.destroy(options);
   }
 });

@@ -91,15 +91,12 @@ create type enum_item_type as enum (
   'service'
 );
 
-drop table if exists item;
-create table if not exists item (
+drop table if exists material;
+create table if not exists material (
   id uuid not null primary key default uuid_generate_v4(),
   category_id uuid,
   code varchar(30) not null unique default 'unset',
   name varchar(100) not null unique,
-  type enum_item_type default 'service',
-  stock integer not null default 0,
-  price integer not null default 0,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),
@@ -109,42 +106,12 @@ create table if not exists item (
   deleted_by uuid
 );
 
--- order_department
+-- order_job
 
-drop table if exists order_department;
-create table if not exists order_department (
+drop table if exists order_job;
+create table if not exists order_job (
   order_id uuid not null,
-  department_id uuid not null,
-  extra jsonb,
-  created_at timestamp not null default now(),
-  updated_at timestamp not null default now(),
-  deleted_at timestamp,
-  created_by uuid,
-  updated_by uuid,
-  deleted_by uuid
-);
-
--- order_item
-
-drop table if exists order_item;
-create table if not exists order_item (
-  order_id uuid not null,
-  item_id uuid not null,
-  extra jsonb,
-  created_at timestamp not null default now(),
-  updated_at timestamp not null default now(),
-  deleted_at timestamp,
-  created_by uuid,
-  updated_by uuid,
-  deleted_by uuid
-);
-
--- order_employee
-
-drop table if exists order_employee;
-create table if not exists order_employee (
-  order_id uuid not null,
-  employee_id uuid not null,
+  job_id uuid not null,
   extra jsonb,
   created_at timestamp not null default now(),
   updated_at timestamp not null default now(),

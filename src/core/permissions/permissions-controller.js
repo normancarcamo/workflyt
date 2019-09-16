@@ -1,46 +1,58 @@
-module.exports = service => Object.freeze({
-  async getPermissions (request, response, next) {
-    let result = await service.getPermissions(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+module.exports = ({ service, validator, helpers }) => Object.freeze({
+  getPermissions: [
+    helpers.validateRights('get permissions'),
+    helpers.validateInput(validator.getPermissions),
+    function handler (req, res, next) {
+      service.getPermissions(req.query)
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async createPermissions (request, response, next) {
-    let result = await service.createPermissions(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.status(201).json(result);
+  createPermission: [
+    helpers.validateRights('create permission'),
+    helpers.validateInput(validator.createPermission),
+    function handler (req, res, next) {
+      service.createPermission(req.body)
+        .then(result => res.status(201).json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async getPermission (request, response, next) {
-    let result = await service.getPermission(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  getPermission: [
+    helpers.validateRights('get permission'),
+    helpers.validateInput(validator.getPermission),
+    function handler (req, res, next) {
+      let permission_id = req.params.permission;
+      let options = req.query;
+      service.getPermission({ permission_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async updatePermission (request, response, next) {
-    let result = await service.updatePermission(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  updatePermission: [
+    helpers.validateRights('update permission'),
+    helpers.validateInput(validator.updatePermission),
+    function handler (req, res, next) {
+      let permission_id = req.params.permission;
+      let values = req.body;
+      let options = req.query;
+      service.updatePermission({ permission_id, values, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  },
+  ],
 
-  async deletePermission (request, response, next) {
-    let result = await service.deletePermission(request);
-    if (result.error) {
-      next(result.error);
-    } else {
-      response.json(result);
+  deletePermission: [
+    helpers.validateRights('delete permission'),
+    helpers.validateInput(validator.deletePermission),
+    function handler (req, res, next) {
+      let permission_id = req.params.permission;
+      let options = req.query;
+      service.deletePermission({ permission_id, options })
+        .then(result => res.json({ success: true, data: result }))
+        .catch(next);
     }
-  }
+  ]
 });

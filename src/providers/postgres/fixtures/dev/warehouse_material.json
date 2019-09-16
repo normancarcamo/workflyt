@@ -1,0 +1,28 @@
+[
+  {
+    "warehouse_id": "f77be5d1-3010-477c-8370-3c935223b44e",
+    "material_id": "ca7dc0db-12a1-47fd-b0a0-70cbb8df769e",
+    "extra": {
+      "units": 143
+    },
+    "created_at": "2019-09-08T10:53:16.671Z",
+    "updated_at": "2019-09-08T10:53:16.671Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  },
+  {
+    "warehouse_id": "f77be5d1-3010-477c-8370-3c935223b44e",
+    "material_id": "227bfd26-b8d1-4134-921d-51b89268958d",
+    "extra": {
+      "units": 11
+    },
+    "created_at": "2019-09-08T10:53:16.671Z",
+    "updated_at": "2019-09-08T10:53:16.671Z",
+    "deleted_at": null,
+    "created_by": null,
+    "updated_by": null,
+    "deleted_by": null
+  }
+]

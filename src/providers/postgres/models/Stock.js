@@ -10,14 +10,14 @@ export function Schema(DataTypes) {
         defaultValue: DataTypes.UUIDV4,
         validate: { isUUID: 4 }
       },
-      item_id: {
+      material_id: {
         type: DataTypes.UUID,
         allowNull: false,
         unique: false,
         references: {
           model: {
             schema: "public",
-            tableName: "item"
+            tableName: "material"
           },
           key: "id"
         },
@@ -47,7 +47,7 @@ export function Schema(DataTypes) {
           notEmpty: true
         }
       },
-      stock: {
+      stocks: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
@@ -112,9 +112,9 @@ export function Model(sequelize, DataTypes) {
   const Stock = sequelize.define(name, attributes, options);
 
   Stock.associate = function(models) {
-    Stock.belongsTo(models.Item, {
-      as: "item",
-      foreignKey: "item_id"
+    Stock.belongsTo(models.Material, {
+      as: "material",
+      foreignKey: "material_id"
     });
   }
 

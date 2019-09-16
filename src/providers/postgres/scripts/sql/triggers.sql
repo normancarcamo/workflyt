@@ -7,6 +7,15 @@ before insert on category
 for each row
 execute procedure category_code_trigger_fn();
 
+-- client ---------------------------------------------------------------------
+
+drop trigger if exists client_code_trigger on client cascade;
+
+create trigger client_code_trigger
+before insert on client
+for each row
+execute procedure client_code_trigger_fn();
+
 -- company --------------------------------------------------------------------
 
 drop trigger if exists company_code_trigger on company cascade;
@@ -16,41 +25,50 @@ before insert on company
 for each row
 execute procedure company_code_trigger_fn();
 
--- customer -------------------------------------------------------------------
+-- area -----------------------------------------------------------------
 
-drop trigger if exists customer_code_trigger on customer cascade;
+drop trigger if exists area_code_trigger on area cascade;
 
-create trigger customer_code_trigger
-before insert on customer
+create trigger area_code_trigger
+before insert on area
 for each row
-execute procedure customer_code_trigger_fn();
+execute procedure area_code_trigger_fn();
 
--- department -----------------------------------------------------------------
+-- worker -------------------------------------------------------------------
 
-drop trigger if exists department_code_trigger on department cascade;
+drop trigger if exists worker_code_trigger on worker cascade;
 
-create trigger department_code_trigger
-before insert on department
+create trigger worker_code_trigger
+before insert on worker
 for each row
-execute procedure department_code_trigger_fn();
+execute procedure worker_code_trigger_fn();
 
--- employee -----------------------------------------------------------------
+-- service -------------------------------------------------------------------
 
-drop trigger if exists employee_code_trigger on employee cascade;
+drop trigger if exists service_code_trigger on service cascade;
 
-create trigger employee_code_trigger
-before insert on employee
+create trigger service_code_trigger
+before insert on service
 for each row
-execute procedure employee_code_trigger_fn();
+execute procedure service_code_trigger_fn();
 
--- item -----------------------------------------------------------------------
+-- job ------------------------------------------------------------------------
 
-drop trigger if exists item_code_trigger on item cascade;
+drop trigger if exists job_code_trigger on job cascade;
 
-create trigger item_code_trigger
-before insert on item
+create trigger job_code_trigger
+before insert on job
 for each row
-execute procedure item_code_trigger_fn();
+execute procedure job_code_trigger_fn();
+
+-- material -------------------------------------------------------------------
+
+drop trigger if exists material_code_trigger on material cascade;
+
+create trigger material_code_trigger
+before insert on material
+for each row
+execute procedure material_code_trigger_fn();
 
 -- order ----------------------------------------------------------------------
 

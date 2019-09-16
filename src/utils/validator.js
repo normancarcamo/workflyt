@@ -34,7 +34,6 @@ export function CODE (opts) {
     $trim: 'all',
     $empty: false,
     $null: true,
-    $default: 'unset',
     $match: /^[A-Z][A-Z][A-Z](\-[0-9][0-9])?\/[0-9]+$/,
     ...opts
   };
@@ -43,8 +42,8 @@ export function CODE (opts) {
 export function TEXT (opts) {
   return {
     $type: 'string',
-    $max: 30,
-    $match: /^(\%|[a-zA-Z0-9])+[a-zA-Z0-9\_\-\s\%\.]*$/,
+    $max: 60,
+    $match: /^(\%|[a-zA-Z0-9]|\ñ|\Ñ|\Á|\É|\Í|\Ó|\Ú|\á|\é|\í|\ó|\ú|\,|\'|\"|\(|\)|\.)+[a-zA-Z0-9\ñ\Ñ|\Á|\É|\Í|\Ó|\Ú|\á|\é|\í|\ó|\ú|\'|\"|\(|\)|\,\_\-\s\%\.]*$/,
     ...opts
   };
 }
@@ -237,21 +236,6 @@ export function LIMIT (opts) {
     $zero: false,
     ...opts
   });
-}
-
-export function PRICE (opts) {
-  return NUMBER({
-    $zero: true,
-    $positive: true,
-    $float: true,
-    $default: 0.0,
-    $decimals: 2,
-    ...opts
-  });
-}
-
-export function PRICE_FILTER (opts) {
-  return NUMBER_FILTER(PRICE(opts))
 }
 
 export function ORDER_BY (opts) {
