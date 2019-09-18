@@ -1,12 +1,14 @@
 {
   "presets": [
-    "@babel/preset-env"
+    "@babel/preset-env",
+    "@babel/preset-typescript"
   ],
   "plugins": [
-    [
-      "module-resolver", {
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread",
+    ["module-resolver", {
         "cwd": "babelrc",
-        "extensions": [ ".js", ".jsx", ".json" ],
+        "extensions": [ ".js", ".ts", ".jsx", ".tsx", ".json" ],
         "root": [
           "./",
           "./logs",

@@ -1,6 +1,6 @@
-const OPTIONS = {
-  url: process.env.POSTGRES_URL,
-  use_env_variable: process.env.POSTGRES_URL,
+import { IdatabaseConfig } from '../../utils/types';
+
+const shared:object = {
   dialect: "postgres",
   migrationStorageTableSchema: "sequelize_schema",
   logging: false,
@@ -11,7 +11,7 @@ const OPTIONS = {
   define: {
     charset: "utf8",
     engine: "InnoDB",
-    dialectOptions: { collate: "utf8_general_ci", useUTC: false, },
+    dialectOptions: { collate: "utf8_general_ci", useUTC: false },
     createdAt: "created_at",
     updatedAt: "updated_at",
     deletedAt: "deleted_at",
@@ -27,9 +27,11 @@ const OPTIONS = {
 // https://github.com/sequelize/cli/blob/master/docs/README.md
 // https://sequelize.org/master/manual/migrations.html
 
-module.exports = {
-  development: OPTIONS,
-  test: OPTIONS,
-  production: OPTIONS,
-  stage: OPTIONS
-};
+ const options:IdatabaseConfig = Object.freeze({
+  development: shared,
+  test: shared,
+  production: shared,
+  stage: shared
+});
+
+export default options;

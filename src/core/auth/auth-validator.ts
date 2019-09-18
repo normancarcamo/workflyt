@@ -1,4 +1,4 @@
-const Datalizer = require('@ncardez/datalizer');
+import Datalizer from '@ncardez/datalizer';
 
 export const signIn = new Datalizer({
   body: {

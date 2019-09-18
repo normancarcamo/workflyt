@@ -1,20 +1,20 @@
-const uuid = require('uuid/v4');
-const os = require('os');
-const Pino = require('pino');
+import uuid from "uuid/v4";
+import os from "os";
+import Pino, { LoggerOptions } from "pino";
 
-module.exports = {
+export default <LoggerOptions> {
   base: {
     instance: uuid(),
     pid: process.pid,
     hostname: os.hostname(),
-    hostport: JSON.parse(process.env.SERVER_PORT),
+    hostport: JSON.parse(<string>process.env.SERVER_PORT),
     hostip: process.env.SERVER_HOST,
-    env: process.env.NODE_ENV
+    env: <string>process.env.NODE_ENV
   },
-  enabled: JSON.parse(process.env.LOG_ENABLED),
-  name: process.env.APP_NAME,
-  level: process.env.LOG_LEVEL,
-  prettyPrint: process.env.LOG_PRETTY_PRINT,
+  enabled: JSON.parse(<string>process.env.LOG_ENABLED),
+  name: <string>process.env.APP_NAME,
+  level: <string>process.env.LOG_LEVEL,
+  prettyPrint: JSON.parse(<string>process.env.LOG_PRETTY_PRINT),
   serializers: {
     req: req => ({
       id: uuid(),

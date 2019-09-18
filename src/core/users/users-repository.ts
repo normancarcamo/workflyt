@@ -1,4 +1,7 @@
-module.exports = ({ database }) => ({
+import { IUserRepository } from './users-interface';
+import { Idatabase } from 'src/providers/postgres';
+
+export default ({ database }:{ database:Idatabase }):IUserRepository => ({
   async getUsers (options) {
     return await database.models.User.findAll(options);
   },

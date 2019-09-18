@@ -1,11 +1,11 @@
-module.exports = Op => {
-  const isObject = x => Object.prototype.toString.call(x) === '[object Object]';
+export default (Op:any):object => {
+  let isObject = (x:object):boolean => Object.prototype.toString.call(x) === '[object Object]';
 
-  const setOperator = data => {
+  let onlyOperator = (data:any) => {
     if (isObject(data)) {
-      return Object.keys(data).reduce((acc, key) => {
+      return Object.keys(data).reduce((acc:any, key:string) => {
         if (isObject(data[key])) {
-          acc[key] = setOperator(data[key]);
+          acc[key] = onlyOperator(data[key]);
         } else {
           if (key in Op) {
             acc[Op[key]] = data[key];
@@ -18,26 +18,28 @@ module.exports = Op => {
     }
   };
 
-  const queryBuilder = query => {
-    let criteria = {};
-    let options = {};
-    let additional = [
+  const queryBuilder = (query:any):object => {
+    let criteria:any = {};
+    let options:any = {};
+    let option:string;
+    let additional:string[] = [
       'attributes', 'include', 'force',
       'limit', 'offset', 'order_by',
       'paranoid', 'prematch','sort_by',
       'plain','raw','returning'
     ];
 
-    for (let key in query) {
-      if (additional.includes(key)) {
-        options[key] = query[key];
+
+    for (option in query) {
+      if (additional.includes(option)) {
+        options[option] = query[option];
       } else {
-        criteria[key] = setOperator(query[key]);
+        criteria[option] = onlyOperator(query[option]);
       }
     }
 
     if (options.sort_by) {
-      let order = [ options.sort_by, options.order_by || 'asc' ];
+      let order:string[] = [ options.sort_by, options.order_by || 'asc' ];
       options.sort_by = undefined;
       options.order_by = undefined;
       options.order = [ order ];
