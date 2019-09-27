@@ -1,17 +1,14 @@
+import { IHandler, IHandlerError, IJsonWebToken, IError, IValidator } from './types';
 import { Logger } from 'pino';
-import {
-  IMiddleware, IMiddlewareError,
-  IJsonWebToken, IError, IValidator
-} from './interfaces';
 
-export function trackTime ():IMiddleware {
+export function trackTime ():IHandler {
   return function (req, res, next) {
     req.start = Date.now();
     next();
   };
 };
 
-export function logResponse (logger:Logger):IMiddleware {
+export function logResponse (logger:Logger):IHandler {
   return function (req, res, next) {
     res.on("finish", ():void => {
       if (process.env.LOG_ENABLED === "true") {
@@ -36,7 +33,7 @@ export function logResponse (logger:Logger):IMiddleware {
   };
 };
 
-export function handleError():IMiddlewareError {
+export function handleError():IHandlerError {
   return function (ctx, req, res, next) {
     if (ctx.message.includes("Forbidden")) {
       ctx.reason = ctx.message;
@@ -46,10 +43,10 @@ export function handleError():IMiddlewareError {
       ctx.reason = ctx.message;
       ctx.status = 404;
       ctx.message = "Not found.";
-    } else if (ctx.message.includes("Method Not allowed")) {
+    } else if (ctx.message.includes("Method Not Allowed")) {
       ctx.status = 405;
       ctx.code = 405;
-      ctx.message = "Method Not allowed";
+      ctx.message = "Method Not Allowed";
     } else if (ctx.name === "SequelizeUniqueConstraintError") {
       ctx.reason = ctx.message;
       ctx.status = 400;
@@ -75,23 +72,23 @@ export function handleError():IMiddlewareError {
   };
 };
 
-export function handleNotFound():IMiddleware {
+export function handleNotFound():IHandler {
   return function (req, res, next) {
     next(new Error("Not found."));
   };
 };
 
-export function methodNotAllowed():IMiddleware {
+export function methodNotAllowed():IHandler {
   return function (req, res, next) {
     return next(new Error("Method Not allowed."));
   };
 };
 
-export function validateToken(jsonwebtoken:IJsonWebToken):IMiddleware {
+export function validateToken(jsonwebtoken:IJsonWebToken):IHandler {
   return function (req, res, next) {
     let publicRoutes:string[] = [
-      "/auth/signin",
-      "/auth/signout", // <-- pending use case to implement!
+      "/v1/auth/signin",
+      "/v1/auth/signout", // <-- pending use case to implement!
     ];
 
     if (publicRoutes.includes(req.url)) {
@@ -124,7 +121,6 @@ export function validateToken(jsonwebtoken:IJsonWebToken):IMiddleware {
     }
 
     try {
-      // jsonwebtoken.verify()
       req.token = jsonwebtoken.verify(token, process.env.JWT_SECRET);
     } catch (error) {
       error.reason = error.message;
@@ -159,7 +155,7 @@ export function validateToken(jsonwebtoken:IJsonWebToken):IMiddleware {
   };
 };
 
-export function validateRights(name:string):IMiddleware {
+export function validateRights(name:string):IHandler {
   return function (req, res, next) {
     if (req.token.permissions.includes(name)) {
       next();
@@ -169,7 +165,7 @@ export function validateRights(name:string):IMiddleware {
   };
 };
 
-export function validateInput(schema:IValidator):IMiddleware {
+export function validateInput(schema:IValidator):IHandler {
   return async function (req, res, next) {
     try {
       let result = await schema.validate({

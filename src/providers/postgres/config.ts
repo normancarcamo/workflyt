@@ -1,6 +1,6 @@
-import { IdatabaseConfig } from '../../utils/types';
+import { IConfig } from './types';
 
-const shared:object = {
+const config = {
   dialect: "postgres",
   migrationStorageTableSchema: "sequelize_schema",
   logging: false,
@@ -23,15 +23,13 @@ const shared:object = {
   }
 };
 
+export default <IConfig> {
+  development: config,
+  test: config,
+  stage: config,
+  production: config
+};
+
 // More info about the options used by sequelize-cli:
 // https://github.com/sequelize/cli/blob/master/docs/README.md
 // https://sequelize.org/master/manual/migrations.html
-
- const options:IdatabaseConfig = Object.freeze({
-  development: shared,
-  test: shared,
-  production: shared,
-  stage: shared
-});
-
-export default options;

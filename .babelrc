@@ -7,18 +7,20 @@
     "@babel/proposal-class-properties",
     "@babel/proposal-object-rest-spread",
     ["module-resolver", {
-        "cwd": "babelrc",
-        "extensions": [ ".js", ".ts", ".jsx", ".tsx", ".json" ],
-        "root": [
-          "./",
-          "./logs",
-          "./dist",
-          "./docs",
-          "./test",
-          "./src"
-        ]
+      "cwd": "babelrc",
+      "extensions": [ ".js", ".ts", ".jsx", ".tsx", ".json" ],
+      "root": [
+        "./",
+        "./logs",
+        "./dist",
+        "./docs",
+        "./src"
+      ],
+      "alias": {
+        "src": "./src",
+        "@test": "./test"
       }
-    ]
+    }]
   ],
   "env": {
     "development": {
@@ -34,7 +36,8 @@
         ["inline-dotenv", {
           "path": ".env.test"
         }],
-        "@babel/plugin-transform-runtime"
+        "@babel/plugin-transform-runtime",
+        "@babel/plugin-transform-typescript"
       ]
     }
   }

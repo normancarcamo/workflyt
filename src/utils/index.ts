@@ -1,11 +1,12 @@
 import * as middlewares from "./middlewares";
 import * as helpers from "./helpers";
-import * as shared from "./validator";
-import logger from "./logger";
+import * as schemas from "./schemas";
+import loggerOptions from "./logger";
+import { IUtils } from './types';
 
-export default {
+export default <IUtils> {
   ...middlewares,
   ...helpers,
-  logger: logger,
-  schema: shared
+  logger: loggerOptions,
+  schema: schemas
 };

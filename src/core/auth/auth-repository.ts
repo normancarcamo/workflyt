@@ -1,3 +1,3 @@
-import { IUserRepository } from '../users/users-interface';
+import { F } from './auth-types';
 
-export const AuthRepository = ({ User }:{ User:IUserRepository }) => User;
+export const AuthRepository:F.repository = (User) => User;

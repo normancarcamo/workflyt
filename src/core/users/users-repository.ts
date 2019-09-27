@@ -1,16 +1,15 @@
-import { IUserRepository } from './users-interface';
-import { Idatabase } from 'src/providers/postgres';
+import { F } from './users-types';
 
-export default ({ database }:{ database:Idatabase }):IUserRepository => ({
+export const UserRepository:F.repository = (database) => ({
   async getUsers (options) {
     return await database.models.User.findAll(options);
   },
 
-  async createUser ({ values, options }) {
+  async createUser (values, options) {
     return await database.models.User.create(values, options);
   },
 
-  async getUser ({ user_id, options, throwNotFound }) {
+  async getUser (user_id, options, throwNotFound) {
     let user = await database.models.User.findByPk(
       user_id,
       database.queryBuilder(options)
@@ -23,7 +22,7 @@ export default ({ database }:{ database:Idatabase }):IUserRepository => ({
     }
   },
 
-  async getUserByUsername ({ username, options, throwNotFound }) {
+  async getUserByUsername (username, options, throwNotFound) {
     let user = await database.models.User.findOne({
       where: { username },
       plain: true,
@@ -38,7 +37,7 @@ export default ({ database }:{ database:Idatabase }):IUserRepository => ({
     return user;
   },
 
-  async getUserByUsernameWithRoles ({ username, options, throwNotFound }) {
+  async getUserByUsernameWithRoles (username, options, throwNotFound) {
     let user = await database.sequelize.query(`
       SELECT
         u.*,
@@ -68,28 +67,28 @@ export default ({ database }:{ database:Idatabase }):IUserRepository => ({
     return user;
   },
 
-  async updateUser ({ user_id, values, options }) {
-    let user = await this.getUser({ user_id, throwNotFound: true });
+  async updateUser (user_id, values, options) {
+    let user = await this.getUser(user_id, null, true);
     return await user.update(values, options);
   },
 
-  async deleteUser ({ user_id, options }) {
-    let user = await this.getUser({ user_id, throwNotFound: true });
+  async deleteUser (user_id, options) {
+    let user = await this.getUser(user_id, null, true);
     return await user.destroy(options);
   },
 
-  async getRoles ({ user_id, options }) {
-    let user = await this.getUser({ user_id, throwNotFound: true });
+  async getRoles (user_id, options) {
+    let user = await this.getUser(user_id, null, true);
     return await user.getRoles(database.queryBuilder(options));
   },
 
-  async addRoles ({ user_id, roles }) {
-    let user = await this.getUser({ user_id, throwNotFound: true });
+  async addRoles (user_id, roles) {
+    let user = await this.getUser(user_id, null, true);
     return await user.addRoles(roles);
   },
 
-  async getRole ({ user_id, role_id, options, throwNotFound }) {
-    let user = await this.getUser({ user_id, throwNotFound: true });
+  async getRole (user_id, role_id, options, throwNotFound) {
+    let user = await this.getUser(user_id, null, true);
 
     let role = await user.getRoles({
       plain: true,
@@ -106,13 +105,13 @@ export default ({ database }:{ database:Idatabase }):IUserRepository => ({
     }
   },
 
-  async updateRole ({ user_id, role_id, values, options }) {
-    let role = await this.getRole({ user_id, role_id, throwNotFound: true });
+  async updateRole (user_id, role_id, values, options) {
+    let role = await this.getRole(user_id, role_id, null, true);
     return await role.UserRole.update(values, options);
   },
 
-  async deleteRole ({ user_id, role_id, options }) {
-    let role = await this.getRole({ user_id, role_id, throwNotFound: true });
+  async deleteRole (user_id, role_id, options) {
+    let role = await this.getRole(user_id, role_id, null, true);
     return await role.UserRole.destroy(options);
   }
 });

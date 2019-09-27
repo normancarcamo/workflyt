@@ -1,70 +1,46 @@
+import { Idatabase } from '../providers/postgres/types';
+import { ChildProcess } from 'child_process';
 import jsonwebtoken from 'jsonwebtoken';
+import { Logger } from 'pino';
+import { Server } from 'http';
 import bcrypt from 'bcrypt';
-import {
-  IcomparePassword, IhashPassword, IsignToken,
-  IinvokeCallback, IonServerListen, IonServerError,
-  IonServerClose, IonProcessStop, IonProcessError,
-  IError
-} from './interfaces';
 
-export const comparePassword:IcomparePassword = async ({ raw, hash, errorCode }) => {
-  let samePassword:boolean = false;
-
-  try {
-    samePassword = await bcrypt.compare(raw, hash);
-  } catch (error) {
-    error.status = 500;
-    error.code = errorCode;
-    throw error;
-  }
-
-  if (samePassword) {
+export async function comparePassword (raw:string, hash:string):Promise<boolean> {
+  let match:boolean = await bcrypt.compare(raw, hash);
+  if (match) {
     return true;
   } else {
     throw new Error('Forbidden.');
   }
 }
 
-export const hashPassword:IhashPassword = async ({ password, salt, errorCode }) => {
-  try {
-    return await bcrypt.hash(password, salt);
-  } catch (error) {
-    error.status = 500;
-    error.code = errorCode;
-    throw error;
-  }
+export async function hashPassword (password:string, salt:number):Promise<string> {
+  return await bcrypt.hash(password, salt);
 }
 
-export const signToken:IsignToken = ({ payload, secret, errorCode }) => {
-  try {
-    return jsonwebtoken.sign(payload, secret);
-  } catch (error) {
-    error.status = 500;
-    error.code = errorCode;
-    throw error;
-  }
+export function signToken (payload:any, secret:string):string {
+  return jsonwebtoken.sign(payload, secret);
 }
 
-export const invokeCallback:IinvokeCallback = (callback) => {
+export function invokeCallback (callback?:Function):void {
   callback && callback();
 }
 
-export const onServerListen:IonServerListen = (logger, database, callback) => {
-  return ():void => {
+export function onServerListen (logger:Logger, database:Idatabase, callback?:Function) {
+  return function ():void {
     logger.info("Server is connected.");
-    invokeCallback(callback);
     database.sequelize.authenticate().then(() => {
       logger.info("Database is connected.");
       invokeCallback(callback);
-    }).catch((err:IError) => {
+    }).catch((err:any) => {
       logger.error({ err }, "Unable to connect to the database.");
       invokeCallback(callback);
     });
   };
 }
 
-export const onServerError:IonServerError = (logger, exec) => {
-  return (err:IError):void => {
+export function onServerError (logger:Logger, exec:(command:string) => ChildProcess) {
+  return function (err:any):void {
     if (err.code === "EADDRINUSE") {
       exec(`sh nodemon.sh`);
     } else {
@@ -73,8 +49,8 @@ export const onServerError:IonServerError = (logger, exec) => {
   };
 }
 
-export const onServerClose:IonServerClose = (logger, database, callback) => {
-  return (err:IError):void => {
+export function onServerClose (logger:Logger, database:Idatabase, callback?:Function) {
+  return function (err:any):void {
     if (err) {
       logger.error({ err }, err.message);
       invokeCallback(callback);
@@ -83,7 +59,7 @@ export const onServerClose:IonServerClose = (logger, database, callback) => {
       database.sequelize.close().then(() => {
         logger.info("Database is now closed.");
         invokeCallback(callback);
-      }).catch((err:IError) => {
+      }).catch((err:any) => {
         logger.error({ err }, err.message);
         invokeCallback(callback);
       });
@@ -91,8 +67,8 @@ export const onServerClose:IonServerClose = (logger, database, callback) => {
   };
 }
 
-export const onProcessStop:IonProcessStop = (server, logger, database, callback) => {
-  return ():void => {
+export function onProcessStop (server:Server, logger:Logger, database:Idatabase, callback?:Function) {
+  return function ():void {
     if (server.listening) {
       server.close(onServerClose(logger, database, () => {
         invokeCallback(callback);
@@ -103,6 +79,8 @@ export const onProcessStop:IonProcessStop = (server, logger, database, callback)
   };
 }
 
-export const onProcessError:IonProcessError = (logger) => {
-  return (err:IError):void => logger.error({ err }, err.message)
+export function onProcessError (logger:Logger) {
+  return function (err:any):void {
+    logger.error({ err }, err.message);
+  }
 }

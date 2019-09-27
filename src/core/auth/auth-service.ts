@@ -1,19 +1,18 @@
-import { IAuthRepository, IAuthService } from './auth-interfaces';
-import { IHelpers } from 'src/utils/interfaces';
+import { F } from './auth-types';
 
-export const AuthService = ({ repository, helpers }:{ repository:IAuthRepository, helpers:IHelpers }):IAuthService => ({
-  async signIn ({ username, password }) {
-    let user = await repository.getUserByUsernameWithRoles({ username });
+export const AuthService:F.service = (repository, helpers) => ({
+  signIn: async function (username, password) {
+    let user = await repository.getUserByUsernameWithRoles(username);
 
     if (!user) {
       throw new Error('Forbidden');
     }
 
-    await helpers.comparePassword({ raw: password, hash: user.password });
+    await helpers.comparePassword(password, user.password);
 
     user.sub = user.id;
     user.password = undefined;
 
-    return helpers.signToken({ payload: user, secret: <string>process.env.JWT_SECRET });
+    return helpers.signToken(user, process.env.JWT_SECRET as string);
   }
 });

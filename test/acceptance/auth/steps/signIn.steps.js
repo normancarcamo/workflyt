@@ -13,7 +13,7 @@ defineFeature(featureSignIn, test => {
     service = ser;
   }));
 
-  test('User gets a token after logged in', ({ given, when, then }) => {
+  test('User gets a token after logged in', ({ given, when, then, and, but, defineStep, pending }) => {
     let username, password, result = null;
 
     given('a real username and password', () => {

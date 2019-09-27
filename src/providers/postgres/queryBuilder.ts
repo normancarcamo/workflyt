@@ -1,7 +1,10 @@
-export default (Op:any):object => {
-  let isObject = (x:object):boolean => Object.prototype.toString.call(x) === '[object Object]';
+import { Op } from 'sequelize';
 
-  let onlyOperator = (data:any) => {
+function filter (Op:any) {
+  let isObject = (x: object): boolean =>
+    Object.prototype.toString.call(x) === '[object Object]';
+
+  return function onlyOperator (data: any): object {
     if (isObject(data)) {
       return Object.keys(data).reduce((acc:any, key:string) => {
         if (isObject(data[key])) {
@@ -17,8 +20,10 @@ export default (Op:any):object => {
       return data;
     }
   };
+}
 
-  const queryBuilder = (query:any):object => {
+function build (filter:Function) {
+  return function (query:any):object {
     let criteria:any = {};
     let options:any = {};
     let option:string;
@@ -34,7 +39,7 @@ export default (Op:any):object => {
       if (additional.includes(option)) {
         options[option] = query[option];
       } else {
-        criteria[option] = onlyOperator(query[option]);
+        criteria[option] = filter(query[option]);
       }
     }
 
@@ -49,6 +54,6 @@ export default (Op:any):object => {
       options: { enumerable: false, value: options }
     });
   };
-
-  return queryBuilder;
 }
+
+export default build(filter(Op));

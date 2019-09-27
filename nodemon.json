@@ -1,11 +1,11 @@
 {
   "execMap": {
-    "js": "babel-node"
+    "ts": "ts-node"
   },
   "env": {
     "NODE_ENV": "development"
   },
-  "ext": ".js,.jsx,.json",
+  "ext": ".ts,.tsx,.js,.jsx,.json",
   "ignore": [
     "test",
     "dist",
@@ -15,7 +15,7 @@
   "events": {
     "start": "sh nodemon.sh"
   },
-  "script": "src/server.js",
+  "script": "src/server.ts",
   "restartable": "rs",
   "verbose": false,
   "watch": ["src"],

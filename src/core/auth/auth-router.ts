@@ -1,8 +1,8 @@
 import { methodNotAllowed } from 'src/utils/middlewares';
-import { IAuthController } from './auth-interfaces';
+import { F } from './auth-types';
 import { Router } from 'express';
 
-export const AuthRouter = (controller:IAuthController):Router => {
+export const AuthRouter:F.router = (controller) => {
   let router = Router();
 
   router.route('/auth/signin')

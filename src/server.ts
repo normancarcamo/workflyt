@@ -21,3 +21,5 @@ process.on("SIGINT", utils.onProcessStop(server, logger, database));
 process.on("unhandledRejection", utils.onProcessError(logger));
 
 process.on("uncaughtException", utils.onProcessError(logger));
+
+export default server;

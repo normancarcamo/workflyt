@@ -1,0 +1,54 @@
+import { ModelType } from 'sequelize';
+
+export type entityType = {
+  Area: ModelType;
+  Category: ModelType;
+  Company: ModelType;
+  Client: ModelType;
+  Job: ModelType;
+  Material: ModelType;
+  Order: ModelType;
+  Permission: ModelType;
+  Quote: ModelType;
+  Role: ModelType;
+  Service: ModelType;
+  Stock: ModelType;
+  Supplier: ModelType;
+  User: ModelType;
+  Warehouse: ModelType;
+  Worker: ModelType;
+};
+
+export namespace models {
+  export type area = { id: string, name: string };
+  export type subarea = { id: string, name: string };
+  export type category = { id: string, name: string };
+  export type client = { id: string, name: string };
+  export type company = { id: string, name: string };
+  export type worker = { id: string, firstname: string, lastname: string };
+  export type salesman = { id: string, firstname: string, lastname: string };
+  export type supervisor = { id: string, firstname: string, lastname: string };
+  export type workerSupervisor = { worker_id: string, supervisor_id: string };
+  export type service = { id: string, area_id: string, name: string };
+  export type areaSubarea = { area_id: string, subarea_id: string };
+  export type areaWorker = { area_id: string, worker_id: string };
+  export type material = { id: string, category_id: string, code: string, name: string };
+  export type stock = { id: string, material_id: string, entries: number, exits: number, stocks: number };
+  export type user = { id: string, worker_id: string, code: string, username: string, password: string };
+  export type quote = { id: string, client_id: string, salesman_id: string, code: string, subject: string, status: string };
+  export type quoteService = { quote_id: string, service_id: string };
+  export type order = { id: string, quote_id: string, code: string, subject: string, status: string, priority: string, progress: number };
+  export type job = { id: string, service_id: string, order_id: string, code: string, details: string, status: string, priority: string, progress: number, units: number };
+  export type subjob = { id: string, service_id: string, order_id: string, code: string, details: string, status: string, priority: string, progress: number, units: number };
+  export type jobSubjob = { job_id: string, subjob_id: string };
+  export type jobWorker = { job_id: string, worker_id: string };
+  export type jobMaterial = { job_id: string, material_id: string };
+  export type permission = { id: string, code: string, name: string };
+  export type role = { id: string, code: string, name: string };
+  export type rolePermission = { role_id: string, permission_id: string };
+  export type userRole = { user_id: string, role_id: string };
+  export type supplier = { id: string, code: string, name: string };
+  export type supplierMaterial = { supplier_id: string, material_id: string };
+  export type warehouse = { id: string, code: string, name: string };
+  export type warehouseMaterial = { warehouse_id: string, material_id: string };
+};
